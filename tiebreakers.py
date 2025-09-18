@@ -10320,7 +10320,7 @@ def playoffPercentages():
     print("seahawks 6 seed: " + str((seahawks6 / 100.0)) + "%")
     print("seahawks 7 seed: " + str((seahawks7 / 100.0)) + "%\n")
     
-def run_tiebreakers():
+def simulate_odds():
     # As a test return a json dump of nonsense
     data = {
         "status": "success",

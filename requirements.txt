@@ -2,3 +2,8 @@ fastapi
 uvicorn
 supabase
 python-dotenv
+numpy
+pandas
+random
+collections
+json

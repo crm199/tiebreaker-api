@@ -1,26 +1,59 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 from supabase import create_client, Client
-import os
-from tiebreakers import run_tiebreakers  # your function
-from dotenv import load_dotenv
+from tiebreakers import simulate_odds  # Import your script/module
 
-load_dotenv()  # take environment variables from .env.
+app = FastAPI(title="Playoff Odds API")
 
-# Load environment variables
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-
+# Supabase config (get these from your Supabase dashboard: Settings > API)
+SUPABASE_URL = "https://your-project.supabase.co"
+SUPABASE_KEY = "your-anon-or-service-key"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-app = FastAPI()
+# Pydantic model for incoming schedule data (adjust fields to match your script's needs)
+class ScheduleRequest(BaseModel):
+    league_id: str  # Or whatever identifies the league
+    incomplete_games: list[dict]  # e.g., [{"home_team": "DAL", "away_team": "PHI", "week": 5, ...}]
+    # Add other fields like current standings if your script needs them
 
-@app.post("/run-tiebreakers")
-def run_playoff_simulation():
+@app.post("/update-odds")
+async def update_odds(request: ScheduleRequest):
+    """
+    Automated trigger: Run sims and update Supabase table.
+    Expects POST body like: {"league_id": "abc123", "incomplete_games": [...]}
+    """
     try:
-        # Call your simulation function
-        # It should read from Games, TeamRecords, etc., and write to PlayoffOdds
-        run_tiebreakers(supabase)
-
-        return {"status": "success", "message": "Playoff odds updated"}
+        # Run your script with the provided schedule
+        results = simulate_odds.run_simulations(request.dict())  # Adjust to match your function
+        
+        # Upsert into PlayoffOdds table (adjust table/columns as needed)
+        data = {
+            "league_id": request.league_id,
+            "playoff_odds": results,  # Assuming results is JSON-serializable
+            "updated_at": "now()"  # Or use datetime.utcnow()
+        }
+        response = supabase.table("PlayoffOdds").upsert(data).execute()
+        
+        if not response.data:
+            raise HTTPException(status_code=500, detail="Failed to update Supabase")
+        
+        return {"status": "success", "message": "Odds updated in Supabase"}
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/calculate-odds")
+async def calculate_odds(request: ScheduleRequest):
+    """
+    User-specific: Run sims with custom schedule and return JSON.
+    Expects same POST body as above.
+    """
+    try:
+        # Run your script with the provided (updated) schedule
+        results = simulate_odds.run_simulations(request.dict())
+        return {"playoff_odds": results}  # Just return the data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
