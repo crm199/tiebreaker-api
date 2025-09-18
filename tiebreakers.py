@@ -10337,7 +10337,7 @@ def simulate_odds(data: dict = None) -> dict:
     
 #divisionStandings()
 #playoffPercentages()
-playoffStandings()
+
 #r = tiebreak2(Panthers, Commanders)
 #print (r[0].getName() + r[1].getName())
 
