@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from supabase import create_client, Client
 import os
-from temp import run_tiebreakers  # your function
+from tiebreakers import run_tiebreakers  # your function
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.

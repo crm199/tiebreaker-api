@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import random
 from collections import Counter
+import json
 
 
 
@@ -10319,7 +10320,18 @@ def playoffPercentages():
     print("seahawks 6 seed: " + str((seahawks6 / 100.0)) + "%")
     print("seahawks 7 seed: " + str((seahawks7 / 100.0)) + "%\n")
     
-    
+def run_tiebreakers():
+    # As a test return a json dump of nonsense
+    data = {
+        "status": "success",
+        "random_number": random.randint(1, 100),
+        "message": "API test response",
+        "teams": ["Bills", "Dolphins", "Jets", "Patriots"],
+        "playoff_spots": [random.choice(range(1, 8)) for _ in range(4)]
+    }
+    return json.dumps(data)
+
+
     
     
     
