@@ -10320,16 +10320,16 @@ def playoffPercentages():
     print("seahawks 6 seed: " + str((seahawks6 / 100.0)) + "%")
     print("seahawks 7 seed: " + str((seahawks7 / 100.0)) + "%\n")
     
-def simulate_odds():
-    # As a test return a json dump of nonsense
-    data = {
+def simulate_odds(data: dict = None) -> dict:
+    # As a test, return a dict of nonsense
+    result = {
         "status": "success",
         "random_number": random.randint(1, 100),
         "message": "API test response",
         "teams": ["Bills", "Dolphins", "Jets", "Patriots"],
         "playoff_spots": [random.choice(range(1, 8)) for _ in range(4)]
     }
-    return json.dumps(data)
+    return result
 
 
     
