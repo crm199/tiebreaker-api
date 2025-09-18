@@ -1,48 +1,37 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from supabase import create_client, Client
 import os
 from dotenv import load_dotenv
-from tiebreakers import simulate_odds  # Match deployed import
+from tiebreakers import simulate_odds
 
-# Load env for local dev
+# Load env for local dev (in case tiebreakers.py needs it)
 load_dotenv()
 
 app = FastAPI(title="Playoff Odds API")
 
-# Supabase config
+# Validate env vars (for tiebreakers.py)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
-    raise ValueError("Missing SUPABASE_URL or SUPABASE_KEY env vars")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+    raise ValueError("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars")
 
 # Model for calculate-odds
 class ScheduleRequest(BaseModel):
     incomplete_games: list[dict]  # e.g., [{"homeTeamId": 1, "awayTeamId": 2, "week": 5, "winner": "home"}]
 
+@app.get("/")
+async def root():
+    return {"message": "Playoff Odds API is running. Use /update-odds or /calculate-odds."}
+
 @app.post("/update-odds")
 async def update_odds():
     """
-    Automated trigger: Run sims (fetch schedule internally) and update Supabase.
+    Automated trigger: Run sims in tiebreakers.py, which handles all Supabase ops.
     Expects POST body: {} (or any JSON, ignored)
     """
     try:
-        # Run script, which fetches schedule itself (e.g., from Supabase Games table)
-        results = simulate_odds({})  # Adjust if function expects specific args
-        
-        # Upsert into PlayoffOdds table
-        data = {
-            "league_id": "default",  # Hardcode since single league
-            "playoff_odds": results,  # Must be JSON-serializable
-            "updated_at": "now()"
-        }
-        response = supabase.table("PlayoffOdds").upsert(data).execute()
-        
-        if not response.data:
-            raise HTTPException(status_code=500, detail="Failed to update Supabase")
-        
-        return {"status": "success", "message": "Odds updated in Supabase"}
+        results = simulate_odds({})  # Trigger sims, tiebreakers.py handles Supabase
+        return {"status": "success", "message": "Odds updated", "playoff_odds": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -53,8 +42,7 @@ async def calculate_odds(request: ScheduleRequest):
     Expects POST body: {"incomplete_games": [...]}
     """
     try:
-        # Run script with user-provided schedule
-        results = simulate_odds(request.dict())  # Or run_tiebreakers(request.incomplete_games)
+        results = simulate_odds(request.dict())
         return {"playoff_odds": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
