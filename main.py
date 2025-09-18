@@ -1,36 +1,41 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from supabase import create_client, Client
-from tiebreakers import simulate_odds  # Import your script/module
+import os
+from dotenv import load_dotenv
+from tiebreakers import simulate_odds  # Match deployed import
+
+# Load env for local dev
+load_dotenv()
 
 app = FastAPI(title="Playoff Odds API")
 
-# Supabase config (get these from your Supabase dashboard: Settings > API)
-SUPABASE_URL = "https://your-project.supabase.co"
-SUPABASE_KEY = "your-anon-or-service-key"
+# Supabase config
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise ValueError("Missing SUPABASE_URL or SUPABASE_KEY env vars")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Pydantic model for incoming schedule data (adjust fields to match your script's needs)
+# Model for calculate-odds
 class ScheduleRequest(BaseModel):
-    league_id: str  # Or whatever identifies the league
-    incomplete_games: list[dict]  # e.g., [{"home_team": "DAL", "away_team": "PHI", "week": 5, ...}]
-    # Add other fields like current standings if your script needs them
+    incomplete_games: list[dict]  # e.g., [{"homeTeamId": 1, "awayTeamId": 2, "week": 5, "winner": "home"}]
 
 @app.post("/update-odds")
-async def update_odds(request: ScheduleRequest):
+async def update_odds():
     """
-    Automated trigger: Run sims and update Supabase table.
-    Expects POST body like: {"league_id": "abc123", "incomplete_games": [...]}
+    Automated trigger: Run sims (fetch schedule internally) and update Supabase.
+    Expects POST body: {} (or any JSON, ignored)
     """
     try:
-        # Run your script with the provided schedule
-        results = simulate_odds.run_simulations(request.dict())  # Adjust to match your function
+        # Run script, which fetches schedule itself (e.g., from Supabase Games table)
+        results = simulate_odds({})  # Adjust if function expects specific args
         
-        # Upsert into PlayoffOdds table (adjust table/columns as needed)
+        # Upsert into PlayoffOdds table
         data = {
-            "league_id": request.league_id,
-            "playoff_odds": results,  # Assuming results is JSON-serializable
-            "updated_at": "now()"  # Or use datetime.utcnow()
+            "league_id": "default",  # Hardcode since single league
+            "playoff_odds": results,  # Must be JSON-serializable
+            "updated_at": "now()"
         }
         response = supabase.table("PlayoffOdds").upsert(data).execute()
         
@@ -44,13 +49,13 @@ async def update_odds(request: ScheduleRequest):
 @app.post("/calculate-odds")
 async def calculate_odds(request: ScheduleRequest):
     """
-    User-specific: Run sims with custom schedule and return JSON.
-    Expects same POST body as above.
+    User-specific: Run sims with provided schedule and return JSON.
+    Expects POST body: {"incomplete_games": [...]}
     """
     try:
-        # Run your script with the provided (updated) schedule
-        results = simulate_odds.run_simulations(request.dict())
-        return {"playoff_odds": results}  # Just return the data
+        # Run script with user-provided schedule
+        results = simulate_odds(request.dict())  # Or run_tiebreakers(request.incomplete_games)
+        return {"playoff_odds": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
