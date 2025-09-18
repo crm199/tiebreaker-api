@@ -11,7 +11,7 @@ Titans,Eagles,24,38
 Rams,Panthers,33,13
 Bengals,Dolphins,18,36
 Bears,Texans,28,31
-49ers,Bisons,27,30
+49ers,Cardinals,27,30
 Raiders,Ravens,17,20
 Seahawks,Falcons,21,28
 Buccaneers,Chargers,17,33
@@ -24,7 +24,7 @@ Jets,Seahawks,1,0
 Bills,Broncos,0,39
 Texans,Vikings,1,0
 Buccaneers,Panthers,15,12
-Bisons,Rams,28,51
+Cardinals,Rams,28,51
 49ers,Saints,17,35
 Cowboys,Giants,1,0
 Dolphins,Patriots,0,1
@@ -37,7 +37,7 @@ Broncos,Chiefs,30,21
 Colts,Bears,38,35
 Falcons,Panthers,41,38
 Eagles,Commanders,49,30
-Seahawks,Bisons,14,19
+Seahawks,Cardinals,14,19
 Steelers,Patriots,34,27
 49ers,Lions,28,20
 Giants,Browns,38,28
@@ -48,7 +48,7 @@ Buccaneers,Cowboys,21,24
 Bengals,Jets,21,61
 Texans,Titans,17,14
 Chargers,Colts,28,38
-Rams,Bisons,40,21
+Rams,Cardinals,40,21
 Patriots,Chiefs,23,34
 Bengals,Ravens,57,60
 Eagles,49ers,24,27
@@ -69,7 +69,7 @@ Lions,Bears,38,30
 Texans,Raiders,20,14
 Eagles,Vikings,41,31
 Panthers,Seahawks,1,0
-Bisons,Packers,14,49
+Cardinals,Packers,14,49
 Chargers,Saints,20,13
 Ravens,Browns,63,21
 Chiefs,Falcons,0,1
@@ -89,7 +89,7 @@ Dolphins,Steelers,23,17
 Vikings,Bears,14,35
 Bills,Jets,29,23
 Chiefs,Buccaneers,17,27
-Giants,Bisons,38,24
+Giants,Cardinals,38,24
 Patriots,Lions,7,24
 Cowboys,Commanders,35,14
 Rams,49ers,48,9
@@ -100,7 +100,7 @@ Vikings,Lions,17,52
 Chiefs,Jaguars,49,13
 Raiders,Chargers,27,47
 Buccaneers,Saints,32,28
-Bisons,Bills,13,63
+Cardinals,Bills,13,63
 Giants,Cowboys,9,24
 49ers,Dolphins,14,22
 Panthers,Falcons,24,27
@@ -109,7 +109,7 @@ Colts,Texans,26,28
 Ravens,Commanders,45,41
 Saints,Falcons,30,35
 Packers,Vikings,24,17
-Chargers,Bisons,41,6
+Chargers,Cardinals,41,6
 Titans,Texans,9,27
 Rams,Jets,21,24
 Colts,Jaguars,31,7
@@ -134,10 +134,10 @@ Saints,Panthers,7,28
 Vikings,Commanders,20,14
 Packers,Colts,17,42
 Patriots,49ers,23,49
-Bisons,Falcons,14,31
+Cardinals,Falcons,14,31
 Vikings,Colts,10,35
 Steelers,Cowboys,38,35
-Panthers,Bisons,31,29
+Panthers,Cardinals,31,29
 Commanders,Browns,57,47
 Ravens,Saints,44,38
 Patriots,Bengals,14,40
@@ -159,7 +159,7 @@ Falcons,Raiders,45,21
 Chargers,Broncos,19,7
 Texans,Jaguars,38,17
 Giants,Bears,35,17
-Bisons,Patriots,33,14
+Cardinals,Patriots,33,14
 Bills,Bengals,67,36
 49ers,Rams,22,48
 Panthers,Buccaneers,6,38
@@ -175,7 +175,7 @@ Broncos,Texans,21,35
 Colts,Bills,23,17
 Buccaneers,Raiders,15,21
 Falcons,49ers,37,13
-Dolphins,Bisons,24,15
+Dolphins,Cardinals,24,15
 Lions,Jaguars,34,12
 Jets,Patriots,28,21
 Seahawks,Vikings,14,24
@@ -188,7 +188,7 @@ Jets,Steelers,11,17
 Jaguars,Dolphins,10,28
 Bills,Ravens,56,30
 Chargers,Bengals,22,12
-Bisons,49ers,34,30
+Cardinals,49ers,34,30
 Panthers,Broncos,27,42
 Titans,Lions,21,31
 Raiders,Saints,31,14
@@ -218,7 +218,7 @@ Colts,Lions,1,0
 Saints,Broncos,0,1
 Browns,Ravens,1,0
 Bengals,Giants,0,1
-Bisons,Buccaneers,1,0
+Cardinals,Buccaneers,1,0
 Jaguars,Titans,0,1
 Raiders,Panthers,1,0
 Seahawks,Patriots,0,1
@@ -235,7 +235,7 @@ Patriots,Jets,0,1
 Browns,Titans,0,1
 Rams,Seahawks,1,0
 Jaguars,Colts,0,1
-Saints,Bisons,0,1
+Saints,Cardinals,0,1
 Cowboys,Packers,1,0
 Bears,Eagles,0,1
 Lions,Vikings,1,0
@@ -246,7 +246,7 @@ Bengals,Steelers,0,1
 Vikings,Saints,1,0
 Texans,Giants,0,1
 Patriots,Ravens,1,0
-Jets,Bisons,1,0
+Jets,Cardinals,1,0
 Titans,Jaguars,1,0
 Seahawks,49ers,0,1
 Bills,Dolphins,1,0
@@ -265,7 +265,7 @@ Bills,Bears,1,0
 Broncos,Steelers,1,0
 Chiefs,Raiders,1,0
 Falcons,Rams,1,0
-Bisons,Seahawks,1,0
+Cardinals,Seahawks,1,0
 Giants,Eagles,1,0
 Texans,Colts,1,0
 Panthers,Saints,0,1
