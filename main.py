@@ -30,7 +30,7 @@ async def update_odds():
     Expects POST body: {} (or any JSON, ignored)
     """
     try:
-        results = playoffPercentages({})  # Trigger sims, tiebreakers.py handles Supabase
+        results = playoffPercentages()  # Trigger sims, tiebreakers.py handles Supabase
         return {"status": "success", "message": "Odds updated", "playoff_odds": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
