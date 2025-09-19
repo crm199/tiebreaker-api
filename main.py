@@ -74,12 +74,12 @@ async def calculate_odds(request: ScheduleRequest):
         logger.error(f"Error in /calculate-odds: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-if __name__ == "__main__":
-    import uvicorn
-    port = int(PORT)
-    logger.info(f"Starting Uvicorn on 0.0.0.0:{port}")
-    try:
-        uvicorn.run(app, host="0.0.0.0", port=port)
-    except Exception as e:
-        logger.error(f"Failed to start Uvicorn: {str(e)}")
-        raise
+#if __name__ == "__main__":
+#    import uvicorn
+#    port = int(PORT)
+#    logger.info(f"Starting Uvicorn on 0.0.0.0:{port}")
+#    try:
+#        uvicorn.run(app, host="0.0.0.0", port=port)
+#    except Exception as e:
+#        logger.error(f"Failed to start Uvicorn: {str(e)}")
+#        raise
