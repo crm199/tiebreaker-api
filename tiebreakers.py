@@ -7,6 +7,7 @@ import json
 from supabase import create_client, Client
 import os
 
+
 supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_SERVICE_ROLE_KEY"))
 
 
@@ -85,7 +86,7 @@ class Team:
 
 
 # Fetch games from Supabase
-games_data = supabase.table('Games').select('homeTeamId, awayTeamId, homeScore, awayScore').execute()
+games_data = supabase.table('Games').select('homeTeamId, awayTeamId, homeScore, awayScore', 'scheduleId').filter('stageIndex', 'neq', 0).filter('weekIndex', 'lte', 17).execute()
 games_df = pd.DataFrame(games_data.data)
 
 # Map IDs to names using teamMap
@@ -120,6 +121,7 @@ for index, row in bills_data.iterrows():
         bills_schedule_results.append('T')
     else:
         bills_schedule_results.append('NA')
+
 
 Bills = Team('Bills', 'AFC', 'AFCE', bills_schedule[0], bills_schedule_results[0], bills_schedule[1],
              bills_schedule_results[1], bills_schedule[2], bills_schedule_results[2], bills_schedule[3],
@@ -8478,7 +8480,7 @@ def playoffPercentages():
 
     playoffsList = []
     remSchedules= []
-    for i in range(100):
+    for i in range(10000):
         remSchedule = []
         for i in range(17):
             if (not Bills.results[i] == 'W' and not Bills.results[i] == 'L' and not Bills.results[i] == 'T'):
@@ -10766,8 +10768,8 @@ def playoffPercentages():
         'sevenseed': seahawks7 / 100.0
     })
 
-    supabase.table('playoffOdds').delete().neq('teamId', 'dummy').execute()  # Clear table (use a safe filter)
-    supabase.table('playoffOdds').insert(odds_data).execute()
+    supabase.table('PlayoffOdds').delete().neq('teamId', -1).execute() # Clear all rows
+    supabase.table('PlayoffOdds').insert(odds_data).execute()
 
     print("Playoff odds inserted into Supabase successfully.")
 
@@ -10788,7 +10790,7 @@ def simulate_odds(data: dict = None) -> dict:
     
     
 #divisionStandings()
-#playoffPercentages()
+playoffPercentages()
 
 #r = tiebreak2(Panthers, Commanders)
 #print (r[0].getName() + r[1].getName())
