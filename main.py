@@ -52,6 +52,7 @@ async def update_odds():
     """
     logger.info("Received POST request to /update-odds")
     try:
+        logger.info("Starting playoffPercentages simulation")
         results = playoffPercentages()
         logger.info("Successfully ran playoffPercentages")
         return {"status": "success", "message": "Odds updated", "playoff_odds": results}
