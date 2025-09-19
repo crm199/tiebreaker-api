@@ -4,7 +4,17 @@ import pandas as pd
 import random
 from collections import Counter
 import json
+from supabase import create_client, Client
+import os
 
+supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_SERVICE_ROLE_KEY"))
+
+
+# Load team map
+# Fetch team map from Supabase
+team_map_data = supabase.table('Teams').select('teamId, displayName').execute()
+teamMap = pd.DataFrame(team_map_data.data)
+teamMap.columns = ['teamId', 'teamName']  # Match existing column names
 
 
 class Team:
@@ -74,7 +84,16 @@ class Team:
         return (winPercentage)
 
 
-df = pd.read_csv("MML25_S5.csv")
+# Fetch games from Supabase
+games_data = supabase.table('Games').select('homeTeamId, awayTeamId, homeScore, awayScore').execute()
+games_df = pd.DataFrame(games_data.data)
+
+# Map IDs to names using teamMap
+games_df['homeTeam'] = games_df['homeTeamId'].map(dict(zip(teamMap['teamId'], teamMap['teamName'])))
+games_df['awayTeam'] = games_df['awayTeamId'].map(dict(zip(teamMap['teamId'], teamMap['teamName'])))
+games_df = games_df.drop(['homeTeamId', 'awayTeamId'], axis=1)  # Drop ID columns
+
+df = games_df  # Now df has name-based columns like original CSV
 
 bills_data = df[(df['homeTeam'] == 'Bills') | (df['awayTeam'] == 'Bills')]
 
@@ -8269,8 +8288,16 @@ def playoffStandings():
 
 def resetStandings():
     for team in teamList:
-        for i in range(16, 17):
-            team.results[i] = 'NA'
+        # Get games for this team (home or away)
+        team_games = df[(df['homeTeam'] == team.name) | (df['awayTeam'] == team.name)]
+        
+        # Track game indices in team's schedule
+        game_index = 0
+        for index, row in team_games.iterrows():
+            # Check if game has no result (homeScore and awayScore both 0)
+            if row['homeScore'] == 0 and row['awayScore'] == 0:
+                team.results[game_index] = 'NA'
+            game_index += 1
 
 
 def trackScenarios(playoffs, remSchedules, Team, spot):
@@ -9866,7 +9893,7 @@ def playoffPercentages():
 
         resetStandings()
 
-    trackScenarios(playoffsList, remSchedules, Patriots, '1')
+    #trackScenarios(playoffsList, remSchedules, Patriots, '1')
 
     billsPlayoffs = (bills1 + bills2 + bills3 + bills4 + bills5 + bills6 + bills7) / 100.0
     billsDiv = (bills1 + bills2 + bills3 + bills4) / 100.0
@@ -10319,6 +10346,431 @@ def playoffPercentages():
     print("seahawks 5 seed: " + str((seahawks5 / 100.0)) + "%")
     print("seahawks 6 seed: " + str((seahawks6 / 100.0)) + "%")
     print("seahawks 7 seed: " + str((seahawks7 / 100.0)) + "%\n")
+
+    name_to_id = dict(zip(teamMap['teamName'], teamMap['teamId']))
+
+    odds_data = []
+
+    odds_data.append({
+        'teamId': name_to_id['Bills'],
+        'division': billsDiv,
+        'playoffs': billsPlayoffs,
+        'oneseed': bills1 / 100.0,
+        'twoseed': bills2 / 100.0,
+        'threeseed': bills3 / 100.0,
+        'fourseed': bills4 / 100.0,
+        'fiveseed': bills5 / 100.0,
+        'sixseed': bills6 / 100.0,
+        'sevenseed': bills7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Dolphins'],
+        'division': dolphinsDiv,
+        'playoffs': dolphinsPlayoffs,
+        'oneseed': dolphins1 / 100.0,
+        'twoseed': dolphins2 / 100.0,
+        'threeseed': dolphins3 / 100.0,
+        'fourseed': dolphins4 / 100.0,
+        'fiveseed': dolphins5 / 100.0,
+        'sixseed': dolphins6 / 100.0,
+        'sevenseed': dolphins7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Jets'],
+        'division': jetsDiv,
+        'playoffs': jetsPlayoffs,
+        'oneseed': jets1 / 100.0,
+        'twoseed': jets2 / 100.0,
+        'threeseed': jets3 / 100.0,
+        'fourseed': jets4 / 100.0,
+        'fiveseed': jets5 / 100.0,
+        'sixseed': jets6 / 100.0,
+        'sevenseed': jets7 / 100.0
+    })
+    odds_data.append({
+        'teamId': name_to_id['Patriots'],
+        'division': patriotsDiv,
+        'playoffs': patriotsPlayoffs,
+        'oneseed': patriots1 / 100.0,
+        'twoseed': patriots2 / 100.0,
+        'threeseed': patriots3 / 100.0,
+        'fourseed': patriots4 / 100.0,
+        'fiveseed': patriots5 / 100.0,
+        'sixseed': patriots6 / 100.0,
+        'sevenseed': patriots7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Bengals'],
+        'division': bengalsDiv,
+        'playoffs': bengalsPlayoffs,
+        'oneseed': bengals1 / 100.0,
+        'twoseed': bengals2 / 100.0,
+        'threeseed': bengals3 / 100.0,
+        'fourseed': bengals4 / 100.0,
+        'fiveseed': bengals5 / 100.0,
+        'sixseed': bengals6 / 100.0,
+        'sevenseed': bengals7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Browns'],
+        'division': brownsDiv,
+        'playoffs': brownsPlayoffs,
+        'oneseed': browns1 / 100.0,
+        'twoseed': browns2 / 100.0,
+        'threeseed': browns3 / 100.0,
+        'fourseed': browns4 / 100.0,
+        'fiveseed': browns5 / 100.0,
+        'sixseed': browns6 / 100.0,
+        'sevenseed': browns7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Ravens'],
+        'division': ravensDiv,
+        'playoffs': ravensPlayoffs,
+        'oneseed': ravens1 / 100.0,
+        'twoseed': ravens2 / 100.0,
+        'threeseed': ravens3 / 100.0,
+        'fourseed': ravens4 / 100.0,
+        'fiveseed': ravens5 / 100.0,
+        'sixseed': ravens6 / 100.0,
+        'sevenseed': ravens7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Steelers'],
+        'division': steelersDiv,
+        'playoffs': steelersPlayoffs,
+        'oneseed': steelers1 / 100.0,
+        'twoseed': steelers2 / 100.0,
+        'threeseed': steelers3 / 100.0,
+        'fourseed': steelers4 / 100.0,
+        'fiveseed': steelers5 / 100.0,
+        'sixseed': steelers6 / 100.0,
+        'sevenseed': steelers7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Colts'],
+        'division': coltsDiv,
+        'playoffs': coltsPlayoffs,
+        'oneseed': colts1 / 100.0,
+        'twoseed': colts2 / 100.0,
+        'threeseed': colts3 / 100.0,
+        'fourseed': colts4 / 100.0,
+        'fiveseed': colts5 / 100.0,
+        'sixseed': colts6 / 100.0,
+        'sevenseed': colts7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Jaguars'],
+        'division': jaguarsDiv,
+        'playoffs': jaguarsPlayoffs,
+        'oneseed': jaguars1 / 100.0,
+        'twoseed': jaguars2 / 100.0,
+        'threeseed': jaguars3 / 100.0,
+        'fourseed': jaguars4 / 100.0,
+        'fiveseed': jaguars5 / 100.0,
+        'sixseed': jaguars6 / 100.0,
+        'sevenseed': jaguars7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Titans'],
+        'division': titansDiv,
+        'playoffs': titansPlayoffs,
+        'oneseed': titans1 / 100.0,
+        'twoseed': titans2 / 100.0,
+        'threeseed': titans3 / 100.0,
+        'fourseed': titans4 / 100.0,
+        'fiveseed': titans5 / 100.0,
+        'sixseed': titans6 / 100.0,
+        'sevenseed': titans7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Texans'],
+        'division': texansDiv,
+        'playoffs': texansPlayoffs,
+        'oneseed': texans1 / 100.0,
+        'twoseed': texans2 / 100.0,
+        'threeseed': texans3 / 100.0,
+        'fourseed': texans4 / 100.0,
+        'fiveseed': texans5 / 100.0,
+        'sixseed': texans6 / 100.0,
+        'sevenseed': texans7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Chiefs'],
+        'division': chiefsDiv,
+        'playoffs': chiefsPlayoffs,
+        'oneseed': chiefs1 / 100.0,
+        'twoseed': chiefs2 / 100.0,
+        'threeseed': chiefs3 / 100.0,
+        'fourseed': chiefs4 / 100.0,
+        'fiveseed': chiefs5 / 100.0,
+        'sixseed': chiefs6 / 100.0,
+        'sevenseed': chiefs7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Broncos'],
+        'division': broncosDiv,
+        'playoffs': broncosPlayoffs,
+        'oneseed': broncos1 / 100.0,
+        'twoseed': broncos2 / 100.0,
+        'threeseed': broncos3 / 100.0,
+        'fourseed': broncos4 / 100.0,
+        'fiveseed': broncos5 / 100.0,
+        'sixseed': broncos6 / 100.0,
+        'sevenseed': broncos7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Chargers'],
+        'division': chargersDiv,
+        'playoffs': chargersPlayoffs,
+        'oneseed': chargers1 / 100.0,
+        'twoseed': chargers2 / 100.0,
+        'threeseed': chargers3 / 100.0,
+        'fourseed': chargers4 / 100.0,
+        'fiveseed': chargers5 / 100.0,
+        'sixseed': chargers6 / 100.0,
+        'sevenseed': chargers7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Raiders'],
+        'division': raidersDiv,
+        'playoffs': raidersPlayoffs,
+        'oneseed': raiders1 / 100.0,
+        'twoseed': raiders2 / 100.0,
+        'threeseed': raiders3 / 100.0,
+        'fourseed': raiders4 / 100.0,
+        'fiveseed': raiders5 / 100.0,
+        'sixseed': raiders6 / 100.0,
+        'sevenseed': raiders7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Cowboys'],
+        'division': cowboysDiv,
+        'playoffs': cowboysPlayoffs,
+        'oneseed': cowboys1 / 100.0,
+        'twoseed': cowboys2 / 100.0,
+        'threeseed': cowboys3 / 100.0,
+        'fourseed': cowboys4 / 100.0,
+        'fiveseed': cowboys5 / 100.0,
+        'sixseed': cowboys6 / 100.0,
+        'sevenseed': cowboys7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Commanders'],
+        'division': commandersDiv,
+        'playoffs': commandersPlayoffs,
+        'oneseed': commanders1 / 100.0,
+        'twoseed': commanders2 / 100.0,
+        'threeseed': commanders3 / 100.0,
+        'fourseed': commanders4 / 100.0,
+        'fiveseed': commanders5 / 100.0,
+        'sixseed': commanders6 / 100.0,
+        'sevenseed': commanders7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Eagles'],
+        'division': eaglesDiv,
+        'playoffs': eaglesPlayoffs,
+        'oneseed': eagles1 / 100.0,
+        'twoseed': eagles2 / 100.0,
+        'threeseed': eagles3 / 100.0,
+        'fourseed': eagles4 / 100.0,
+        'fiveseed': eagles5 / 100.0,
+        'sixseed': eagles6 / 100.0,
+        'sevenseed': eagles7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Giants'],
+        'division': giantsDiv,
+        'playoffs': giantsPlayoffs,
+        'oneseed': giants1 / 100.0,
+        'twoseed': giants2 / 100.0,
+        'threeseed': giants3 / 100.0,
+        'fourseed': giants4 / 100.0,
+        'fiveseed': giants5 / 100.0,
+        'sixseed': giants6 / 100.0,
+        'sevenseed': giants7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Bears'],
+        'division': bearsDiv,
+        'playoffs': bearsPlayoffs,
+        'oneseed': bears1 / 100.0,
+        'twoseed': bears2 / 100.0,
+        'threeseed': bears3 / 100.0,
+        'fourseed': bears4 / 100.0,
+        'fiveseed': bears5 / 100.0,
+        'sixseed': bears6 / 100.0,
+        'sevenseed': bears7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Lions'],
+        'division': lionsDiv,
+        'playoffs': lionsPlayoffs,
+        'oneseed': lions1 / 100.0,
+        'twoseed': lions2 / 100.0,
+        'threeseed': lions3 / 100.0,
+        'fourseed': lions4 / 100.0,
+        'fiveseed': lions5 / 100.0,
+        'sixseed': lions6 / 100.0,
+        'sevenseed': lions7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Packers'],
+        'division': packersDiv,
+        'playoffs': packersPlayoffs,
+        'oneseed': packers1 / 100.0,
+        'twoseed': packers2 / 100.0,
+        'threeseed': packers3 / 100.0,
+        'fourseed': packers4 / 100.0,
+        'fiveseed': packers5 / 100.0,
+        'sixseed': packers6 / 100.0,
+        'sevenseed': packers7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Vikings'],
+        'division': vikingsDiv,
+        'playoffs': vikingsPlayoffs,
+        'oneseed': vikings1 / 100.0,
+        'twoseed': vikings2 / 100.0,
+        'threeseed': vikings3 / 100.0,
+        'fourseed': vikings4 / 100.0,
+        'fiveseed': vikings5 / 100.0,
+        'sixseed': vikings6 / 100.0,
+        'sevenseed': vikings7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Buccaneers'],
+        'division': buccaneersDiv,
+        'playoffs': buccaneersPlayoffs,
+        'oneseed': buccaneers1 / 100.0,
+        'twoseed': buccaneers2 / 100.0,
+        'threeseed': buccaneers3 / 100.0,
+        'fourseed': buccaneers4 / 100.0,
+        'fiveseed': buccaneers5 / 100.0,
+        'sixseed': buccaneers6 / 100.0,
+        'sevenseed': buccaneers7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Falcons'],
+        'division': falconsDiv,
+        'playoffs': falconsPlayoffs,
+        'oneseed': falcons1 / 100.0,
+        'twoseed': falcons2 / 100.0,
+        'threeseed': falcons3 / 100.0,
+        'fourseed': falcons4 / 100.0,
+        'fiveseed': falcons5 / 100.0,
+        'sixseed': falcons6 / 100.0,
+        'sevenseed': falcons7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Panthers'],
+        'division': panthersDiv,
+        'playoffs': panthersPlayoffs,
+        'oneseed': panthers1 / 100.0,
+        'twoseed': panthers2 / 100.0,
+        'threeseed': panthers3 / 100.0,
+        'fourseed': panthers4 / 100.0,
+        'fiveseed': panthers5 / 100.0,
+        'sixseed': panthers6 / 100.0,
+        'sevenseed': panthers7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Saints'],
+        'division': saintsDiv,
+        'playoffs': saintsPlayoffs,
+        'oneseed': saints1 / 100.0,
+        'twoseed': saints2 / 100.0,
+        'threeseed': saints3 / 100.0,
+        'fourseed': saints4 / 100.0,
+        'fiveseed': saints5 / 100.0,
+        'sixseed': saints6 / 100.0,
+        'sevenseed': saints7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Cardinals'],
+        'division': cardinalsDiv,
+        'playoffs': cardinalsPlayoffs,
+        'oneseed': cardinals1 / 100.0,
+        'twoseed': cardinals2 / 100.0,
+        'threeseed': cardinals3 / 100.0,
+        'fourseed': cardinals4 / 100.0,
+        'fiveseed': cardinals5 / 100.0,
+        'sixseed': cardinals6 / 100.0,
+        'sevenseed': cardinals7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['49ers'],
+        'division': ninersDiv,
+        'playoffs': ninersPlayoffs,
+        'oneseed': niners1 / 100.0,
+        'twoseed': niners2 / 100.0,
+        'threeseed': niners3 / 100.0,
+        'fourseed': niners4 / 100.0,
+        'fiveseed': niners5 / 100.0,
+        'sixseed': niners6 / 100.0,
+        'sevenseed': niners7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Rams'],
+        'division': ramsDiv,
+        'playoffs': ramsPlayoffs,
+        'oneseed': rams1 / 100.0,
+        'twoseed': rams2 / 100.0,
+        'threeseed': rams3 / 100.0,
+        'fourseed': rams4 / 100.0,
+        'fiveseed': rams5 / 100.0,
+        'sixseed': rams6 / 100.0,
+        'sevenseed': rams7 / 100.0
+    })
+
+    odds_data.append({
+        'teamId': name_to_id['Seahawks'],
+        'division': seahawksDiv,
+        'playoffs': seahawksPlayoffs,
+        'oneseed': seahawks1 / 100.0,
+        'twoseed': seahawks2 / 100.0,
+        'threeseed': seahawks3 / 100.0,
+        'fourseed': seahawks4 / 100.0,
+        'fiveseed': seahawks5 / 100.0,
+        'sixseed': seahawks6 / 100.0,
+        'sevenseed': seahawks7 / 100.0
+    })
+
+    supabase.table('playoffOdds').delete().neq('teamId', 'dummy').execute()  # Clear table (use a safe filter)
+    supabase.table('playoffOdds').insert(odds_data).execute()
+
+    print("Playoff odds inserted into Supabase successfully.")
+
     
 def simulate_odds(data: dict = None) -> dict:
     # As a test, return a dict of nonsense

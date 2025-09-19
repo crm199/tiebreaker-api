@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
-from tiebreakers import simulate_odds
+from tiebreakers import playoffPercentages
 
 # Load env for local dev (in case tiebreakers.py needs it)
 load_dotenv()
@@ -30,7 +30,7 @@ async def update_odds():
     Expects POST body: {} (or any JSON, ignored)
     """
     try:
-        results = simulate_odds({})  # Trigger sims, tiebreakers.py handles Supabase
+        results = playoffPercentages({})  # Trigger sims, tiebreakers.py handles Supabase
         return {"status": "success", "message": "Odds updated", "playoff_odds": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -42,7 +42,7 @@ async def calculate_odds(request: ScheduleRequest):
     Expects POST body: {"incomplete_games": [...]}
     """
     try:
-        results = simulate_odds(request.dict())
+        results = playoffPercentages(request.dict())
         return {"playoff_odds": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
