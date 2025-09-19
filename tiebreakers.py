@@ -9996,7 +9996,7 @@ def playoffPercentages():
     seahawksPlayoffs = (seahawks1 + seahawks2 + seahawks3 + seahawks4 + seahawks5 + seahawks6 + seahawks7) / 100.0
     seahawksDiv = (seahawks1 + seahawks2 + seahawks3 + seahawks4) / 100.0
     seahawksOut = 100 - seahawksPlayoffs
-    
+    '''
     print("bills miss playoffs: " + str(billsOut) + "%")
     print("bills win division:  " + str(billsDiv) + "%")
     print("bills make playoffs: " + str(billsPlayoffs) + "%")
@@ -10348,7 +10348,7 @@ def playoffPercentages():
     print("seahawks 5 seed: " + str((seahawks5 / 100.0)) + "%")
     print("seahawks 6 seed: " + str((seahawks6 / 100.0)) + "%")
     print("seahawks 7 seed: " + str((seahawks7 / 100.0)) + "%\n")
-
+    '''
     name_to_id = dict(zip(teamMap['teamName'], teamMap['teamId']))
 
     odds_data = []
