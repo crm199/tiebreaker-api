@@ -1,11 +1,11 @@
 import logging
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import os
+from dotenv import load_dotenv
 from tiebreakers import playoffPercentages, simulate_odds
 
-# --------------------------
 # Logging configuration
-# --------------------------
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -16,20 +16,28 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# --------------------------
-# FastAPI app
-# --------------------------
-app = FastAPI()
+# Load env vars
+load_dotenv()
+logger.info("Loaded environment variables")
 
-# --------------------------
+# Validate env vars
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+logger.info(f"SUPABASE_URL: {SUPABASE_URL}")
+logger.info(f"SUPABASE_KEY: {'[REDACTED]' if SUPABASE_KEY else None}")
+if not SUPABASE_URL or not SUPABASE_KEY:
+    logger.error("Missing SUPABASE_URL or SUPABASE_KEY")
+    raise ValueError("Missing SUPABASE_URL or SUPABASE_KEY")
+
+# FastAPI app
+app = FastAPI()
+logger.info("FastAPI app initialized")
+
 # Request model
-# --------------------------
 class ScheduleRequest(BaseModel):
     incomplete_games: list[dict]
 
-# --------------------------
 # Routes
-# --------------------------
 @app.get("/")
 async def root():
     logger.info("GET / called")
