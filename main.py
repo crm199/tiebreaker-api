@@ -3,39 +3,56 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from tiebreakers import playoffPercentages, simulate_odds
 
-# Configure logging
+# --------------------------
+# Logging configuration
+# --------------------------
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("app.log"), logging.StreamHandler()],
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("app.log"),
+        logging.StreamHandler()
+    ]
 )
 logger = logging.getLogger(__name__)
 
-# Initialize FastAPI
-app = FastAPI(title="Playoff Odds API")
-logger.info("FastAPI app initialized")
+# --------------------------
+# FastAPI app
+# --------------------------
+app = FastAPI()
 
+# --------------------------
+# Request model
+# --------------------------
 class ScheduleRequest(BaseModel):
     incomplete_games: list[dict]
 
+# --------------------------
+# Routes
+# --------------------------
 @app.get("/")
 async def root():
-    return {"message": "Playoff Odds API is running. Use /update-odds or /calculate-odds."}
+    logger.info("GET / called")
+    return {"message": "Server is running. Use /update-odds or /calculate-odds."}
 
 @app.post("/update-odds")
 async def update_odds():
+    logger.info("POST /update-odds called")
     try:
         results = playoffPercentages()
-        return {"status": "success", "message": "Odds updated", "playoff_odds": results}
+        logger.info("playoffPercentages ran successfully")
+        return {"status": "success", "playoff_odds": results}
     except Exception as e:
         logger.error(f"Error in /update-odds: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/calculate-odds")
 async def calculate_odds(request: ScheduleRequest):
+    logger.info(f"POST /calculate-odds called with body: {request.dict()}")
     try:
         results = simulate_odds(request.incomplete_games)
-        return {"status": "success", "message": "Odds calculated", "playoff_odds": results}
+        logger.info("simulate_odds ran successfully")
+        return {"status": "success", "playoff_odds": results}
     except Exception as e:
         logger.error(f"Error in /calculate-odds: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
