@@ -1,1 +1,14 @@
 2025-09-20 11:29:03,528 - __main__ - INFO - FastAPI app initialized
+2025-09-20 14:37:36,874 - INFO - GET / called
+2025-09-20 14:45:03,771 - INFO - POST /update-odds called
+2025-09-20 14:58:24,509 - INFO - HTTP Request: DELETE https://gypbjlbuznipjrvbhlbg.supabase.co/rest/v1/PlayoffOdds?teamId=neq.-1 "HTTP/2 200 OK"
+2025-09-20 14:58:24,621 - INFO - HTTP Request: POST https://gypbjlbuznipjrvbhlbg.supabase.co/rest/v1/PlayoffOdds?columns=%22fourseed%22%2C%22oneseed%22%2C%22teamId%22%2C%22fiveseed%22%2C%22sevenseed%22%2C%22division%22%2C%22sixseed%22%2C%22threeseed%22%2C%22playoffs%22%2C%22twoseed%22 "HTTP/2 201 Created"
+2025-09-20 14:58:24,733 - INFO - playoffPercentages ran successfully
+2025-09-20 14:58:24,776 - INFO - POST /update-odds called
+2025-09-20 15:28:45,221 - INFO - HTTP Request: DELETE https://gypbjlbuznipjrvbhlbg.supabase.co/rest/v1/PlayoffOdds?teamId=neq.-1 "HTTP/2 200 OK"
+2025-09-20 15:28:45,316 - INFO - HTTP Request: POST https://gypbjlbuznipjrvbhlbg.supabase.co/rest/v1/PlayoffOdds?columns=%22fourseed%22%2C%22oneseed%22%2C%22teamId%22%2C%22fiveseed%22%2C%22sevenseed%22%2C%22division%22%2C%22sixseed%22%2C%22threeseed%22%2C%22playoffs%22%2C%22twoseed%22 "HTTP/2 201 Created"
+2025-09-20 15:28:45,360 - INFO - playoffPercentages ran successfully
+2025-09-20 15:28:45,370 - INFO - POST /update-odds called
+2025-09-20 15:35:53,492 - INFO - HTTP Request: DELETE https://gypbjlbuznipjrvbhlbg.supabase.co/rest/v1/PlayoffOdds?teamId=neq.-1 "HTTP/2 200 OK"
+2025-09-20 15:35:53,697 - INFO - HTTP Request: POST https://gypbjlbuznipjrvbhlbg.supabase.co/rest/v1/PlayoffOdds?columns=%22fourseed%22%2C%22oneseed%22%2C%22teamId%22%2C%22fiveseed%22%2C%22sevenseed%22%2C%22division%22%2C%22sixseed%22%2C%22threeseed%22%2C%22playoffs%22%2C%22twoseed%22 "HTTP/2 201 Created"
+2025-09-20 15:35:53,769 - INFO - playoffPercentages ran successfully
