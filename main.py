@@ -1,5 +1,6 @@
 import logging
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
@@ -32,6 +33,15 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 # FastAPI app
 app = FastAPI()
 logger.info("FastAPI app initialized")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://crm199.github.io"],
+    allow_credentials=True,
+    allow_methods=["POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
+)
 
 # Request model
 class ScheduleRequest(BaseModel):
