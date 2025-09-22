@@ -1,5 +1,5 @@
 import logging
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
@@ -55,10 +55,15 @@ async def update_odds():
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/calculate-odds")
-async def calculate_odds(request: ScheduleRequest):
-    logger.info(f"POST /calculate-odds called with body: {request.dict()}")
+async def calculate_odds(request: Request):
+    logger.info("POST /calculate-odds called")
     try:
-        results = simulate_odds(request.incomplete_games)
+        # Get raw JSON data from the request
+        json_data = await request.json()
+        logger.info(f"Received JSON data: {json_data}")
+        
+        # Pass the JSON data directly to simulate_odds
+        results = simulate_odds(json_data)
         logger.info("simulate_odds ran successfully")
         return {"status": "success", "playoff_odds": results}
     except Exception as e:

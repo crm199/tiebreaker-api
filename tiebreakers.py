@@ -8,8 +8,8 @@ from supabase import create_client, Client
 import os
 
 
-supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_SERVICE_ROLE_KEY"))
-
+#supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_SERVICE_ROLE_KEY"))
+supabase = create_client("https://gypbjlbuznipjrvbhlbg.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5cGJqbGJ1em5pcGpydmJobGJnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjY1NzUzNywiZXhwIjoyMDcyMjMzNTM3fQ.eIAQmlvcQQm9oP8E54XE2-Ez3WduDINtD_U3s51_YK8")
 
 # Load team map
 # Fetch team map from Supabase
@@ -85,6 +85,7 @@ class Team:
         return (winPercentage)
 
 
+
 # Fetch games from Supabase
 games_data = supabase.table('Games').select('homeTeamId, awayTeamId, homeScore, awayScore', 'scheduleId').filter('stageIndex', 'neq', 0).filter('weekIndex', 'lte', 17).execute()
 games_df = pd.DataFrame(games_data.data)
@@ -96,1317 +97,1327 @@ games_df = games_df.drop(['homeTeamId', 'awayTeamId'], axis=1)  # Drop ID column
 
 df = games_df  # Now df has name-based columns like original CSV
 
-bills_data = df[(df['homeTeam'] == 'Bills') | (df['awayTeam'] == 'Bills')]
-
-bills_schedule = []
-for index, row in bills_data.iterrows():
-    if (row['homeTeam'] == 'Bills'):
-        bills_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Bills'):
-        bills_schedule.append(row['homeTeam'])
-
-bills_schedule_results = []
-for index, row in bills_data.iterrows():
-    if (row['homeTeam'] == 'Bills' and row['homeScore'] > row['awayScore']):
-        bills_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Bills' and row['awayScore'] > row['homeScore']):
-        bills_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Bills' and row['homeScore'] < row['awayScore']):
-        bills_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Bills' and row['awayScore'] < row['homeScore']):
-        bills_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Bills' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        bills_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Bills' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        bills_schedule_results.append('T')
-    else:
-        bills_schedule_results.append('NA')
-
-
-Bills = Team('Bills', 'AFC', 'AFCE', bills_schedule[0], bills_schedule_results[0], bills_schedule[1],
-             bills_schedule_results[1], bills_schedule[2], bills_schedule_results[2], bills_schedule[3],
-             bills_schedule_results[3],
-             bills_schedule[4], bills_schedule_results[4], bills_schedule[5], bills_schedule_results[5],
-             bills_schedule[6],
-             bills_schedule_results[6], bills_schedule[7], bills_schedule_results[7], bills_schedule[8],
-             bills_schedule_results[8],
-             bills_schedule[9], bills_schedule_results[9], bills_schedule[10], bills_schedule_results[10],
-             bills_schedule[11],
-             bills_schedule_results[11], bills_schedule[12], bills_schedule_results[12], bills_schedule[13],
-             bills_schedule_results[13],
-             bills_schedule[14], bills_schedule_results[14], bills_schedule[15], bills_schedule_results[15],
-             bills_schedule[16],
-             bills_schedule_results[16])
-
-dolphins_data = df[(df['homeTeam'] == 'Dolphins') | (df['awayTeam'] == 'Dolphins')]
-
-dolphins_schedule = []
-for index, row in dolphins_data.iterrows():
-    if (row['homeTeam'] == 'Dolphins'):
-        dolphins_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Dolphins'):
-        dolphins_schedule.append(row['homeTeam'])
-
-dolphins_schedule_results = []
-for index, row in dolphins_data.iterrows():
-    if (row['homeTeam'] == 'Dolphins' and row['homeScore'] > row['awayScore']):
-        dolphins_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Dolphins' and row['awayScore'] > row['homeScore']):
-        dolphins_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Dolphins' and row['homeScore'] < row['awayScore']):
-        dolphins_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Dolphins' and row['awayScore'] < row['homeScore']):
-        dolphins_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Dolphins' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        dolphins_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Dolphins' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        dolphins_schedule_results.append('T')
-    else:
-        dolphins_schedule_results.append('NA')
-
-Dolphins = Team('Dolphins', 'AFC', 'AFCE', dolphins_schedule[0], dolphins_schedule_results[0], dolphins_schedule[1],
-                dolphins_schedule_results[1], dolphins_schedule[2], dolphins_schedule_results[2], dolphins_schedule[3],
-                dolphins_schedule_results[3],
-                dolphins_schedule[4], dolphins_schedule_results[4], dolphins_schedule[5], dolphins_schedule_results[5],
-                dolphins_schedule[6],
-                dolphins_schedule_results[6], dolphins_schedule[7], dolphins_schedule_results[7], dolphins_schedule[8],
-                dolphins_schedule_results[8],
-                dolphins_schedule[9], dolphins_schedule_results[9], dolphins_schedule[10],
-                dolphins_schedule_results[10], dolphins_schedule[11],
-                dolphins_schedule_results[11], dolphins_schedule[12], dolphins_schedule_results[12],
-                dolphins_schedule[13], dolphins_schedule_results[13],
-                dolphins_schedule[14], dolphins_schedule_results[14], dolphins_schedule[15],
-                dolphins_schedule_results[15], dolphins_schedule[16],
-                dolphins_schedule_results[16])
-
-jets_data = df[(df['homeTeam'] == 'Jets') | (df['awayTeam'] == 'Jets')]
-
-jets_schedule = []
-for index, row in jets_data.iterrows():
-    if (row['homeTeam'] == 'Jets'):
-        jets_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Jets'):
-        jets_schedule.append(row['homeTeam'])
-
-jets_schedule_results = []
-for index, row in jets_data.iterrows():
-    if (row['homeTeam'] == 'Jets' and row['homeScore'] > row['awayScore']):
-        jets_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Jets' and row['awayScore'] > row['homeScore']):
-        jets_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Jets' and row['homeScore'] < row['awayScore']):
-        jets_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Jets' and row['awayScore'] < row['homeScore']):
-        jets_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Jets' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        jets_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Jets' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        jets_schedule_results.append('T')
-    else:
-        jets_schedule_results.append('NA')
-
-Jets = Team('Jets', 'AFC', 'AFCE', jets_schedule[0], jets_schedule_results[0], jets_schedule[1],
-            jets_schedule_results[1], jets_schedule[2], jets_schedule_results[2], jets_schedule[3],
-            jets_schedule_results[3],
-            jets_schedule[4], jets_schedule_results[4], jets_schedule[5], jets_schedule_results[5], jets_schedule[6],
-            jets_schedule_results[6], jets_schedule[7], jets_schedule_results[7], jets_schedule[8],
-            jets_schedule_results[8],
-            jets_schedule[9], jets_schedule_results[9], jets_schedule[10], jets_schedule_results[10], jets_schedule[11],
-            jets_schedule_results[11], jets_schedule[12], jets_schedule_results[12], jets_schedule[13],
-            jets_schedule_results[13],
-            jets_schedule[14], jets_schedule_results[14], jets_schedule[15], jets_schedule_results[15],
-            jets_schedule[16],
-            jets_schedule_results[16])
-
-patriots_data = df[(df['homeTeam'] == 'Patriots') | (df['awayTeam'] == 'Patriots')]
-
-patriots_schedule = []
-for index, row in patriots_data.iterrows():
-    if (row['homeTeam'] == 'Patriots'):
-        patriots_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Patriots'):
-        patriots_schedule.append(row['homeTeam'])
-
-patriots_schedule_results = []
-for index, row in patriots_data.iterrows():
-    if (row['homeTeam'] == 'Patriots' and row['homeScore'] > row['awayScore']):
-        patriots_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Patriots' and row['awayScore'] > row['homeScore']):
-        patriots_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Patriots' and row['homeScore'] < row['awayScore']):
-        patriots_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Patriots' and row['awayScore'] < row['homeScore']):
-        patriots_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Patriots' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        patriots_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Patriots' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        patriots_schedule_results.append('T')
-    else:
-        patriots_schedule_results.append('NA')
-
-Patriots = Team('Patriots', 'AFC', 'AFCE', patriots_schedule[0], patriots_schedule_results[0], patriots_schedule[1],
-                patriots_schedule_results[1], patriots_schedule[2], patriots_schedule_results[2], patriots_schedule[3],
-                patriots_schedule_results[3],
-                patriots_schedule[4], patriots_schedule_results[4], patriots_schedule[5], patriots_schedule_results[5],
-                patriots_schedule[6],
-                patriots_schedule_results[6], patriots_schedule[7], patriots_schedule_results[7], patriots_schedule[8],
-                patriots_schedule_results[8],
-                patriots_schedule[9], patriots_schedule_results[9], patriots_schedule[10],
-                patriots_schedule_results[10], patriots_schedule[11],
-                patriots_schedule_results[11], patriots_schedule[12], patriots_schedule_results[12],
-                patriots_schedule[13], patriots_schedule_results[13],
-                patriots_schedule[14], patriots_schedule_results[14], patriots_schedule[15],
-                patriots_schedule_results[15], patriots_schedule[16],
-                patriots_schedule_results[16])
-
-bengals_data = df[(df['homeTeam'] == 'Bengals') | (df['awayTeam'] == 'Bengals')]
-
-bengals_schedule = []
-for index, row in bengals_data.iterrows():
-    if (row['homeTeam'] == 'Bengals'):
-        bengals_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Bengals'):
-        bengals_schedule.append(row['homeTeam'])
-
-bengals_schedule_results = []
-for index, row in bengals_data.iterrows():
-    if (row['homeTeam'] == 'Bengals' and row['homeScore'] > row['awayScore']):
-        bengals_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Bengals' and row['awayScore'] > row['homeScore']):
-        bengals_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Bengals' and row['homeScore'] < row['awayScore']):
-        bengals_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Bengals' and row['awayScore'] < row['homeScore']):
-        bengals_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Bengals' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        bengals_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Bengals' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        bengals_schedule_results.append('T')
-    else:
-        bengals_schedule_results.append('NA')
-
-Bengals = Team('Bengals', 'AFC', 'AFCN', bengals_schedule[0], bengals_schedule_results[0], bengals_schedule[1],
-               bengals_schedule_results[1], bengals_schedule[2], bengals_schedule_results[2], bengals_schedule[3],
-               bengals_schedule_results[3],
-               bengals_schedule[4], bengals_schedule_results[4], bengals_schedule[5], bengals_schedule_results[5],
-               bengals_schedule[6],
-               bengals_schedule_results[6], bengals_schedule[7], bengals_schedule_results[7], bengals_schedule[8],
-               bengals_schedule_results[8],
-               bengals_schedule[9], bengals_schedule_results[9], bengals_schedule[10], bengals_schedule_results[10],
-               bengals_schedule[11],
-               bengals_schedule_results[11], bengals_schedule[12], bengals_schedule_results[12], bengals_schedule[13],
-               bengals_schedule_results[13],
-               bengals_schedule[14], bengals_schedule_results[14], bengals_schedule[15], bengals_schedule_results[15],
-               bengals_schedule[16],
-               bengals_schedule_results[16])
-
-browns_data = df[(df['homeTeam'] == 'Browns') | (df['awayTeam'] == 'Browns')]
-
-browns_schedule = []
-for index, row in browns_data.iterrows():
-    if (row['homeTeam'] == 'Browns'):
-        browns_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Browns'):
-        browns_schedule.append(row['homeTeam'])
-
-browns_schedule_results = []
-for index, row in browns_data.iterrows():
-    if (row['homeTeam'] == 'Browns' and row['homeScore'] > row['awayScore']):
-        browns_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Browns' and row['awayScore'] > row['homeScore']):
-        browns_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Browns' and row['homeScore'] < row['awayScore']):
-        browns_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Browns' and row['awayScore'] < row['homeScore']):
-        browns_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Browns' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        browns_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Browns' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        browns_schedule_results.append('T')
-    else:
-        browns_schedule_results.append('NA')
-
-Browns = Team('Browns', 'AFC', 'AFCN', browns_schedule[0], browns_schedule_results[0], browns_schedule[1],
-              browns_schedule_results[1], browns_schedule[2], browns_schedule_results[2], browns_schedule[3],
-              browns_schedule_results[3],
-              browns_schedule[4], browns_schedule_results[4], browns_schedule[5], browns_schedule_results[5],
-              browns_schedule[6],
-              browns_schedule_results[6], browns_schedule[7], browns_schedule_results[7], browns_schedule[8],
-              browns_schedule_results[8],
-              browns_schedule[9], browns_schedule_results[9], browns_schedule[10], browns_schedule_results[10],
-              browns_schedule[11],
-              browns_schedule_results[11], browns_schedule[12], browns_schedule_results[12], browns_schedule[13],
-              browns_schedule_results[13],
-              browns_schedule[14], browns_schedule_results[14], browns_schedule[15], browns_schedule_results[15],
-              browns_schedule[16],
-              browns_schedule_results[16])
-
-ravens_data = df[(df['homeTeam'] == 'Ravens') | (df['awayTeam'] == 'Ravens')]
-
-ravens_schedule = []
-for index, row in ravens_data.iterrows():
-    if (row['homeTeam'] == 'Ravens'):
-        ravens_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Ravens'):
-        ravens_schedule.append(row['homeTeam'])
-
-ravens_schedule_results = []
-for index, row in ravens_data.iterrows():
-    if (row['homeTeam'] == 'Ravens' and row['homeScore'] > row['awayScore']):
-        ravens_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Ravens' and row['awayScore'] > row['homeScore']):
-        ravens_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Ravens' and row['homeScore'] < row['awayScore']):
-        ravens_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Ravens' and row['awayScore'] < row['homeScore']):
-        ravens_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Ravens' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        ravens_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Ravens' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        ravens_schedule_results.append('T')
-    else:
-        ravens_schedule_results.append('NA')
-
-Ravens = Team('Ravens', 'AFC', 'AFCN', ravens_schedule[0], ravens_schedule_results[0], ravens_schedule[1],
-              ravens_schedule_results[1], ravens_schedule[2], ravens_schedule_results[2], ravens_schedule[3],
-              ravens_schedule_results[3],
-              ravens_schedule[4], ravens_schedule_results[4], ravens_schedule[5], ravens_schedule_results[5],
-              ravens_schedule[6],
-              ravens_schedule_results[6], ravens_schedule[7], ravens_schedule_results[7], ravens_schedule[8],
-              ravens_schedule_results[8],
-              ravens_schedule[9], ravens_schedule_results[9], ravens_schedule[10], ravens_schedule_results[10],
-              ravens_schedule[11],
-              ravens_schedule_results[11], ravens_schedule[12], ravens_schedule_results[12], ravens_schedule[13],
-              ravens_schedule_results[13],
-              ravens_schedule[14], ravens_schedule_results[14], ravens_schedule[15], ravens_schedule_results[15],
-              ravens_schedule[16],
-              ravens_schedule_results[16])
-
-steelers_data = df[(df['homeTeam'] == 'Steelers') | (df['awayTeam'] == 'Steelers')]
-
-steelers_schedule = []
-for index, row in steelers_data.iterrows():
-    if (row['homeTeam'] == 'Steelers'):
-        steelers_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Steelers'):
-        steelers_schedule.append(row['homeTeam'])
-
-steelers_schedule_results = []
-for index, row in steelers_data.iterrows():
-    if (row['homeTeam'] == 'Steelers' and row['homeScore'] > row['awayScore']):
-        steelers_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Steelers' and row['awayScore'] > row['homeScore']):
-        steelers_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Steelers' and row['homeScore'] < row['awayScore']):
-        steelers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Steelers' and row['awayScore'] < row['homeScore']):
-        steelers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Steelers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        steelers_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Steelers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        steelers_schedule_results.append('T')
-    else:
-        steelers_schedule_results.append('NA')
-
-Steelers = Team('Steelers', 'AFC', 'AFCN', steelers_schedule[0], steelers_schedule_results[0], steelers_schedule[1],
-                steelers_schedule_results[1], steelers_schedule[2], steelers_schedule_results[2], steelers_schedule[3],
-                steelers_schedule_results[3],
-                steelers_schedule[4], steelers_schedule_results[4], steelers_schedule[5], steelers_schedule_results[5],
-                steelers_schedule[6],
-                steelers_schedule_results[6], steelers_schedule[7], steelers_schedule_results[7], steelers_schedule[8],
-                steelers_schedule_results[8],
-                steelers_schedule[9], steelers_schedule_results[9], steelers_schedule[10],
-                steelers_schedule_results[10], steelers_schedule[11],
-                steelers_schedule_results[11], steelers_schedule[12], steelers_schedule_results[12],
-                steelers_schedule[13], steelers_schedule_results[13],
-                steelers_schedule[14], steelers_schedule_results[14], steelers_schedule[15],
-                steelers_schedule_results[15], steelers_schedule[16],
-                steelers_schedule_results[16])
-
-colts_data = df[(df['homeTeam'] == 'Colts') | (df['awayTeam'] == 'Colts')]
-
-colts_schedule = []
-for index, row in colts_data.iterrows():
-    if (row['homeTeam'] == 'Colts'):
-        colts_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Colts'):
-        colts_schedule.append(row['homeTeam'])
-
-colts_schedule_results = []
-for index, row in colts_data.iterrows():
-    if (row['homeTeam'] == 'Colts' and row['homeScore'] > row['awayScore']):
-        colts_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Colts' and row['awayScore'] > row['homeScore']):
-        colts_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Colts' and row['homeScore'] < row['awayScore']):
-        colts_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Colts' and row['awayScore'] < row['homeScore']):
-        colts_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Colts' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        colts_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Colts' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        colts_schedule_results.append('T')
-    else:
-        colts_schedule_results.append('NA')
-
-Colts = Team('Colts', 'AFC', 'AFCS', colts_schedule[0], colts_schedule_results[0], colts_schedule[1],
-             colts_schedule_results[1], colts_schedule[2], colts_schedule_results[2], colts_schedule[3],
-             colts_schedule_results[3],
-             colts_schedule[4], colts_schedule_results[4], colts_schedule[5], colts_schedule_results[5],
-             colts_schedule[6],
-             colts_schedule_results[6], colts_schedule[7], colts_schedule_results[7], colts_schedule[8],
-             colts_schedule_results[8],
-             colts_schedule[9], colts_schedule_results[9], colts_schedule[10], colts_schedule_results[10],
-             colts_schedule[11],
-             colts_schedule_results[11], colts_schedule[12], colts_schedule_results[12], colts_schedule[13],
-             colts_schedule_results[13],
-             colts_schedule[14], colts_schedule_results[14], colts_schedule[15], colts_schedule_results[15],
-             colts_schedule[16],
-             colts_schedule_results[16])
-
-jaguars_data = df[(df['homeTeam'] == 'Jaguars') | (df['awayTeam'] == 'Jaguars')]
-
-jaguars_schedule = []
-for index, row in jaguars_data.iterrows():
-    if (row['homeTeam'] == 'Jaguars'):
-        jaguars_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Jaguars'):
-        jaguars_schedule.append(row['homeTeam'])
-
-jaguars_schedule_results = []
-for index, row in jaguars_data.iterrows():
-    if (row['homeTeam'] == 'Jaguars' and row['homeScore'] > row['awayScore']):
-        jaguars_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Jaguars' and row['awayScore'] > row['homeScore']):
-        jaguars_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Jaguars' and row['homeScore'] < row['awayScore']):
-        jaguars_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Jaguars' and row['awayScore'] < row['homeScore']):
-        jaguars_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Jaguars' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        jaguars_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Jaguars' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        jaguars_schedule_results.append('T')
-    else:
-        jaguars_schedule_results.append('NA')
-
-Jaguars = Team('Jaguars', 'AFC', 'AFCS', jaguars_schedule[0], jaguars_schedule_results[0], jaguars_schedule[1],
-               jaguars_schedule_results[1], jaguars_schedule[2], jaguars_schedule_results[2], jaguars_schedule[3],
-               jaguars_schedule_results[3],
-               jaguars_schedule[4], jaguars_schedule_results[4], jaguars_schedule[5], jaguars_schedule_results[5],
-               jaguars_schedule[6],
-               jaguars_schedule_results[6], jaguars_schedule[7], jaguars_schedule_results[7], jaguars_schedule[8],
-               jaguars_schedule_results[8],
-               jaguars_schedule[9], jaguars_schedule_results[9], jaguars_schedule[10], jaguars_schedule_results[10],
-               jaguars_schedule[11],
-               jaguars_schedule_results[11], jaguars_schedule[12], jaguars_schedule_results[12], jaguars_schedule[13],
-               jaguars_schedule_results[13],
-               jaguars_schedule[14], jaguars_schedule_results[14], jaguars_schedule[15], jaguars_schedule_results[15],
-               jaguars_schedule[16],
-               jaguars_schedule_results[16])
-
-titans_data = df[(df['homeTeam'] == 'Titans') | (df['awayTeam'] == 'Titans')]
-
-titans_schedule = []
-for index, row in titans_data.iterrows():
-    if (row['homeTeam'] == 'Titans'):
-        titans_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Titans'):
-        titans_schedule.append(row['homeTeam'])
-
-titans_schedule_results = []
-for index, row in titans_data.iterrows():
-    if (row['homeTeam'] == 'Titans' and row['homeScore'] > row['awayScore']):
-        titans_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Titans' and row['awayScore'] > row['homeScore']):
-        titans_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Titans' and row['homeScore'] < row['awayScore']):
-        titans_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Titans' and row['awayScore'] < row['homeScore']):
-        titans_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Titans' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        titans_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Titans' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        titans_schedule_results.append('T')
-    else:
-        titans_schedule_results.append('NA')
-
-Titans = Team('Titans', 'AFC', 'AFCS', titans_schedule[0], titans_schedule_results[0], titans_schedule[1],
-              titans_schedule_results[1], titans_schedule[2], titans_schedule_results[2], titans_schedule[3],
-              titans_schedule_results[3],
-              titans_schedule[4], titans_schedule_results[4], titans_schedule[5], titans_schedule_results[5],
-              titans_schedule[6],
-              titans_schedule_results[6], titans_schedule[7], titans_schedule_results[7], titans_schedule[8],
-              titans_schedule_results[8],
-              titans_schedule[9], titans_schedule_results[9], titans_schedule[10], titans_schedule_results[10],
-              titans_schedule[11],
-              titans_schedule_results[11], titans_schedule[12], titans_schedule_results[12], titans_schedule[13],
-              titans_schedule_results[13],
-              titans_schedule[14], titans_schedule_results[14], titans_schedule[15], titans_schedule_results[15],
-              titans_schedule[16],
-              titans_schedule_results[16])
-
-texans_data = df[(df['homeTeam'] == 'Texans') | (df['awayTeam'] == 'Texans')]
-
-texans_schedule = []
-for index, row in texans_data.iterrows():
-    if (row['homeTeam'] == 'Texans'):
-        texans_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Texans'):
-        texans_schedule.append(row['homeTeam'])
-
-texans_schedule_results = []
-for index, row in texans_data.iterrows():
-    if (row['homeTeam'] == 'Texans' and row['homeScore'] > row['awayScore']):
-        texans_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Texans' and row['awayScore'] > row['homeScore']):
-        texans_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Texans' and row['homeScore'] < row['awayScore']):
-        texans_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Texans' and row['awayScore'] < row['homeScore']):
-        texans_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Texans' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        texans_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Texans' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        texans_schedule_results.append('T')
-    else:
-        texans_schedule_results.append('NA')
-
-Texans = Team('Texans', 'AFC', 'AFCS', texans_schedule[0], texans_schedule_results[0], texans_schedule[1],
-              texans_schedule_results[1], texans_schedule[2], texans_schedule_results[2], texans_schedule[3],
-              texans_schedule_results[3],
-              texans_schedule[4], texans_schedule_results[4], texans_schedule[5], texans_schedule_results[5],
-              texans_schedule[6],
-              texans_schedule_results[6], texans_schedule[7], texans_schedule_results[7], texans_schedule[8],
-              texans_schedule_results[8],
-              texans_schedule[9], texans_schedule_results[9], texans_schedule[10], texans_schedule_results[10],
-              texans_schedule[11],
-              texans_schedule_results[11], texans_schedule[12], texans_schedule_results[12], texans_schedule[13],
-              texans_schedule_results[13],
-              texans_schedule[14], texans_schedule_results[14], texans_schedule[15], texans_schedule_results[15],
-              texans_schedule[16],
-              texans_schedule_results[16])
-
-broncos_data = df[(df['homeTeam'] == 'Broncos') | (df['awayTeam'] == 'Broncos')]
-
-broncos_schedule = []
-for index, row in broncos_data.iterrows():
-    if (row['homeTeam'] == 'Broncos'):
-        broncos_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Broncos'):
-        broncos_schedule.append(row['homeTeam'])
-
-broncos_schedule_results = []
-for index, row in broncos_data.iterrows():
-    if (row['homeTeam'] == 'Broncos' and row['homeScore'] > row['awayScore']):
-        broncos_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Broncos' and row['awayScore'] > row['homeScore']):
-        broncos_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Broncos' and row['homeScore'] < row['awayScore']):
-        broncos_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Broncos' and row['awayScore'] < row['homeScore']):
-        broncos_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Broncos' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        broncos_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Broncos' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        broncos_schedule_results.append('T')
-    else:
-        broncos_schedule_results.append('NA')
-
-Broncos = Team('Broncos', 'AFC', 'AFCW', broncos_schedule[0], broncos_schedule_results[0], broncos_schedule[1],
-               broncos_schedule_results[1], broncos_schedule[2], broncos_schedule_results[2], broncos_schedule[3],
-               broncos_schedule_results[3],
-               broncos_schedule[4], broncos_schedule_results[4], broncos_schedule[5], broncos_schedule_results[5],
-               broncos_schedule[6],
-               broncos_schedule_results[6], broncos_schedule[7], broncos_schedule_results[7], broncos_schedule[8],
-               broncos_schedule_results[8],
-               broncos_schedule[9], broncos_schedule_results[9], broncos_schedule[10], broncos_schedule_results[10],
-               broncos_schedule[11],
-               broncos_schedule_results[11], broncos_schedule[12], broncos_schedule_results[12], broncos_schedule[13],
-               broncos_schedule_results[13],
-               broncos_schedule[14], broncos_schedule_results[14], broncos_schedule[15], broncos_schedule_results[15],
-               broncos_schedule[16],
-               broncos_schedule_results[16])
-
-chiefs_data = df[(df['homeTeam'] == 'Chiefs') | (df['awayTeam'] == 'Chiefs')]
-
-chiefs_schedule = []
-for index, row in chiefs_data.iterrows():
-    if (row['homeTeam'] == 'Chiefs'):
-        chiefs_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Chiefs'):
-        chiefs_schedule.append(row['homeTeam'])
-
-chiefs_schedule_results = []
-for index, row in chiefs_data.iterrows():
-    if (row['homeTeam'] == 'Chiefs' and row['homeScore'] > row['awayScore']):
-        chiefs_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Chiefs' and row['awayScore'] > row['homeScore']):
-        chiefs_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Chiefs' and row['homeScore'] < row['awayScore']):
-        chiefs_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Chiefs' and row['awayScore'] < row['homeScore']):
-        chiefs_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Chiefs' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        chiefs_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Chiefs' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        chiefs_schedule_results.append('T')
-    else:
-        chiefs_schedule_results.append('NA')
-
-Chiefs = Team('Chiefs', 'AFC', 'AFCW', chiefs_schedule[0], chiefs_schedule_results[0], chiefs_schedule[1],
-              chiefs_schedule_results[1], chiefs_schedule[2], chiefs_schedule_results[2], chiefs_schedule[3],
-              chiefs_schedule_results[3],
-              chiefs_schedule[4], chiefs_schedule_results[4], chiefs_schedule[5], chiefs_schedule_results[5],
-              chiefs_schedule[6],
-              chiefs_schedule_results[6], chiefs_schedule[7], chiefs_schedule_results[7], chiefs_schedule[8],
-              chiefs_schedule_results[8],
-              chiefs_schedule[9], chiefs_schedule_results[9], chiefs_schedule[10], chiefs_schedule_results[10],
-              chiefs_schedule[11],
-              chiefs_schedule_results[11], chiefs_schedule[12], chiefs_schedule_results[12], chiefs_schedule[13],
-              chiefs_schedule_results[13],
-              chiefs_schedule[14], chiefs_schedule_results[14], chiefs_schedule[15], chiefs_schedule_results[15],
-              chiefs_schedule[16],
-              chiefs_schedule_results[16])
-
-chargers_data = df[(df['homeTeam'] == 'Chargers') | (df['awayTeam'] == 'Chargers')]
-
-chargers_schedule = []
-for index, row in chargers_data.iterrows():
-    if (row['homeTeam'] == 'Chargers'):
-        chargers_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Chargers'):
-        chargers_schedule.append(row['homeTeam'])
-
-chargers_schedule_results = []
-for index, row in chargers_data.iterrows():
-    if (row['homeTeam'] == 'Chargers' and row['homeScore'] > row['awayScore']):
-        chargers_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Chargers' and row['awayScore'] > row['homeScore']):
-        chargers_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Chargers' and row['homeScore'] < row['awayScore']):
-        chargers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Chargers' and row['awayScore'] < row['homeScore']):
-        chargers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Chargers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        chargers_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Chargers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        chargers_schedule_results.append('T')
-    else:
-        chargers_schedule_results.append('NA')
-
-Chargers = Team('Chargers', 'AFC', 'AFCW', chargers_schedule[0], chargers_schedule_results[0], chargers_schedule[1],
-                chargers_schedule_results[1], chargers_schedule[2], chargers_schedule_results[2], chargers_schedule[3],
-                chargers_schedule_results[3],
-                chargers_schedule[4], chargers_schedule_results[4], chargers_schedule[5], chargers_schedule_results[5],
-                chargers_schedule[6],
-                chargers_schedule_results[6], chargers_schedule[7], chargers_schedule_results[7], chargers_schedule[8],
-                chargers_schedule_results[8],
-                chargers_schedule[9], chargers_schedule_results[9], chargers_schedule[10],
-                chargers_schedule_results[10], chargers_schedule[11],
-                chargers_schedule_results[11], chargers_schedule[12], chargers_schedule_results[12],
-                chargers_schedule[13], chargers_schedule_results[13],
-                chargers_schedule[14], chargers_schedule_results[14], chargers_schedule[15],
-                chargers_schedule_results[15], chargers_schedule[16],
-                chargers_schedule_results[16])
-
-raiders_data = df[(df['homeTeam'] == 'Raiders') | (df['awayTeam'] == 'Raiders')]
-
-raiders_schedule = []
-for index, row in raiders_data.iterrows():
-    if (row['homeTeam'] == 'Raiders'):
-        raiders_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Raiders'):
-        raiders_schedule.append(row['homeTeam'])
-
-raiders_schedule_results = []
-for index, row in raiders_data.iterrows():
-    if (row['homeTeam'] == 'Raiders' and row['homeScore'] > row['awayScore']):
-        raiders_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Raiders' and row['awayScore'] > row['homeScore']):
-        raiders_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Raiders' and row['homeScore'] < row['awayScore']):
-        raiders_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Raiders' and row['awayScore'] < row['homeScore']):
-        raiders_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Raiders' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        raiders_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Raiders' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        raiders_schedule_results.append('T')
-    else:
-        raiders_schedule_results.append('NA')
-
-Raiders = Team('Raiders', 'AFC', 'AFCW', raiders_schedule[0], raiders_schedule_results[0], raiders_schedule[1],
-               raiders_schedule_results[1], raiders_schedule[2], raiders_schedule_results[2], raiders_schedule[3],
-               raiders_schedule_results[3],
-               raiders_schedule[4], raiders_schedule_results[4], raiders_schedule[5], raiders_schedule_results[5],
-               raiders_schedule[6],
-               raiders_schedule_results[6], raiders_schedule[7], raiders_schedule_results[7], raiders_schedule[8],
-               raiders_schedule_results[8],
-               raiders_schedule[9], raiders_schedule_results[9], raiders_schedule[10], raiders_schedule_results[10],
-               raiders_schedule[11],
-               raiders_schedule_results[11], raiders_schedule[12], raiders_schedule_results[12], raiders_schedule[13],
-               raiders_schedule_results[13],
-               raiders_schedule[14], raiders_schedule_results[14], raiders_schedule[15], raiders_schedule_results[15],
-               raiders_schedule[16],
-               raiders_schedule_results[16])
-
-commanders_data = df[(df['homeTeam'] == 'Commanders') | (df['awayTeam'] == 'Commanders')]
-
-commanders_schedule = []
-for index, row in commanders_data.iterrows():
-    if (row['homeTeam'] == 'Commanders'):
-        commanders_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Commanders'):
-        commanders_schedule.append(row['homeTeam'])
-
-commanders_schedule_results = []
-for index, row in commanders_data.iterrows():
-    if (row['homeTeam'] == 'Commanders' and row['homeScore'] > row['awayScore']):
-        commanders_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Commanders' and row['awayScore'] > row['homeScore']):
-        commanders_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Commanders' and row['homeScore'] < row['awayScore']):
-        commanders_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Commanders' and row['awayScore'] < row['homeScore']):
-        commanders_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Commanders' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        commanders_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Commanders' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        commanders_schedule_results.append('T')
-    else:
-        commanders_schedule_results.append('NA')
-
-Commanders = Team('Commanders', 'NFC', 'NFCE', commanders_schedule[0], commanders_schedule_results[0],
-                  commanders_schedule[1],
-                  commanders_schedule_results[1], commanders_schedule[2], commanders_schedule_results[2],
-                  commanders_schedule[3], commanders_schedule_results[3],
-                  commanders_schedule[4], commanders_schedule_results[4], commanders_schedule[5],
-                  commanders_schedule_results[5], commanders_schedule[6],
-                  commanders_schedule_results[6], commanders_schedule[7], commanders_schedule_results[7],
-                  commanders_schedule[8], commanders_schedule_results[8],
-                  commanders_schedule[9], commanders_schedule_results[9], commanders_schedule[10],
-                  commanders_schedule_results[10], commanders_schedule[11],
-                  commanders_schedule_results[11], commanders_schedule[12], commanders_schedule_results[12],
-                  commanders_schedule[13], commanders_schedule_results[13],
-                  commanders_schedule[14], commanders_schedule_results[14], commanders_schedule[15],
-                  commanders_schedule_results[15], commanders_schedule[16],
-                  commanders_schedule_results[16])
-
-cowboys_data = df[(df['homeTeam'] == 'Cowboys') | (df['awayTeam'] == 'Cowboys')]
-
-cowboys_schedule = []
-for index, row in cowboys_data.iterrows():
-    if (row['homeTeam'] == 'Cowboys'):
-        cowboys_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Cowboys'):
-        cowboys_schedule.append(row['homeTeam'])
-
-cowboys_schedule_results = []
-for index, row in cowboys_data.iterrows():
-    if (row['homeTeam'] == 'Cowboys' and row['homeScore'] > row['awayScore']):
-        cowboys_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Cowboys' and row['awayScore'] > row['homeScore']):
-        cowboys_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Cowboys' and row['homeScore'] < row['awayScore']):
-        cowboys_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Cowboys' and row['awayScore'] < row['homeScore']):
-        cowboys_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Cowboys' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        cowboys_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Cowboys' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        cowboys_schedule_results.append('T')
-    else:
-        cowboys_schedule_results.append('NA')
-
-Cowboys = Team('Cowboys', 'NFC', 'NFCE', cowboys_schedule[0], cowboys_schedule_results[0], cowboys_schedule[1],
-               cowboys_schedule_results[1], cowboys_schedule[2], cowboys_schedule_results[2], cowboys_schedule[3],
-               cowboys_schedule_results[3],
-               cowboys_schedule[4], cowboys_schedule_results[4], cowboys_schedule[5], cowboys_schedule_results[5],
-               cowboys_schedule[6],
-               cowboys_schedule_results[6], cowboys_schedule[7], cowboys_schedule_results[7], cowboys_schedule[8],
-               cowboys_schedule_results[8],
-               cowboys_schedule[9], cowboys_schedule_results[9], cowboys_schedule[10], cowboys_schedule_results[10],
-               cowboys_schedule[11],
-               cowboys_schedule_results[11], cowboys_schedule[12], cowboys_schedule_results[12], cowboys_schedule[13],
-               cowboys_schedule_results[13],
-               cowboys_schedule[14], cowboys_schedule_results[14], cowboys_schedule[15], cowboys_schedule_results[15],
-               cowboys_schedule[16],
-               cowboys_schedule_results[16])
-
-giants_data = df[(df['homeTeam'] == 'Giants') | (df['awayTeam'] == 'Giants')]
-
-giants_schedule = []
-for index, row in giants_data.iterrows():
-    if (row['homeTeam'] == 'Giants'):
-        giants_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Giants'):
-        giants_schedule.append(row['homeTeam'])
-
-giants_schedule_results = []
-for index, row in giants_data.iterrows():
-    if (row['homeTeam'] == 'Giants' and row['homeScore'] > row['awayScore']):
-        giants_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Giants' and row['awayScore'] > row['homeScore']):
-        giants_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Giants' and row['homeScore'] < row['awayScore']):
-        giants_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Giants' and row['awayScore'] < row['homeScore']):
-        giants_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Giants' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        giants_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Giants' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        giants_schedule_results.append('T')
-    else:
-        giants_schedule_results.append('NA')
-
-Giants = Team('Giants', 'NFC', 'NFCE', giants_schedule[0], giants_schedule_results[0], giants_schedule[1],
-              giants_schedule_results[1], giants_schedule[2], giants_schedule_results[2], giants_schedule[3],
-              giants_schedule_results[3],
-              giants_schedule[4], giants_schedule_results[4], giants_schedule[5], giants_schedule_results[5],
-              giants_schedule[6],
-              giants_schedule_results[6], giants_schedule[7], giants_schedule_results[7], giants_schedule[8],
-              giants_schedule_results[8],
-              giants_schedule[9], giants_schedule_results[9], giants_schedule[10], giants_schedule_results[10],
-              giants_schedule[11],
-              giants_schedule_results[11], giants_schedule[12], giants_schedule_results[12], giants_schedule[13],
-              giants_schedule_results[13],
-              giants_schedule[14], giants_schedule_results[14], giants_schedule[15], giants_schedule_results[15],
-              giants_schedule[16],
-              giants_schedule_results[16])
-
-eagles_data = df[(df['homeTeam'] == 'Eagles') | (df['awayTeam'] == 'Eagles')]
-
-eagles_schedule = []
-for index, row in eagles_data.iterrows():
-    if (row['homeTeam'] == 'Eagles'):
-        eagles_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Eagles'):
-        eagles_schedule.append(row['homeTeam'])
-
-eagles_schedule_results = []
-for index, row in eagles_data.iterrows():
-    if (row['homeTeam'] == 'Eagles' and row['homeScore'] > row['awayScore']):
-        eagles_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Eagles' and row['awayScore'] > row['homeScore']):
-        eagles_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Eagles' and row['homeScore'] < row['awayScore']):
-        eagles_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Eagles' and row['awayScore'] < row['homeScore']):
-        eagles_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Eagles' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        eagles_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Eagles' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        eagles_schedule_results.append('T')
-    else:
-        eagles_schedule_results.append('NA')
-
-Eagles = Team('Eagles', 'NFC', 'NFCE', eagles_schedule[0], eagles_schedule_results[0], eagles_schedule[1],
-              eagles_schedule_results[1], eagles_schedule[2], eagles_schedule_results[2], eagles_schedule[3],
-              eagles_schedule_results[3],
-              eagles_schedule[4], eagles_schedule_results[4], eagles_schedule[5], eagles_schedule_results[5],
-              eagles_schedule[6],
-              eagles_schedule_results[6], eagles_schedule[7], eagles_schedule_results[7], eagles_schedule[8],
-              eagles_schedule_results[8],
-              eagles_schedule[9], eagles_schedule_results[9], eagles_schedule[10], eagles_schedule_results[10],
-              eagles_schedule[11],
-              eagles_schedule_results[11], eagles_schedule[12], eagles_schedule_results[12], eagles_schedule[13],
-              eagles_schedule_results[13],
-              eagles_schedule[14], eagles_schedule_results[14], eagles_schedule[15], eagles_schedule_results[15],
-              eagles_schedule[16],
-              eagles_schedule_results[16])
-
-bears_data = df[(df['homeTeam'] == 'Bears') | (df['awayTeam'] == 'Bears')]
-
-bears_schedule = []
-for index, row in bears_data.iterrows():
-    if (row['homeTeam'] == 'Bears'):
-        bears_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Bears'):
-        bears_schedule.append(row['homeTeam'])
-
-bears_schedule_results = []
-for index, row in bears_data.iterrows():
-    if (row['homeTeam'] == 'Bears' and row['homeScore'] > row['awayScore']):
-        bears_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Bears' and row['awayScore'] > row['homeScore']):
-        bears_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Bears' and row['homeScore'] < row['awayScore']):
-        bears_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Bears' and row['awayScore'] < row['homeScore']):
-        bears_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Bears' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        bears_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Bears' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        bears_schedule_results.append('T')
-    else:
-        bears_schedule_results.append('NA')
-
-Bears = Team('Bears', 'NFC', 'NFCN', bears_schedule[0], bears_schedule_results[0], bears_schedule[1],
-             bears_schedule_results[1], bears_schedule[2], bears_schedule_results[2], bears_schedule[3],
-             bears_schedule_results[3],
-             bears_schedule[4], bears_schedule_results[4], bears_schedule[5], bears_schedule_results[5],
-             bears_schedule[6],
-             bears_schedule_results[6], bears_schedule[7], bears_schedule_results[7], bears_schedule[8],
-             bears_schedule_results[8],
-             bears_schedule[9], bears_schedule_results[9], bears_schedule[10], bears_schedule_results[10],
-             bears_schedule[11],
-             bears_schedule_results[11], bears_schedule[12], bears_schedule_results[12], bears_schedule[13],
-             bears_schedule_results[13],
-             bears_schedule[14], bears_schedule_results[14], bears_schedule[15], bears_schedule_results[15],
-             bears_schedule[16],
-             bears_schedule_results[16])
-
-lions_data = df[(df['homeTeam'] == 'Lions') | (df['awayTeam'] == 'Lions')]
-
-lions_schedule = []
-for index, row in lions_data.iterrows():
-    if (row['homeTeam'] == 'Lions'):
-        lions_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Lions'):
-        lions_schedule.append(row['homeTeam'])
-
-lions_schedule_results = []
-for index, row in lions_data.iterrows():
-    if (row['homeTeam'] == 'Lions' and row['homeScore'] > row['awayScore']):
-        lions_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Lions' and row['awayScore'] > row['homeScore']):
-        lions_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Lions' and row['homeScore'] < row['awayScore']):
-        lions_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Lions' and row['awayScore'] < row['homeScore']):
-        lions_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Lions' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        lions_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Lions' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        lions_schedule_results.append('T')
-    else:
-        lions_schedule_results.append('NA')
-
-Lions = Team('Lions', 'NFC', 'NFCN', lions_schedule[0], lions_schedule_results[0], lions_schedule[1],
-             lions_schedule_results[1], lions_schedule[2], lions_schedule_results[2], lions_schedule[3],
-             lions_schedule_results[3],
-             lions_schedule[4], lions_schedule_results[4], lions_schedule[5], lions_schedule_results[5],
-             lions_schedule[6],
-             lions_schedule_results[6], lions_schedule[7], lions_schedule_results[7], lions_schedule[8],
-             lions_schedule_results[8],
-             lions_schedule[9], lions_schedule_results[9], lions_schedule[10], lions_schedule_results[10],
-             lions_schedule[11],
-             lions_schedule_results[11], lions_schedule[12], lions_schedule_results[12], lions_schedule[13],
-             lions_schedule_results[13],
-             lions_schedule[14], lions_schedule_results[14], lions_schedule[15], lions_schedule_results[15],
-             lions_schedule[16],
-             lions_schedule_results[16])
-
-packers_data = df[(df['homeTeam'] == 'Packers') | (df['awayTeam'] == 'Packers')]
-
-packers_schedule = []
-for index, row in packers_data.iterrows():
-    if (row['homeTeam'] == 'Packers'):
-        packers_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Packers'):
-        packers_schedule.append(row['homeTeam'])
-
-packers_schedule_results = []
-for index, row in packers_data.iterrows():
-    if (row['homeTeam'] == 'Packers' and row['homeScore'] > row['awayScore']):
-        packers_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Packers' and row['awayScore'] > row['homeScore']):
-        packers_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Packers' and row['homeScore'] < row['awayScore']):
-        packers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Packers' and row['awayScore'] < row['homeScore']):
-        packers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Packers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        packers_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Packers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        packers_schedule_results.append('T')
-    else:
-        packers_schedule_results.append('NA')
-
-Packers = Team('Packers', 'NFC', 'NFCN', packers_schedule[0], packers_schedule_results[0], packers_schedule[1],
-               packers_schedule_results[1], packers_schedule[2], packers_schedule_results[2], packers_schedule[3],
-               packers_schedule_results[3],
-               packers_schedule[4], packers_schedule_results[4], packers_schedule[5], packers_schedule_results[5],
-               packers_schedule[6],
-               packers_schedule_results[6], packers_schedule[7], packers_schedule_results[7], packers_schedule[8],
-               packers_schedule_results[8],
-               packers_schedule[9], packers_schedule_results[9], packers_schedule[10], packers_schedule_results[10],
-               packers_schedule[11],
-               packers_schedule_results[11], packers_schedule[12], packers_schedule_results[12], packers_schedule[13],
-               packers_schedule_results[13],
-               packers_schedule[14], packers_schedule_results[14], packers_schedule[15], packers_schedule_results[15],
-               packers_schedule[16],
-               packers_schedule_results[16])
-
-vikings_data = df[(df['homeTeam'] == 'Vikings') | (df['awayTeam'] == 'Vikings')]
-
-vikings_schedule = []
-for index, row in vikings_data.iterrows():
-    if (row['homeTeam'] == 'Vikings'):
-        vikings_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Vikings'):
-        vikings_schedule.append(row['homeTeam'])
-
-vikings_schedule_results = []
-for index, row in vikings_data.iterrows():
-    if (row['homeTeam'] == 'Vikings' and row['homeScore'] > row['awayScore']):
-        vikings_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Vikings' and row['awayScore'] > row['homeScore']):
-        vikings_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Vikings' and row['homeScore'] < row['awayScore']):
-        vikings_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Vikings' and row['awayScore'] < row['homeScore']):
-        vikings_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Vikings' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        vikings_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Vikings' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        vikings_schedule_results.append('T')
-    else:
-        vikings_schedule_results.append('NA')
-
-Vikings = Team('Vikings', 'NFC', 'NFCN', vikings_schedule[0], vikings_schedule_results[0], vikings_schedule[1],
-               vikings_schedule_results[1], vikings_schedule[2], vikings_schedule_results[2], vikings_schedule[3],
-               vikings_schedule_results[3],
-               vikings_schedule[4], vikings_schedule_results[4], vikings_schedule[5], vikings_schedule_results[5],
-               vikings_schedule[6],
-               vikings_schedule_results[6], vikings_schedule[7], vikings_schedule_results[7], vikings_schedule[8],
-               vikings_schedule_results[8],
-               vikings_schedule[9], vikings_schedule_results[9], vikings_schedule[10], vikings_schedule_results[10],
-               vikings_schedule[11],
-               vikings_schedule_results[11], vikings_schedule[12], vikings_schedule_results[12], vikings_schedule[13],
-               vikings_schedule_results[13],
-               vikings_schedule[14], vikings_schedule_results[14], vikings_schedule[15], vikings_schedule_results[15],
-               vikings_schedule[16],
-               vikings_schedule_results[16])
-
-buccaneers_data = df[(df['homeTeam'] == 'Buccaneers') | (df['awayTeam'] == 'Buccaneers')]
-
-buccaneers_schedule = []
-for index, row in buccaneers_data.iterrows():
-    if (row['homeTeam'] == 'Buccaneers'):
-        buccaneers_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Buccaneers'):
-        buccaneers_schedule.append(row['homeTeam'])
-
-buccaneers_schedule_results = []
-for index, row in buccaneers_data.iterrows():
-    if (row['homeTeam'] == 'Buccaneers' and row['homeScore'] > row['awayScore']):
-        buccaneers_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Buccaneers' and row['awayScore'] > row['homeScore']):
-        buccaneers_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Buccaneers' and row['homeScore'] < row['awayScore']):
-        buccaneers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Buccaneers' and row['awayScore'] < row['homeScore']):
-        buccaneers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Buccaneers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        buccaneers_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Buccaneers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        buccaneers_schedule_results.append('T')
-    else:
-        buccaneers_schedule_results.append('NA')
-
-Buccaneers = Team('Buccaneers', 'NFC', 'NFCS', buccaneers_schedule[0], buccaneers_schedule_results[0],
-                  buccaneers_schedule[1],
-                  buccaneers_schedule_results[1], buccaneers_schedule[2], buccaneers_schedule_results[2],
-                  buccaneers_schedule[3], buccaneers_schedule_results[3],
-                  buccaneers_schedule[4], buccaneers_schedule_results[4], buccaneers_schedule[5],
-                  buccaneers_schedule_results[5], buccaneers_schedule[6],
-                  buccaneers_schedule_results[6], buccaneers_schedule[7], buccaneers_schedule_results[7],
-                  buccaneers_schedule[8], buccaneers_schedule_results[8],
-                  buccaneers_schedule[9], buccaneers_schedule_results[9], buccaneers_schedule[10],
-                  buccaneers_schedule_results[10], buccaneers_schedule[11],
-                  buccaneers_schedule_results[11], buccaneers_schedule[12], buccaneers_schedule_results[12],
-                  buccaneers_schedule[13], buccaneers_schedule_results[13],
-                  buccaneers_schedule[14], buccaneers_schedule_results[14], buccaneers_schedule[15],
-                  buccaneers_schedule_results[15], buccaneers_schedule[16],
-                  buccaneers_schedule_results[16])
-
-falcons_data = df[(df['homeTeam'] == 'Falcons') | (df['awayTeam'] == 'Falcons')]
-
-falcons_schedule = []
-for index, row in falcons_data.iterrows():
-    if (row['homeTeam'] == 'Falcons'):
-        falcons_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Falcons'):
-        falcons_schedule.append(row['homeTeam'])
-
-falcons_schedule_results = []
-for index, row in falcons_data.iterrows():
-    if (row['homeTeam'] == 'Falcons' and row['homeScore'] > row['awayScore']):
-        falcons_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Falcons' and row['awayScore'] > row['homeScore']):
-        falcons_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Falcons' and row['homeScore'] < row['awayScore']):
-        falcons_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Falcons' and row['awayScore'] < row['homeScore']):
-        falcons_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Falcons' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        falcons_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Falcons' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        falcons_schedule_results.append('T')
-    else:
-        falcons_schedule_results.append('NA')
-
-Falcons = Team('Falcons', 'NFC', 'NFCS', falcons_schedule[0], falcons_schedule_results[0], falcons_schedule[1],
-               falcons_schedule_results[1], falcons_schedule[2], falcons_schedule_results[2], falcons_schedule[3],
-               falcons_schedule_results[3],
-               falcons_schedule[4], falcons_schedule_results[4], falcons_schedule[5], falcons_schedule_results[5],
-               falcons_schedule[6],
-               falcons_schedule_results[6], falcons_schedule[7], falcons_schedule_results[7], falcons_schedule[8],
-               falcons_schedule_results[8],
-               falcons_schedule[9], falcons_schedule_results[9], falcons_schedule[10], falcons_schedule_results[10],
-               falcons_schedule[11],
-               falcons_schedule_results[11], falcons_schedule[12], falcons_schedule_results[12], falcons_schedule[13],
-               falcons_schedule_results[13],
-               falcons_schedule[14], falcons_schedule_results[14], falcons_schedule[15], falcons_schedule_results[15],
-               falcons_schedule[16],
-               falcons_schedule_results[16])
-
-saints_data = df[(df['homeTeam'] == 'Saints') | (df['awayTeam'] == 'Saints')]
-
-saints_schedule = []
-for index, row in saints_data.iterrows():
-    if (row['homeTeam'] == 'Saints'):
-        saints_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Saints'):
-        saints_schedule.append(row['homeTeam'])
-
-saints_schedule_results = []
-for index, row in saints_data.iterrows():
-    if (row['homeTeam'] == 'Saints' and row['homeScore'] > row['awayScore']):
-        saints_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Saints' and row['awayScore'] > row['homeScore']):
-        saints_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Saints' and row['homeScore'] < row['awayScore']):
-        saints_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Saints' and row['awayScore'] < row['homeScore']):
-        saints_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Saints' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        saints_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Saints' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        saints_schedule_results.append('T')
-    else:
-        saints_schedule_results.append('NA')
-
-Saints = Team('Saints', 'NFC', 'NFCS', saints_schedule[0], saints_schedule_results[0], saints_schedule[1],
-              saints_schedule_results[1], saints_schedule[2], saints_schedule_results[2], saints_schedule[3],
-              saints_schedule_results[3],
-              saints_schedule[4], saints_schedule_results[4], saints_schedule[5], saints_schedule_results[5],
-              saints_schedule[6],
-              saints_schedule_results[6], saints_schedule[7], saints_schedule_results[7], saints_schedule[8],
-              saints_schedule_results[8],
-              saints_schedule[9], saints_schedule_results[9], saints_schedule[10], saints_schedule_results[10],
-              saints_schedule[11],
-              saints_schedule_results[11], saints_schedule[12], saints_schedule_results[12], saints_schedule[13],
-              saints_schedule_results[13],
-              saints_schedule[14], saints_schedule_results[14], saints_schedule[15], saints_schedule_results[15],
-              saints_schedule[16],
-              saints_schedule_results[16])
-
-panthers_data = df[(df['homeTeam'] == 'Panthers') | (df['awayTeam'] == 'Panthers')]
-
-panthers_schedule = []
-for index, row in panthers_data.iterrows():
-    if (row['homeTeam'] == 'Panthers'):
-        panthers_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Panthers'):
-        panthers_schedule.append(row['homeTeam'])
-
-panthers_schedule_results = []
-for index, row in panthers_data.iterrows():
-    if (row['homeTeam'] == 'Panthers' and row['homeScore'] > row['awayScore']):
-        panthers_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Panthers' and row['awayScore'] > row['homeScore']):
-        panthers_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Panthers' and row['homeScore'] < row['awayScore']):
-        panthers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Panthers' and row['awayScore'] < row['homeScore']):
-        panthers_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Panthers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        panthers_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Panthers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        panthers_schedule_results.append('T')
-    else:
-        panthers_schedule_results.append('NA')
-
-Panthers = Team('Panthers', 'NFC', 'NFCS', panthers_schedule[0], panthers_schedule_results[0], panthers_schedule[1],
-                panthers_schedule_results[1], panthers_schedule[2], panthers_schedule_results[2], panthers_schedule[3],
-                panthers_schedule_results[3],
-                panthers_schedule[4], panthers_schedule_results[4], panthers_schedule[5], panthers_schedule_results[5],
-                panthers_schedule[6],
-                panthers_schedule_results[6], panthers_schedule[7], panthers_schedule_results[7], panthers_schedule[8],
-                panthers_schedule_results[8],
-                panthers_schedule[9], panthers_schedule_results[9], panthers_schedule[10],
-                panthers_schedule_results[10], panthers_schedule[11],
-                panthers_schedule_results[11], panthers_schedule[12], panthers_schedule_results[12],
-                panthers_schedule[13], panthers_schedule_results[13],
-                panthers_schedule[14], panthers_schedule_results[14], panthers_schedule[15],
-                panthers_schedule_results[15], panthers_schedule[16],
-                panthers_schedule_results[16])
-
-niners_data = df[(df['homeTeam'] == '49ers') | (df['awayTeam'] == '49ers')]
-
-niners_schedule = []
-for index, row in niners_data.iterrows():
-    if (row['homeTeam'] == '49ers'):
-        niners_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == '49ers'):
-        niners_schedule.append(row['homeTeam'])
-
-niners_schedule_results = []
-for index, row in niners_data.iterrows():
-    if (row['homeTeam'] == '49ers' and row['homeScore'] > row['awayScore']):
-        niners_schedule_results.append('W')
-    elif (row['awayTeam'] == '49ers' and row['awayScore'] > row['homeScore']):
-        niners_schedule_results.append('W')
-    elif (row['homeTeam'] == '49ers' and row['homeScore'] < row['awayScore']):
-        niners_schedule_results.append('L')
-    elif (row['awayTeam'] == '49ers' and row['awayScore'] < row['homeScore']):
-        niners_schedule_results.append('L')
-    elif (row['awayTeam'] == '49ers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        niners_schedule_results.append('T')
-    elif (row['homeTeam'] == '49ers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        niners_schedule_results.append('T')
-    else:
-        niners_schedule_results.append('NA')
-
-Niners = Team('49ers', 'NFC', 'NFCW', niners_schedule[0], niners_schedule_results[0], niners_schedule[1],
-              niners_schedule_results[1], niners_schedule[2], niners_schedule_results[2], niners_schedule[3],
-              niners_schedule_results[3],
-              niners_schedule[4], niners_schedule_results[4], niners_schedule[5], niners_schedule_results[5],
-              niners_schedule[6],
-              niners_schedule_results[6], niners_schedule[7], niners_schedule_results[7], niners_schedule[8],
-              niners_schedule_results[8],
-              niners_schedule[9], niners_schedule_results[9], niners_schedule[10], niners_schedule_results[10],
-              niners_schedule[11],
-              niners_schedule_results[11], niners_schedule[12], niners_schedule_results[12], niners_schedule[13],
-              niners_schedule_results[13],
-              niners_schedule[14], niners_schedule_results[14], niners_schedule[15], niners_schedule_results[15],
-              niners_schedule[16],
-              niners_schedule_results[16])
-
-cardinals_data = df[(df['homeTeam'] == 'Cardinals') | (df['awayTeam'] == 'Cardinals')]
-
-cardinals_schedule = []
-for index, row in cardinals_data.iterrows():
-    if (row['homeTeam'] == 'Cardinals'):
-        cardinals_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Cardinals'):
-        cardinals_schedule.append(row['homeTeam'])
-
-cardinals_schedule_results = []
-for index, row in cardinals_data.iterrows():
-    if (row['homeTeam'] == 'Cardinals' and row['homeScore'] > row['awayScore']):
-        cardinals_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Cardinals' and row['awayScore'] > row['homeScore']):
-        cardinals_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Cardinals' and row['homeScore'] < row['awayScore']):
-        cardinals_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Cardinals' and row['awayScore'] < row['homeScore']):
-        cardinals_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Cardinals' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        cardinals_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Cardinals' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        cardinals_schedule_results.append('T')
-    else:
-        cardinals_schedule_results.append('NA')
-
-Cardinals = Team('Cardinals', 'NFC', 'NFCW', cardinals_schedule[0], cardinals_schedule_results[0],
-                 cardinals_schedule[1],
-                 cardinals_schedule_results[1], cardinals_schedule[2], cardinals_schedule_results[2],
-                 cardinals_schedule[3], cardinals_schedule_results[3],
-                 cardinals_schedule[4], cardinals_schedule_results[4], cardinals_schedule[5],
-                 cardinals_schedule_results[5], cardinals_schedule[6],
-                 cardinals_schedule_results[6], cardinals_schedule[7], cardinals_schedule_results[7],
-                 cardinals_schedule[8], cardinals_schedule_results[8],
-                 cardinals_schedule[9], cardinals_schedule_results[9], cardinals_schedule[10],
-                 cardinals_schedule_results[10], cardinals_schedule[11],
-                 cardinals_schedule_results[11], cardinals_schedule[12], cardinals_schedule_results[12],
-                 cardinals_schedule[13], cardinals_schedule_results[13],
-                 cardinals_schedule[14], cardinals_schedule_results[14], cardinals_schedule[15],
-                 cardinals_schedule_results[15], cardinals_schedule[16],
-                 cardinals_schedule_results[16])
-
-rams_data = df[(df['homeTeam'] == 'Rams') | (df['awayTeam'] == 'Rams')]
-
-rams_schedule = []
-for index, row in rams_data.iterrows():
-    if (row['homeTeam'] == 'Rams'):
-        rams_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Rams'):
-        rams_schedule.append(row['homeTeam'])
-
-rams_schedule_results = []
-for index, row in rams_data.iterrows():
-    if (row['homeTeam'] == 'Rams' and row['homeScore'] > row['awayScore']):
-        rams_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Rams' and row['awayScore'] > row['homeScore']):
-        rams_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Rams' and row['homeScore'] < row['awayScore']):
-        rams_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Rams' and row['awayScore'] < row['homeScore']):
-        rams_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Rams' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        rams_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Rams' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        rams_schedule_results.append('T')
-    else:
-        rams_schedule_results.append('NA')
-
-Rams = Team('Rams', 'NFC', 'NFCW', rams_schedule[0], rams_schedule_results[0], rams_schedule[1],
-            rams_schedule_results[1], rams_schedule[2], rams_schedule_results[2], rams_schedule[3],
-            rams_schedule_results[3],
-            rams_schedule[4], rams_schedule_results[4], rams_schedule[5], rams_schedule_results[5], rams_schedule[6],
-            rams_schedule_results[6], rams_schedule[7], rams_schedule_results[7], rams_schedule[8],
-            rams_schedule_results[8],
-            rams_schedule[9], rams_schedule_results[9], rams_schedule[10], rams_schedule_results[10], rams_schedule[11],
-            rams_schedule_results[11], rams_schedule[12], rams_schedule_results[12], rams_schedule[13],
-            rams_schedule_results[13],
-            rams_schedule[14], rams_schedule_results[14], rams_schedule[15], rams_schedule_results[15],
-            rams_schedule[16],
-            rams_schedule_results[16])
-
-seahawks_data = df[(df['homeTeam'] == 'Seahawks') | (df['awayTeam'] == 'Seahawks')]
-
-seahawks_schedule = []
-for index, row in seahawks_data.iterrows():
-    if (row['homeTeam'] == 'Seahawks'):
-        seahawks_schedule.append(row['awayTeam'])
-    elif (row['awayTeam'] == 'Seahawks'):
-        seahawks_schedule.append(row['homeTeam'])
-
-seahawks_schedule_results = []
-for index, row in seahawks_data.iterrows():
-    if (row['homeTeam'] == 'Seahawks' and row['homeScore'] > row['awayScore']):
-        seahawks_schedule_results.append('W')
-    elif (row['awayTeam'] == 'Seahawks' and row['awayScore'] > row['homeScore']):
-        seahawks_schedule_results.append('W')
-    elif (row['homeTeam'] == 'Seahawks' and row['homeScore'] < row['awayScore']):
-        seahawks_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Seahawks' and row['awayScore'] < row['homeScore']):
-        seahawks_schedule_results.append('L')
-    elif (row['awayTeam'] == 'Seahawks' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        seahawks_schedule_results.append('T')
-    elif (row['homeTeam'] == 'Seahawks' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-        seahawks_schedule_results.append('T')
-    else:
-        seahawks_schedule_results.append('NA')
-
-Seahawks = Team('Seahawks', 'NFC', 'NFCW', seahawks_schedule[0], seahawks_schedule_results[0], seahawks_schedule[1],
-                seahawks_schedule_results[1], seahawks_schedule[2], seahawks_schedule_results[2], seahawks_schedule[3],
-                seahawks_schedule_results[3],
-                seahawks_schedule[4], seahawks_schedule_results[4], seahawks_schedule[5], seahawks_schedule_results[5],
-                seahawks_schedule[6],
-                seahawks_schedule_results[6], seahawks_schedule[7], seahawks_schedule_results[7], seahawks_schedule[8],
-                seahawks_schedule_results[8],
-                seahawks_schedule[9], seahawks_schedule_results[9], seahawks_schedule[10],
-                seahawks_schedule_results[10], seahawks_schedule[11],
-                seahawks_schedule_results[11], seahawks_schedule[12], seahawks_schedule_results[12],
-                seahawks_schedule[13], seahawks_schedule_results[13],
-                seahawks_schedule[14], seahawks_schedule_results[14], seahawks_schedule[15],
-                seahawks_schedule_results[15], seahawks_schedule[16],
-                seahawks_schedule_results[16])
+
+
+
+
+def fillSchedules(df):
+    global Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans, Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers, Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks
+
+    bills_data = df[(df['homeTeam'] == 'Bills') | (df['awayTeam'] == 'Bills')]
+
+    bills_schedule = []
+    for index, row in bills_data.iterrows():
+        if (row['homeTeam'] == 'Bills'):
+            bills_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Bills'):
+            bills_schedule.append(row['homeTeam'])
+
+    bills_schedule_results = []
+    for index, row in bills_data.iterrows():
+        if (row['homeTeam'] == 'Bills' and row['homeScore'] > row['awayScore']):
+            bills_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Bills' and row['awayScore'] > row['homeScore']):
+            bills_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Bills' and row['homeScore'] < row['awayScore']):
+            bills_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Bills' and row['awayScore'] < row['homeScore']):
+            bills_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Bills' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            bills_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Bills' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            bills_schedule_results.append('T')
+        else:
+            bills_schedule_results.append('NA')
+
+
+    Bills = Team('Bills', 'AFC', 'AFCE', bills_schedule[0], bills_schedule_results[0], bills_schedule[1],
+                bills_schedule_results[1], bills_schedule[2], bills_schedule_results[2], bills_schedule[3],
+                bills_schedule_results[3],
+                bills_schedule[4], bills_schedule_results[4], bills_schedule[5], bills_schedule_results[5],
+                bills_schedule[6],
+                bills_schedule_results[6], bills_schedule[7], bills_schedule_results[7], bills_schedule[8],
+                bills_schedule_results[8],
+                bills_schedule[9], bills_schedule_results[9], bills_schedule[10], bills_schedule_results[10],
+                bills_schedule[11],
+                bills_schedule_results[11], bills_schedule[12], bills_schedule_results[12], bills_schedule[13],
+                bills_schedule_results[13],
+                bills_schedule[14], bills_schedule_results[14], bills_schedule[15], bills_schedule_results[15],
+                bills_schedule[16],
+                bills_schedule_results[16])
+
+    dolphins_data = df[(df['homeTeam'] == 'Dolphins') | (df['awayTeam'] == 'Dolphins')]
+
+    dolphins_schedule = []
+    for index, row in dolphins_data.iterrows():
+        if (row['homeTeam'] == 'Dolphins'):
+            dolphins_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Dolphins'):
+            dolphins_schedule.append(row['homeTeam'])
+
+    dolphins_schedule_results = []
+    for index, row in dolphins_data.iterrows():
+        if (row['homeTeam'] == 'Dolphins' and row['homeScore'] > row['awayScore']):
+            dolphins_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Dolphins' and row['awayScore'] > row['homeScore']):
+            dolphins_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Dolphins' and row['homeScore'] < row['awayScore']):
+            dolphins_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Dolphins' and row['awayScore'] < row['homeScore']):
+            dolphins_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Dolphins' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            dolphins_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Dolphins' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            dolphins_schedule_results.append('T')
+        else:
+            dolphins_schedule_results.append('NA')
+
+    Dolphins = Team('Dolphins', 'AFC', 'AFCE', dolphins_schedule[0], dolphins_schedule_results[0], dolphins_schedule[1],
+                    dolphins_schedule_results[1], dolphins_schedule[2], dolphins_schedule_results[2], dolphins_schedule[3],
+                    dolphins_schedule_results[3],
+                    dolphins_schedule[4], dolphins_schedule_results[4], dolphins_schedule[5], dolphins_schedule_results[5],
+                    dolphins_schedule[6],
+                    dolphins_schedule_results[6], dolphins_schedule[7], dolphins_schedule_results[7], dolphins_schedule[8],
+                    dolphins_schedule_results[8],
+                    dolphins_schedule[9], dolphins_schedule_results[9], dolphins_schedule[10],
+                    dolphins_schedule_results[10], dolphins_schedule[11],
+                    dolphins_schedule_results[11], dolphins_schedule[12], dolphins_schedule_results[12],
+                    dolphins_schedule[13], dolphins_schedule_results[13],
+                    dolphins_schedule[14], dolphins_schedule_results[14], dolphins_schedule[15],
+                    dolphins_schedule_results[15], dolphins_schedule[16],
+                    dolphins_schedule_results[16])
+
+    jets_data = df[(df['homeTeam'] == 'Jets') | (df['awayTeam'] == 'Jets')]
+
+    jets_schedule = []
+    for index, row in jets_data.iterrows():
+        if (row['homeTeam'] == 'Jets'):
+            jets_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Jets'):
+            jets_schedule.append(row['homeTeam'])
+
+    jets_schedule_results = []
+    for index, row in jets_data.iterrows():
+        if (row['homeTeam'] == 'Jets' and row['homeScore'] > row['awayScore']):
+            jets_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Jets' and row['awayScore'] > row['homeScore']):
+            jets_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Jets' and row['homeScore'] < row['awayScore']):
+            jets_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Jets' and row['awayScore'] < row['homeScore']):
+            jets_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Jets' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            jets_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Jets' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            jets_schedule_results.append('T')
+        else:
+            jets_schedule_results.append('NA')
+
+    Jets = Team('Jets', 'AFC', 'AFCE', jets_schedule[0], jets_schedule_results[0], jets_schedule[1],
+                jets_schedule_results[1], jets_schedule[2], jets_schedule_results[2], jets_schedule[3],
+                jets_schedule_results[3],
+                jets_schedule[4], jets_schedule_results[4], jets_schedule[5], jets_schedule_results[5], jets_schedule[6],
+                jets_schedule_results[6], jets_schedule[7], jets_schedule_results[7], jets_schedule[8],
+                jets_schedule_results[8],
+                jets_schedule[9], jets_schedule_results[9], jets_schedule[10], jets_schedule_results[10], jets_schedule[11],
+                jets_schedule_results[11], jets_schedule[12], jets_schedule_results[12], jets_schedule[13],
+                jets_schedule_results[13],
+                jets_schedule[14], jets_schedule_results[14], jets_schedule[15], jets_schedule_results[15],
+                jets_schedule[16],
+                jets_schedule_results[16])
+
+    patriots_data = df[(df['homeTeam'] == 'Patriots') | (df['awayTeam'] == 'Patriots')]
+
+    patriots_schedule = []
+    for index, row in patriots_data.iterrows():
+        if (row['homeTeam'] == 'Patriots'):
+            patriots_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Patriots'):
+            patriots_schedule.append(row['homeTeam'])
+
+    patriots_schedule_results = []
+    for index, row in patriots_data.iterrows():
+        if (row['homeTeam'] == 'Patriots' and row['homeScore'] > row['awayScore']):
+            patriots_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Patriots' and row['awayScore'] > row['homeScore']):
+            patriots_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Patriots' and row['homeScore'] < row['awayScore']):
+            patriots_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Patriots' and row['awayScore'] < row['homeScore']):
+            patriots_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Patriots' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            patriots_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Patriots' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            patriots_schedule_results.append('T')
+        else:
+            patriots_schedule_results.append('NA')
+
+    Patriots = Team('Patriots', 'AFC', 'AFCE', patriots_schedule[0], patriots_schedule_results[0], patriots_schedule[1],
+                    patriots_schedule_results[1], patriots_schedule[2], patriots_schedule_results[2], patriots_schedule[3],
+                    patriots_schedule_results[3],
+                    patriots_schedule[4], patriots_schedule_results[4], patriots_schedule[5], patriots_schedule_results[5],
+                    patriots_schedule[6],
+                    patriots_schedule_results[6], patriots_schedule[7], patriots_schedule_results[7], patriots_schedule[8],
+                    patriots_schedule_results[8],
+                    patriots_schedule[9], patriots_schedule_results[9], patriots_schedule[10],
+                    patriots_schedule_results[10], patriots_schedule[11],
+                    patriots_schedule_results[11], patriots_schedule[12], patriots_schedule_results[12],
+                    patriots_schedule[13], patriots_schedule_results[13],
+                    patriots_schedule[14], patriots_schedule_results[14], patriots_schedule[15],
+                    patriots_schedule_results[15], patriots_schedule[16],
+                    patriots_schedule_results[16])
+
+    bengals_data = df[(df['homeTeam'] == 'Bengals') | (df['awayTeam'] == 'Bengals')]
+
+    bengals_schedule = []
+    for index, row in bengals_data.iterrows():
+        if (row['homeTeam'] == 'Bengals'):
+            bengals_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Bengals'):
+            bengals_schedule.append(row['homeTeam'])
+
+    bengals_schedule_results = []
+    for index, row in bengals_data.iterrows():
+        if (row['homeTeam'] == 'Bengals' and row['homeScore'] > row['awayScore']):
+            bengals_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Bengals' and row['awayScore'] > row['homeScore']):
+            bengals_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Bengals' and row['homeScore'] < row['awayScore']):
+            bengals_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Bengals' and row['awayScore'] < row['homeScore']):
+            bengals_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Bengals' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            bengals_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Bengals' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            bengals_schedule_results.append('T')
+        else:
+            bengals_schedule_results.append('NA')
+
+    Bengals = Team('Bengals', 'AFC', 'AFCN', bengals_schedule[0], bengals_schedule_results[0], bengals_schedule[1],
+                bengals_schedule_results[1], bengals_schedule[2], bengals_schedule_results[2], bengals_schedule[3],
+                bengals_schedule_results[3],
+                bengals_schedule[4], bengals_schedule_results[4], bengals_schedule[5], bengals_schedule_results[5],
+                bengals_schedule[6],
+                bengals_schedule_results[6], bengals_schedule[7], bengals_schedule_results[7], bengals_schedule[8],
+                bengals_schedule_results[8],
+                bengals_schedule[9], bengals_schedule_results[9], bengals_schedule[10], bengals_schedule_results[10],
+                bengals_schedule[11],
+                bengals_schedule_results[11], bengals_schedule[12], bengals_schedule_results[12], bengals_schedule[13],
+                bengals_schedule_results[13],
+                bengals_schedule[14], bengals_schedule_results[14], bengals_schedule[15], bengals_schedule_results[15],
+                bengals_schedule[16],
+                bengals_schedule_results[16])
+
+    browns_data = df[(df['homeTeam'] == 'Browns') | (df['awayTeam'] == 'Browns')]
+
+    browns_schedule = []
+    for index, row in browns_data.iterrows():
+        if (row['homeTeam'] == 'Browns'):
+            browns_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Browns'):
+            browns_schedule.append(row['homeTeam'])
+
+    browns_schedule_results = []
+    for index, row in browns_data.iterrows():
+        if (row['homeTeam'] == 'Browns' and row['homeScore'] > row['awayScore']):
+            browns_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Browns' and row['awayScore'] > row['homeScore']):
+            browns_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Browns' and row['homeScore'] < row['awayScore']):
+            browns_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Browns' and row['awayScore'] < row['homeScore']):
+            browns_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Browns' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            browns_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Browns' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            browns_schedule_results.append('T')
+        else:
+            browns_schedule_results.append('NA')
+
+    Browns = Team('Browns', 'AFC', 'AFCN', browns_schedule[0], browns_schedule_results[0], browns_schedule[1],
+                browns_schedule_results[1], browns_schedule[2], browns_schedule_results[2], browns_schedule[3],
+                browns_schedule_results[3],
+                browns_schedule[4], browns_schedule_results[4], browns_schedule[5], browns_schedule_results[5],
+                browns_schedule[6],
+                browns_schedule_results[6], browns_schedule[7], browns_schedule_results[7], browns_schedule[8],
+                browns_schedule_results[8],
+                browns_schedule[9], browns_schedule_results[9], browns_schedule[10], browns_schedule_results[10],
+                browns_schedule[11],
+                browns_schedule_results[11], browns_schedule[12], browns_schedule_results[12], browns_schedule[13],
+                browns_schedule_results[13],
+                browns_schedule[14], browns_schedule_results[14], browns_schedule[15], browns_schedule_results[15],
+                browns_schedule[16],
+                browns_schedule_results[16])
+
+    ravens_data = df[(df['homeTeam'] == 'Ravens') | (df['awayTeam'] == 'Ravens')]
+
+    ravens_schedule = []
+    for index, row in ravens_data.iterrows():
+        if (row['homeTeam'] == 'Ravens'):
+            ravens_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Ravens'):
+            ravens_schedule.append(row['homeTeam'])
+
+    ravens_schedule_results = []
+    for index, row in ravens_data.iterrows():
+        if (row['homeTeam'] == 'Ravens' and row['homeScore'] > row['awayScore']):
+            ravens_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Ravens' and row['awayScore'] > row['homeScore']):
+            ravens_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Ravens' and row['homeScore'] < row['awayScore']):
+            ravens_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Ravens' and row['awayScore'] < row['homeScore']):
+            ravens_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Ravens' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            ravens_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Ravens' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            ravens_schedule_results.append('T')
+        else:
+            ravens_schedule_results.append('NA')
+
+    Ravens = Team('Ravens', 'AFC', 'AFCN', ravens_schedule[0], ravens_schedule_results[0], ravens_schedule[1],
+                ravens_schedule_results[1], ravens_schedule[2], ravens_schedule_results[2], ravens_schedule[3],
+                ravens_schedule_results[3],
+                ravens_schedule[4], ravens_schedule_results[4], ravens_schedule[5], ravens_schedule_results[5],
+                ravens_schedule[6],
+                ravens_schedule_results[6], ravens_schedule[7], ravens_schedule_results[7], ravens_schedule[8],
+                ravens_schedule_results[8],
+                ravens_schedule[9], ravens_schedule_results[9], ravens_schedule[10], ravens_schedule_results[10],
+                ravens_schedule[11],
+                ravens_schedule_results[11], ravens_schedule[12], ravens_schedule_results[12], ravens_schedule[13],
+                ravens_schedule_results[13],
+                ravens_schedule[14], ravens_schedule_results[14], ravens_schedule[15], ravens_schedule_results[15],
+                ravens_schedule[16],
+                ravens_schedule_results[16])
+
+    steelers_data = df[(df['homeTeam'] == 'Steelers') | (df['awayTeam'] == 'Steelers')]
+
+    steelers_schedule = []
+    for index, row in steelers_data.iterrows():
+        if (row['homeTeam'] == 'Steelers'):
+            steelers_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Steelers'):
+            steelers_schedule.append(row['homeTeam'])
+
+    steelers_schedule_results = []
+    for index, row in steelers_data.iterrows():
+        if (row['homeTeam'] == 'Steelers' and row['homeScore'] > row['awayScore']):
+            steelers_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Steelers' and row['awayScore'] > row['homeScore']):
+            steelers_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Steelers' and row['homeScore'] < row['awayScore']):
+            steelers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Steelers' and row['awayScore'] < row['homeScore']):
+            steelers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Steelers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            steelers_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Steelers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            steelers_schedule_results.append('T')
+        else:
+            steelers_schedule_results.append('NA')
+
+    Steelers = Team('Steelers', 'AFC', 'AFCN', steelers_schedule[0], steelers_schedule_results[0], steelers_schedule[1],
+                    steelers_schedule_results[1], steelers_schedule[2], steelers_schedule_results[2], steelers_schedule[3],
+                    steelers_schedule_results[3],
+                    steelers_schedule[4], steelers_schedule_results[4], steelers_schedule[5], steelers_schedule_results[5],
+                    steelers_schedule[6],
+                    steelers_schedule_results[6], steelers_schedule[7], steelers_schedule_results[7], steelers_schedule[8],
+                    steelers_schedule_results[8],
+                    steelers_schedule[9], steelers_schedule_results[9], steelers_schedule[10],
+                    steelers_schedule_results[10], steelers_schedule[11],
+                    steelers_schedule_results[11], steelers_schedule[12], steelers_schedule_results[12],
+                    steelers_schedule[13], steelers_schedule_results[13],
+                    steelers_schedule[14], steelers_schedule_results[14], steelers_schedule[15],
+                    steelers_schedule_results[15], steelers_schedule[16],
+                    steelers_schedule_results[16])
+
+    colts_data = df[(df['homeTeam'] == 'Colts') | (df['awayTeam'] == 'Colts')]
+
+    colts_schedule = []
+    for index, row in colts_data.iterrows():
+        if (row['homeTeam'] == 'Colts'):
+            colts_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Colts'):
+            colts_schedule.append(row['homeTeam'])
+
+    colts_schedule_results = []
+    for index, row in colts_data.iterrows():
+        if (row['homeTeam'] == 'Colts' and row['homeScore'] > row['awayScore']):
+            colts_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Colts' and row['awayScore'] > row['homeScore']):
+            colts_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Colts' and row['homeScore'] < row['awayScore']):
+            colts_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Colts' and row['awayScore'] < row['homeScore']):
+            colts_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Colts' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            colts_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Colts' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            colts_schedule_results.append('T')
+        else:
+            colts_schedule_results.append('NA')
+
+    Colts = Team('Colts', 'AFC', 'AFCS', colts_schedule[0], colts_schedule_results[0], colts_schedule[1],
+                colts_schedule_results[1], colts_schedule[2], colts_schedule_results[2], colts_schedule[3],
+                colts_schedule_results[3],
+                colts_schedule[4], colts_schedule_results[4], colts_schedule[5], colts_schedule_results[5],
+                colts_schedule[6],
+                colts_schedule_results[6], colts_schedule[7], colts_schedule_results[7], colts_schedule[8],
+                colts_schedule_results[8],
+                colts_schedule[9], colts_schedule_results[9], colts_schedule[10], colts_schedule_results[10],
+                colts_schedule[11],
+                colts_schedule_results[11], colts_schedule[12], colts_schedule_results[12], colts_schedule[13],
+                colts_schedule_results[13],
+                colts_schedule[14], colts_schedule_results[14], colts_schedule[15], colts_schedule_results[15],
+                colts_schedule[16],
+                colts_schedule_results[16])
+
+    jaguars_data = df[(df['homeTeam'] == 'Jaguars') | (df['awayTeam'] == 'Jaguars')]
+
+    jaguars_schedule = []
+    for index, row in jaguars_data.iterrows():
+        if (row['homeTeam'] == 'Jaguars'):
+            jaguars_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Jaguars'):
+            jaguars_schedule.append(row['homeTeam'])
+
+    jaguars_schedule_results = []
+    for index, row in jaguars_data.iterrows():
+        if (row['homeTeam'] == 'Jaguars' and row['homeScore'] > row['awayScore']):
+            jaguars_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Jaguars' and row['awayScore'] > row['homeScore']):
+            jaguars_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Jaguars' and row['homeScore'] < row['awayScore']):
+            jaguars_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Jaguars' and row['awayScore'] < row['homeScore']):
+            jaguars_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Jaguars' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            jaguars_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Jaguars' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            jaguars_schedule_results.append('T')
+        else:
+            jaguars_schedule_results.append('NA')
+
+    Jaguars = Team('Jaguars', 'AFC', 'AFCS', jaguars_schedule[0], jaguars_schedule_results[0], jaguars_schedule[1],
+                jaguars_schedule_results[1], jaguars_schedule[2], jaguars_schedule_results[2], jaguars_schedule[3],
+                jaguars_schedule_results[3],
+                jaguars_schedule[4], jaguars_schedule_results[4], jaguars_schedule[5], jaguars_schedule_results[5],
+                jaguars_schedule[6],
+                jaguars_schedule_results[6], jaguars_schedule[7], jaguars_schedule_results[7], jaguars_schedule[8],
+                jaguars_schedule_results[8],
+                jaguars_schedule[9], jaguars_schedule_results[9], jaguars_schedule[10], jaguars_schedule_results[10],
+                jaguars_schedule[11],
+                jaguars_schedule_results[11], jaguars_schedule[12], jaguars_schedule_results[12], jaguars_schedule[13],
+                jaguars_schedule_results[13],
+                jaguars_schedule[14], jaguars_schedule_results[14], jaguars_schedule[15], jaguars_schedule_results[15],
+                jaguars_schedule[16],
+                jaguars_schedule_results[16])
+
+    titans_data = df[(df['homeTeam'] == 'Titans') | (df['awayTeam'] == 'Titans')]
+
+    titans_schedule = []
+    for index, row in titans_data.iterrows():
+        if (row['homeTeam'] == 'Titans'):
+            titans_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Titans'):
+            titans_schedule.append(row['homeTeam'])
+
+    titans_schedule_results = []
+    for index, row in titans_data.iterrows():
+        if (row['homeTeam'] == 'Titans' and row['homeScore'] > row['awayScore']):
+            titans_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Titans' and row['awayScore'] > row['homeScore']):
+            titans_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Titans' and row['homeScore'] < row['awayScore']):
+            titans_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Titans' and row['awayScore'] < row['homeScore']):
+            titans_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Titans' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            titans_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Titans' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            titans_schedule_results.append('T')
+        else:
+            titans_schedule_results.append('NA')
+
+    Titans = Team('Titans', 'AFC', 'AFCS', titans_schedule[0], titans_schedule_results[0], titans_schedule[1],
+                titans_schedule_results[1], titans_schedule[2], titans_schedule_results[2], titans_schedule[3],
+                titans_schedule_results[3],
+                titans_schedule[4], titans_schedule_results[4], titans_schedule[5], titans_schedule_results[5],
+                titans_schedule[6],
+                titans_schedule_results[6], titans_schedule[7], titans_schedule_results[7], titans_schedule[8],
+                titans_schedule_results[8],
+                titans_schedule[9], titans_schedule_results[9], titans_schedule[10], titans_schedule_results[10],
+                titans_schedule[11],
+                titans_schedule_results[11], titans_schedule[12], titans_schedule_results[12], titans_schedule[13],
+                titans_schedule_results[13],
+                titans_schedule[14], titans_schedule_results[14], titans_schedule[15], titans_schedule_results[15],
+                titans_schedule[16],
+                titans_schedule_results[16])
+
+    texans_data = df[(df['homeTeam'] == 'Texans') | (df['awayTeam'] == 'Texans')]
+
+    texans_schedule = []
+    for index, row in texans_data.iterrows():
+        if (row['homeTeam'] == 'Texans'):
+            texans_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Texans'):
+            texans_schedule.append(row['homeTeam'])
+
+    texans_schedule_results = []
+    for index, row in texans_data.iterrows():
+        if (row['homeTeam'] == 'Texans' and row['homeScore'] > row['awayScore']):
+            texans_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Texans' and row['awayScore'] > row['homeScore']):
+            texans_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Texans' and row['homeScore'] < row['awayScore']):
+            texans_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Texans' and row['awayScore'] < row['homeScore']):
+            texans_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Texans' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            texans_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Texans' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            texans_schedule_results.append('T')
+        else:
+            texans_schedule_results.append('NA')
+
+    Texans = Team('Texans', 'AFC', 'AFCS', texans_schedule[0], texans_schedule_results[0], texans_schedule[1],
+                texans_schedule_results[1], texans_schedule[2], texans_schedule_results[2], texans_schedule[3],
+                texans_schedule_results[3],
+                texans_schedule[4], texans_schedule_results[4], texans_schedule[5], texans_schedule_results[5],
+                texans_schedule[6],
+                texans_schedule_results[6], texans_schedule[7], texans_schedule_results[7], texans_schedule[8],
+                texans_schedule_results[8],
+                texans_schedule[9], texans_schedule_results[9], texans_schedule[10], texans_schedule_results[10],
+                texans_schedule[11],
+                texans_schedule_results[11], texans_schedule[12], texans_schedule_results[12], texans_schedule[13],
+                texans_schedule_results[13],
+                texans_schedule[14], texans_schedule_results[14], texans_schedule[15], texans_schedule_results[15],
+                texans_schedule[16],
+                texans_schedule_results[16])
+
+    broncos_data = df[(df['homeTeam'] == 'Broncos') | (df['awayTeam'] == 'Broncos')]
+
+    broncos_schedule = []
+    for index, row in broncos_data.iterrows():
+        if (row['homeTeam'] == 'Broncos'):
+            broncos_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Broncos'):
+            broncos_schedule.append(row['homeTeam'])
+
+    broncos_schedule_results = []
+    for index, row in broncos_data.iterrows():
+        if (row['homeTeam'] == 'Broncos' and row['homeScore'] > row['awayScore']):
+            broncos_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Broncos' and row['awayScore'] > row['homeScore']):
+            broncos_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Broncos' and row['homeScore'] < row['awayScore']):
+            broncos_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Broncos' and row['awayScore'] < row['homeScore']):
+            broncos_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Broncos' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            broncos_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Broncos' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            broncos_schedule_results.append('T')
+        else:
+            broncos_schedule_results.append('NA')
+
+    Broncos = Team('Broncos', 'AFC', 'AFCW', broncos_schedule[0], broncos_schedule_results[0], broncos_schedule[1],
+                broncos_schedule_results[1], broncos_schedule[2], broncos_schedule_results[2], broncos_schedule[3],
+                broncos_schedule_results[3],
+                broncos_schedule[4], broncos_schedule_results[4], broncos_schedule[5], broncos_schedule_results[5],
+                broncos_schedule[6],
+                broncos_schedule_results[6], broncos_schedule[7], broncos_schedule_results[7], broncos_schedule[8],
+                broncos_schedule_results[8],
+                broncos_schedule[9], broncos_schedule_results[9], broncos_schedule[10], broncos_schedule_results[10],
+                broncos_schedule[11],
+                broncos_schedule_results[11], broncos_schedule[12], broncos_schedule_results[12], broncos_schedule[13],
+                broncos_schedule_results[13],
+                broncos_schedule[14], broncos_schedule_results[14], broncos_schedule[15], broncos_schedule_results[15],
+                broncos_schedule[16],
+                broncos_schedule_results[16])
+
+    chiefs_data = df[(df['homeTeam'] == 'Chiefs') | (df['awayTeam'] == 'Chiefs')]
+
+    chiefs_schedule = []
+    for index, row in chiefs_data.iterrows():
+        if (row['homeTeam'] == 'Chiefs'):
+            chiefs_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Chiefs'):
+            chiefs_schedule.append(row['homeTeam'])
+
+    chiefs_schedule_results = []
+    for index, row in chiefs_data.iterrows():
+        if (row['homeTeam'] == 'Chiefs' and row['homeScore'] > row['awayScore']):
+            chiefs_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Chiefs' and row['awayScore'] > row['homeScore']):
+            chiefs_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Chiefs' and row['homeScore'] < row['awayScore']):
+            chiefs_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Chiefs' and row['awayScore'] < row['homeScore']):
+            chiefs_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Chiefs' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            chiefs_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Chiefs' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            chiefs_schedule_results.append('T')
+        else:
+            chiefs_schedule_results.append('NA')
+
+    Chiefs = Team('Chiefs', 'AFC', 'AFCW', chiefs_schedule[0], chiefs_schedule_results[0], chiefs_schedule[1],
+                chiefs_schedule_results[1], chiefs_schedule[2], chiefs_schedule_results[2], chiefs_schedule[3],
+                chiefs_schedule_results[3],
+                chiefs_schedule[4], chiefs_schedule_results[4], chiefs_schedule[5], chiefs_schedule_results[5],
+                chiefs_schedule[6],
+                chiefs_schedule_results[6], chiefs_schedule[7], chiefs_schedule_results[7], chiefs_schedule[8],
+                chiefs_schedule_results[8],
+                chiefs_schedule[9], chiefs_schedule_results[9], chiefs_schedule[10], chiefs_schedule_results[10],
+                chiefs_schedule[11],
+                chiefs_schedule_results[11], chiefs_schedule[12], chiefs_schedule_results[12], chiefs_schedule[13],
+                chiefs_schedule_results[13],
+                chiefs_schedule[14], chiefs_schedule_results[14], chiefs_schedule[15], chiefs_schedule_results[15],
+                chiefs_schedule[16],
+                chiefs_schedule_results[16])
+
+    chargers_data = df[(df['homeTeam'] == 'Chargers') | (df['awayTeam'] == 'Chargers')]
+
+    chargers_schedule = []
+    for index, row in chargers_data.iterrows():
+        if (row['homeTeam'] == 'Chargers'):
+            chargers_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Chargers'):
+            chargers_schedule.append(row['homeTeam'])
+
+    chargers_schedule_results = []
+    for index, row in chargers_data.iterrows():
+        if (row['homeTeam'] == 'Chargers' and row['homeScore'] > row['awayScore']):
+            chargers_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Chargers' and row['awayScore'] > row['homeScore']):
+            chargers_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Chargers' and row['homeScore'] < row['awayScore']):
+            chargers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Chargers' and row['awayScore'] < row['homeScore']):
+            chargers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Chargers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            chargers_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Chargers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            chargers_schedule_results.append('T')
+        else:
+            chargers_schedule_results.append('NA')
+
+    Chargers = Team('Chargers', 'AFC', 'AFCW', chargers_schedule[0], chargers_schedule_results[0], chargers_schedule[1],
+                    chargers_schedule_results[1], chargers_schedule[2], chargers_schedule_results[2], chargers_schedule[3],
+                    chargers_schedule_results[3],
+                    chargers_schedule[4], chargers_schedule_results[4], chargers_schedule[5], chargers_schedule_results[5],
+                    chargers_schedule[6],
+                    chargers_schedule_results[6], chargers_schedule[7], chargers_schedule_results[7], chargers_schedule[8],
+                    chargers_schedule_results[8],
+                    chargers_schedule[9], chargers_schedule_results[9], chargers_schedule[10],
+                    chargers_schedule_results[10], chargers_schedule[11],
+                    chargers_schedule_results[11], chargers_schedule[12], chargers_schedule_results[12],
+                    chargers_schedule[13], chargers_schedule_results[13],
+                    chargers_schedule[14], chargers_schedule_results[14], chargers_schedule[15],
+                    chargers_schedule_results[15], chargers_schedule[16],
+                    chargers_schedule_results[16])
+
+    raiders_data = df[(df['homeTeam'] == 'Raiders') | (df['awayTeam'] == 'Raiders')]
+
+    raiders_schedule = []
+    for index, row in raiders_data.iterrows():
+        if (row['homeTeam'] == 'Raiders'):
+            raiders_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Raiders'):
+            raiders_schedule.append(row['homeTeam'])
+
+    raiders_schedule_results = []
+    for index, row in raiders_data.iterrows():
+        if (row['homeTeam'] == 'Raiders' and row['homeScore'] > row['awayScore']):
+            raiders_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Raiders' and row['awayScore'] > row['homeScore']):
+            raiders_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Raiders' and row['homeScore'] < row['awayScore']):
+            raiders_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Raiders' and row['awayScore'] < row['homeScore']):
+            raiders_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Raiders' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            raiders_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Raiders' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            raiders_schedule_results.append('T')
+        else:
+            raiders_schedule_results.append('NA')
+
+    Raiders = Team('Raiders', 'AFC', 'AFCW', raiders_schedule[0], raiders_schedule_results[0], raiders_schedule[1],
+                raiders_schedule_results[1], raiders_schedule[2], raiders_schedule_results[2], raiders_schedule[3],
+                raiders_schedule_results[3],
+                raiders_schedule[4], raiders_schedule_results[4], raiders_schedule[5], raiders_schedule_results[5],
+                raiders_schedule[6],
+                raiders_schedule_results[6], raiders_schedule[7], raiders_schedule_results[7], raiders_schedule[8],
+                raiders_schedule_results[8],
+                raiders_schedule[9], raiders_schedule_results[9], raiders_schedule[10], raiders_schedule_results[10],
+                raiders_schedule[11],
+                raiders_schedule_results[11], raiders_schedule[12], raiders_schedule_results[12], raiders_schedule[13],
+                raiders_schedule_results[13],
+                raiders_schedule[14], raiders_schedule_results[14], raiders_schedule[15], raiders_schedule_results[15],
+                raiders_schedule[16],
+                raiders_schedule_results[16])
+
+    commanders_data = df[(df['homeTeam'] == 'Commanders') | (df['awayTeam'] == 'Commanders')]
+
+    commanders_schedule = []
+    for index, row in commanders_data.iterrows():
+        if (row['homeTeam'] == 'Commanders'):
+            commanders_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Commanders'):
+            commanders_schedule.append(row['homeTeam'])
+
+    commanders_schedule_results = []
+    for index, row in commanders_data.iterrows():
+        if (row['homeTeam'] == 'Commanders' and row['homeScore'] > row['awayScore']):
+            commanders_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Commanders' and row['awayScore'] > row['homeScore']):
+            commanders_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Commanders' and row['homeScore'] < row['awayScore']):
+            commanders_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Commanders' and row['awayScore'] < row['homeScore']):
+            commanders_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Commanders' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            commanders_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Commanders' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            commanders_schedule_results.append('T')
+        else:
+            commanders_schedule_results.append('NA')
+
+    Commanders = Team('Commanders', 'NFC', 'NFCE', commanders_schedule[0], commanders_schedule_results[0],
+                    commanders_schedule[1],
+                    commanders_schedule_results[1], commanders_schedule[2], commanders_schedule_results[2],
+                    commanders_schedule[3], commanders_schedule_results[3],
+                    commanders_schedule[4], commanders_schedule_results[4], commanders_schedule[5],
+                    commanders_schedule_results[5], commanders_schedule[6],
+                    commanders_schedule_results[6], commanders_schedule[7], commanders_schedule_results[7],
+                    commanders_schedule[8], commanders_schedule_results[8],
+                    commanders_schedule[9], commanders_schedule_results[9], commanders_schedule[10],
+                    commanders_schedule_results[10], commanders_schedule[11],
+                    commanders_schedule_results[11], commanders_schedule[12], commanders_schedule_results[12],
+                    commanders_schedule[13], commanders_schedule_results[13],
+                    commanders_schedule[14], commanders_schedule_results[14], commanders_schedule[15],
+                    commanders_schedule_results[15], commanders_schedule[16],
+                    commanders_schedule_results[16])
+
+    cowboys_data = df[(df['homeTeam'] == 'Cowboys') | (df['awayTeam'] == 'Cowboys')]
+
+    cowboys_schedule = []
+    for index, row in cowboys_data.iterrows():
+        if (row['homeTeam'] == 'Cowboys'):
+            cowboys_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Cowboys'):
+            cowboys_schedule.append(row['homeTeam'])
+
+    cowboys_schedule_results = []
+    for index, row in cowboys_data.iterrows():
+        if (row['homeTeam'] == 'Cowboys' and row['homeScore'] > row['awayScore']):
+            cowboys_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Cowboys' and row['awayScore'] > row['homeScore']):
+            cowboys_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Cowboys' and row['homeScore'] < row['awayScore']):
+            cowboys_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Cowboys' and row['awayScore'] < row['homeScore']):
+            cowboys_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Cowboys' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            cowboys_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Cowboys' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            cowboys_schedule_results.append('T')
+        else:
+            cowboys_schedule_results.append('NA')
+
+    Cowboys = Team('Cowboys', 'NFC', 'NFCE', cowboys_schedule[0], cowboys_schedule_results[0], cowboys_schedule[1],
+                cowboys_schedule_results[1], cowboys_schedule[2], cowboys_schedule_results[2], cowboys_schedule[3],
+                cowboys_schedule_results[3],
+                cowboys_schedule[4], cowboys_schedule_results[4], cowboys_schedule[5], cowboys_schedule_results[5],
+                cowboys_schedule[6],
+                cowboys_schedule_results[6], cowboys_schedule[7], cowboys_schedule_results[7], cowboys_schedule[8],
+                cowboys_schedule_results[8],
+                cowboys_schedule[9], cowboys_schedule_results[9], cowboys_schedule[10], cowboys_schedule_results[10],
+                cowboys_schedule[11],
+                cowboys_schedule_results[11], cowboys_schedule[12], cowboys_schedule_results[12], cowboys_schedule[13],
+                cowboys_schedule_results[13],
+                cowboys_schedule[14], cowboys_schedule_results[14], cowboys_schedule[15], cowboys_schedule_results[15],
+                cowboys_schedule[16],
+                cowboys_schedule_results[16])
+
+    giants_data = df[(df['homeTeam'] == 'Giants') | (df['awayTeam'] == 'Giants')]
+
+    giants_schedule = []
+    for index, row in giants_data.iterrows():
+        if (row['homeTeam'] == 'Giants'):
+            giants_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Giants'):
+            giants_schedule.append(row['homeTeam'])
+
+    giants_schedule_results = []
+    for index, row in giants_data.iterrows():
+        if (row['homeTeam'] == 'Giants' and row['homeScore'] > row['awayScore']):
+            giants_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Giants' and row['awayScore'] > row['homeScore']):
+            giants_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Giants' and row['homeScore'] < row['awayScore']):
+            giants_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Giants' and row['awayScore'] < row['homeScore']):
+            giants_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Giants' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            giants_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Giants' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            giants_schedule_results.append('T')
+        else:
+            giants_schedule_results.append('NA')
+
+    Giants = Team('Giants', 'NFC', 'NFCE', giants_schedule[0], giants_schedule_results[0], giants_schedule[1],
+                giants_schedule_results[1], giants_schedule[2], giants_schedule_results[2], giants_schedule[3],
+                giants_schedule_results[3],
+                giants_schedule[4], giants_schedule_results[4], giants_schedule[5], giants_schedule_results[5],
+                giants_schedule[6],
+                giants_schedule_results[6], giants_schedule[7], giants_schedule_results[7], giants_schedule[8],
+                giants_schedule_results[8],
+                giants_schedule[9], giants_schedule_results[9], giants_schedule[10], giants_schedule_results[10],
+                giants_schedule[11],
+                giants_schedule_results[11], giants_schedule[12], giants_schedule_results[12], giants_schedule[13],
+                giants_schedule_results[13],
+                giants_schedule[14], giants_schedule_results[14], giants_schedule[15], giants_schedule_results[15],
+                giants_schedule[16],
+                giants_schedule_results[16])
+
+    eagles_data = df[(df['homeTeam'] == 'Eagles') | (df['awayTeam'] == 'Eagles')]
+
+    eagles_schedule = []
+    for index, row in eagles_data.iterrows():
+        if (row['homeTeam'] == 'Eagles'):
+            eagles_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Eagles'):
+            eagles_schedule.append(row['homeTeam'])
+
+    eagles_schedule_results = []
+    for index, row in eagles_data.iterrows():
+        if (row['homeTeam'] == 'Eagles' and row['homeScore'] > row['awayScore']):
+            eagles_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Eagles' and row['awayScore'] > row['homeScore']):
+            eagles_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Eagles' and row['homeScore'] < row['awayScore']):
+            eagles_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Eagles' and row['awayScore'] < row['homeScore']):
+            eagles_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Eagles' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            eagles_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Eagles' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            eagles_schedule_results.append('T')
+        else:
+            eagles_schedule_results.append('NA')
+
+    Eagles = Team('Eagles', 'NFC', 'NFCE', eagles_schedule[0], eagles_schedule_results[0], eagles_schedule[1],
+                eagles_schedule_results[1], eagles_schedule[2], eagles_schedule_results[2], eagles_schedule[3],
+                eagles_schedule_results[3],
+                eagles_schedule[4], eagles_schedule_results[4], eagles_schedule[5], eagles_schedule_results[5],
+                eagles_schedule[6],
+                eagles_schedule_results[6], eagles_schedule[7], eagles_schedule_results[7], eagles_schedule[8],
+                eagles_schedule_results[8],
+                eagles_schedule[9], eagles_schedule_results[9], eagles_schedule[10], eagles_schedule_results[10],
+                eagles_schedule[11],
+                eagles_schedule_results[11], eagles_schedule[12], eagles_schedule_results[12], eagles_schedule[13],
+                eagles_schedule_results[13],
+                eagles_schedule[14], eagles_schedule_results[14], eagles_schedule[15], eagles_schedule_results[15],
+                eagles_schedule[16],
+                eagles_schedule_results[16])
+
+    bears_data = df[(df['homeTeam'] == 'Bears') | (df['awayTeam'] == 'Bears')]
+
+    bears_schedule = []
+    for index, row in bears_data.iterrows():
+        if (row['homeTeam'] == 'Bears'):
+            bears_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Bears'):
+            bears_schedule.append(row['homeTeam'])
+
+    bears_schedule_results = []
+    for index, row in bears_data.iterrows():
+        if (row['homeTeam'] == 'Bears' and row['homeScore'] > row['awayScore']):
+            bears_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Bears' and row['awayScore'] > row['homeScore']):
+            bears_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Bears' and row['homeScore'] < row['awayScore']):
+            bears_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Bears' and row['awayScore'] < row['homeScore']):
+            bears_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Bears' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            bears_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Bears' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            bears_schedule_results.append('T')
+        else:
+            bears_schedule_results.append('NA')
+
+    Bears = Team('Bears', 'NFC', 'NFCN', bears_schedule[0], bears_schedule_results[0], bears_schedule[1],
+                bears_schedule_results[1], bears_schedule[2], bears_schedule_results[2], bears_schedule[3],
+                bears_schedule_results[3],
+                bears_schedule[4], bears_schedule_results[4], bears_schedule[5], bears_schedule_results[5],
+                bears_schedule[6],
+                bears_schedule_results[6], bears_schedule[7], bears_schedule_results[7], bears_schedule[8],
+                bears_schedule_results[8],
+                bears_schedule[9], bears_schedule_results[9], bears_schedule[10], bears_schedule_results[10],
+                bears_schedule[11],
+                bears_schedule_results[11], bears_schedule[12], bears_schedule_results[12], bears_schedule[13],
+                bears_schedule_results[13],
+                bears_schedule[14], bears_schedule_results[14], bears_schedule[15], bears_schedule_results[15],
+                bears_schedule[16],
+                bears_schedule_results[16])
+
+    lions_data = df[(df['homeTeam'] == 'Lions') | (df['awayTeam'] == 'Lions')]
+
+    lions_schedule = []
+    for index, row in lions_data.iterrows():
+        if (row['homeTeam'] == 'Lions'):
+            lions_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Lions'):
+            lions_schedule.append(row['homeTeam'])
+
+    lions_schedule_results = []
+    for index, row in lions_data.iterrows():
+        if (row['homeTeam'] == 'Lions' and row['homeScore'] > row['awayScore']):
+            lions_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Lions' and row['awayScore'] > row['homeScore']):
+            lions_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Lions' and row['homeScore'] < row['awayScore']):
+            lions_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Lions' and row['awayScore'] < row['homeScore']):
+            lions_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Lions' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            lions_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Lions' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            lions_schedule_results.append('T')
+        else:
+            lions_schedule_results.append('NA')
+
+    Lions = Team('Lions', 'NFC', 'NFCN', lions_schedule[0], lions_schedule_results[0], lions_schedule[1],
+                lions_schedule_results[1], lions_schedule[2], lions_schedule_results[2], lions_schedule[3],
+                lions_schedule_results[3],
+                lions_schedule[4], lions_schedule_results[4], lions_schedule[5], lions_schedule_results[5],
+                lions_schedule[6],
+                lions_schedule_results[6], lions_schedule[7], lions_schedule_results[7], lions_schedule[8],
+                lions_schedule_results[8],
+                lions_schedule[9], lions_schedule_results[9], lions_schedule[10], lions_schedule_results[10],
+                lions_schedule[11],
+                lions_schedule_results[11], lions_schedule[12], lions_schedule_results[12], lions_schedule[13],
+                lions_schedule_results[13],
+                lions_schedule[14], lions_schedule_results[14], lions_schedule[15], lions_schedule_results[15],
+                lions_schedule[16],
+                lions_schedule_results[16])
+
+    packers_data = df[(df['homeTeam'] == 'Packers') | (df['awayTeam'] == 'Packers')]
+
+    packers_schedule = []
+    for index, row in packers_data.iterrows():
+        if (row['homeTeam'] == 'Packers'):
+            packers_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Packers'):
+            packers_schedule.append(row['homeTeam'])
+
+    packers_schedule_results = []
+    for index, row in packers_data.iterrows():
+        if (row['homeTeam'] == 'Packers' and row['homeScore'] > row['awayScore']):
+            packers_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Packers' and row['awayScore'] > row['homeScore']):
+            packers_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Packers' and row['homeScore'] < row['awayScore']):
+            packers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Packers' and row['awayScore'] < row['homeScore']):
+            packers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Packers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            packers_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Packers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            packers_schedule_results.append('T')
+        else:
+            packers_schedule_results.append('NA')
+
+    Packers = Team('Packers', 'NFC', 'NFCN', packers_schedule[0], packers_schedule_results[0], packers_schedule[1],
+                packers_schedule_results[1], packers_schedule[2], packers_schedule_results[2], packers_schedule[3],
+                packers_schedule_results[3],
+                packers_schedule[4], packers_schedule_results[4], packers_schedule[5], packers_schedule_results[5],
+                packers_schedule[6],
+                packers_schedule_results[6], packers_schedule[7], packers_schedule_results[7], packers_schedule[8],
+                packers_schedule_results[8],
+                packers_schedule[9], packers_schedule_results[9], packers_schedule[10], packers_schedule_results[10],
+                packers_schedule[11],
+                packers_schedule_results[11], packers_schedule[12], packers_schedule_results[12], packers_schedule[13],
+                packers_schedule_results[13],
+                packers_schedule[14], packers_schedule_results[14], packers_schedule[15], packers_schedule_results[15],
+                packers_schedule[16],
+                packers_schedule_results[16])
+
+    vikings_data = df[(df['homeTeam'] == 'Vikings') | (df['awayTeam'] == 'Vikings')]
+
+    vikings_schedule = []
+    for index, row in vikings_data.iterrows():
+        if (row['homeTeam'] == 'Vikings'):
+            vikings_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Vikings'):
+            vikings_schedule.append(row['homeTeam'])
+
+    vikings_schedule_results = []
+    for index, row in vikings_data.iterrows():
+        if (row['homeTeam'] == 'Vikings' and row['homeScore'] > row['awayScore']):
+            vikings_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Vikings' and row['awayScore'] > row['homeScore']):
+            vikings_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Vikings' and row['homeScore'] < row['awayScore']):
+            vikings_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Vikings' and row['awayScore'] < row['homeScore']):
+            vikings_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Vikings' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            vikings_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Vikings' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            vikings_schedule_results.append('T')
+        else:
+            vikings_schedule_results.append('NA')
+
+    Vikings = Team('Vikings', 'NFC', 'NFCN', vikings_schedule[0], vikings_schedule_results[0], vikings_schedule[1],
+                vikings_schedule_results[1], vikings_schedule[2], vikings_schedule_results[2], vikings_schedule[3],
+                vikings_schedule_results[3],
+                vikings_schedule[4], vikings_schedule_results[4], vikings_schedule[5], vikings_schedule_results[5],
+                vikings_schedule[6],
+                vikings_schedule_results[6], vikings_schedule[7], vikings_schedule_results[7], vikings_schedule[8],
+                vikings_schedule_results[8],
+                vikings_schedule[9], vikings_schedule_results[9], vikings_schedule[10], vikings_schedule_results[10],
+                vikings_schedule[11],
+                vikings_schedule_results[11], vikings_schedule[12], vikings_schedule_results[12], vikings_schedule[13],
+                vikings_schedule_results[13],
+                vikings_schedule[14], vikings_schedule_results[14], vikings_schedule[15], vikings_schedule_results[15],
+                vikings_schedule[16],
+                vikings_schedule_results[16])
+
+    buccaneers_data = df[(df['homeTeam'] == 'Buccaneers') | (df['awayTeam'] == 'Buccaneers')]
+
+    buccaneers_schedule = []
+    for index, row in buccaneers_data.iterrows():
+        if (row['homeTeam'] == 'Buccaneers'):
+            buccaneers_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Buccaneers'):
+            buccaneers_schedule.append(row['homeTeam'])
+
+    buccaneers_schedule_results = []
+    for index, row in buccaneers_data.iterrows():
+        if (row['homeTeam'] == 'Buccaneers' and row['homeScore'] > row['awayScore']):
+            buccaneers_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Buccaneers' and row['awayScore'] > row['homeScore']):
+            buccaneers_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Buccaneers' and row['homeScore'] < row['awayScore']):
+            buccaneers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Buccaneers' and row['awayScore'] < row['homeScore']):
+            buccaneers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Buccaneers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            buccaneers_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Buccaneers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            buccaneers_schedule_results.append('T')
+        else:
+            buccaneers_schedule_results.append('NA')
+
+    Buccaneers = Team('Buccaneers', 'NFC', 'NFCS', buccaneers_schedule[0], buccaneers_schedule_results[0],
+                    buccaneers_schedule[1],
+                    buccaneers_schedule_results[1], buccaneers_schedule[2], buccaneers_schedule_results[2],
+                    buccaneers_schedule[3], buccaneers_schedule_results[3],
+                    buccaneers_schedule[4], buccaneers_schedule_results[4], buccaneers_schedule[5],
+                    buccaneers_schedule_results[5], buccaneers_schedule[6],
+                    buccaneers_schedule_results[6], buccaneers_schedule[7], buccaneers_schedule_results[7],
+                    buccaneers_schedule[8], buccaneers_schedule_results[8],
+                    buccaneers_schedule[9], buccaneers_schedule_results[9], buccaneers_schedule[10],
+                    buccaneers_schedule_results[10], buccaneers_schedule[11],
+                    buccaneers_schedule_results[11], buccaneers_schedule[12], buccaneers_schedule_results[12],
+                    buccaneers_schedule[13], buccaneers_schedule_results[13],
+                    buccaneers_schedule[14], buccaneers_schedule_results[14], buccaneers_schedule[15],
+                    buccaneers_schedule_results[15], buccaneers_schedule[16],
+                    buccaneers_schedule_results[16])
+
+    falcons_data = df[(df['homeTeam'] == 'Falcons') | (df['awayTeam'] == 'Falcons')]
+
+    falcons_schedule = []
+    for index, row in falcons_data.iterrows():
+        if (row['homeTeam'] == 'Falcons'):
+            falcons_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Falcons'):
+            falcons_schedule.append(row['homeTeam'])
+
+    falcons_schedule_results = []
+    for index, row in falcons_data.iterrows():
+        if (row['homeTeam'] == 'Falcons' and row['homeScore'] > row['awayScore']):
+            falcons_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Falcons' and row['awayScore'] > row['homeScore']):
+            falcons_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Falcons' and row['homeScore'] < row['awayScore']):
+            falcons_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Falcons' and row['awayScore'] < row['homeScore']):
+            falcons_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Falcons' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            falcons_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Falcons' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            falcons_schedule_results.append('T')
+        else:
+            falcons_schedule_results.append('NA')
+
+    Falcons = Team('Falcons', 'NFC', 'NFCS', falcons_schedule[0], falcons_schedule_results[0], falcons_schedule[1],
+                falcons_schedule_results[1], falcons_schedule[2], falcons_schedule_results[2], falcons_schedule[3],
+                falcons_schedule_results[3],
+                falcons_schedule[4], falcons_schedule_results[4], falcons_schedule[5], falcons_schedule_results[5],
+                falcons_schedule[6],
+                falcons_schedule_results[6], falcons_schedule[7], falcons_schedule_results[7], falcons_schedule[8],
+                falcons_schedule_results[8],
+                falcons_schedule[9], falcons_schedule_results[9], falcons_schedule[10], falcons_schedule_results[10],
+                falcons_schedule[11],
+                falcons_schedule_results[11], falcons_schedule[12], falcons_schedule_results[12], falcons_schedule[13],
+                falcons_schedule_results[13],
+                falcons_schedule[14], falcons_schedule_results[14], falcons_schedule[15], falcons_schedule_results[15],
+                falcons_schedule[16],
+                falcons_schedule_results[16])
+
+    saints_data = df[(df['homeTeam'] == 'Saints') | (df['awayTeam'] == 'Saints')]
+
+    saints_schedule = []
+    for index, row in saints_data.iterrows():
+        if (row['homeTeam'] == 'Saints'):
+            saints_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Saints'):
+            saints_schedule.append(row['homeTeam'])
+
+    saints_schedule_results = []
+    for index, row in saints_data.iterrows():
+        if (row['homeTeam'] == 'Saints' and row['homeScore'] > row['awayScore']):
+            saints_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Saints' and row['awayScore'] > row['homeScore']):
+            saints_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Saints' and row['homeScore'] < row['awayScore']):
+            saints_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Saints' and row['awayScore'] < row['homeScore']):
+            saints_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Saints' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            saints_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Saints' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            saints_schedule_results.append('T')
+        else:
+            saints_schedule_results.append('NA')
+
+    Saints = Team('Saints', 'NFC', 'NFCS', saints_schedule[0], saints_schedule_results[0], saints_schedule[1],
+                saints_schedule_results[1], saints_schedule[2], saints_schedule_results[2], saints_schedule[3],
+                saints_schedule_results[3],
+                saints_schedule[4], saints_schedule_results[4], saints_schedule[5], saints_schedule_results[5],
+                saints_schedule[6],
+                saints_schedule_results[6], saints_schedule[7], saints_schedule_results[7], saints_schedule[8],
+                saints_schedule_results[8],
+                saints_schedule[9], saints_schedule_results[9], saints_schedule[10], saints_schedule_results[10],
+                saints_schedule[11],
+                saints_schedule_results[11], saints_schedule[12], saints_schedule_results[12], saints_schedule[13],
+                saints_schedule_results[13],
+                saints_schedule[14], saints_schedule_results[14], saints_schedule[15], saints_schedule_results[15],
+                saints_schedule[16],
+                saints_schedule_results[16])
+
+    panthers_data = df[(df['homeTeam'] == 'Panthers') | (df['awayTeam'] == 'Panthers')]
+
+    panthers_schedule = []
+    for index, row in panthers_data.iterrows():
+        if (row['homeTeam'] == 'Panthers'):
+            panthers_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Panthers'):
+            panthers_schedule.append(row['homeTeam'])
+
+    panthers_schedule_results = []
+    for index, row in panthers_data.iterrows():
+        if (row['homeTeam'] == 'Panthers' and row['homeScore'] > row['awayScore']):
+            panthers_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Panthers' and row['awayScore'] > row['homeScore']):
+            panthers_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Panthers' and row['homeScore'] < row['awayScore']):
+            panthers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Panthers' and row['awayScore'] < row['homeScore']):
+            panthers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Panthers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            panthers_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Panthers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            panthers_schedule_results.append('T')
+        else:
+            panthers_schedule_results.append('NA')
+
+    Panthers = Team('Panthers', 'NFC', 'NFCS', panthers_schedule[0], panthers_schedule_results[0], panthers_schedule[1],
+                    panthers_schedule_results[1], panthers_schedule[2], panthers_schedule_results[2], panthers_schedule[3],
+                    panthers_schedule_results[3],
+                    panthers_schedule[4], panthers_schedule_results[4], panthers_schedule[5], panthers_schedule_results[5],
+                    panthers_schedule[6],
+                    panthers_schedule_results[6], panthers_schedule[7], panthers_schedule_results[7], panthers_schedule[8],
+                    panthers_schedule_results[8],
+                    panthers_schedule[9], panthers_schedule_results[9], panthers_schedule[10],
+                    panthers_schedule_results[10], panthers_schedule[11],
+                    panthers_schedule_results[11], panthers_schedule[12], panthers_schedule_results[12],
+                    panthers_schedule[13], panthers_schedule_results[13],
+                    panthers_schedule[14], panthers_schedule_results[14], panthers_schedule[15],
+                    panthers_schedule_results[15], panthers_schedule[16],
+                    panthers_schedule_results[16])
+
+    niners_data = df[(df['homeTeam'] == '49ers') | (df['awayTeam'] == '49ers')]
+
+    niners_schedule = []
+    for index, row in niners_data.iterrows():
+        if (row['homeTeam'] == '49ers'):
+            niners_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == '49ers'):
+            niners_schedule.append(row['homeTeam'])
+
+    niners_schedule_results = []
+    for index, row in niners_data.iterrows():
+        if (row['homeTeam'] == '49ers' and row['homeScore'] > row['awayScore']):
+            niners_schedule_results.append('W')
+        elif (row['awayTeam'] == '49ers' and row['awayScore'] > row['homeScore']):
+            niners_schedule_results.append('W')
+        elif (row['homeTeam'] == '49ers' and row['homeScore'] < row['awayScore']):
+            niners_schedule_results.append('L')
+        elif (row['awayTeam'] == '49ers' and row['awayScore'] < row['homeScore']):
+            niners_schedule_results.append('L')
+        elif (row['awayTeam'] == '49ers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            niners_schedule_results.append('T')
+        elif (row['homeTeam'] == '49ers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            niners_schedule_results.append('T')
+        else:
+            niners_schedule_results.append('NA')
+
+    Niners = Team('49ers', 'NFC', 'NFCW', niners_schedule[0], niners_schedule_results[0], niners_schedule[1],
+                niners_schedule_results[1], niners_schedule[2], niners_schedule_results[2], niners_schedule[3],
+                niners_schedule_results[3],
+                niners_schedule[4], niners_schedule_results[4], niners_schedule[5], niners_schedule_results[5],
+                niners_schedule[6],
+                niners_schedule_results[6], niners_schedule[7], niners_schedule_results[7], niners_schedule[8],
+                niners_schedule_results[8],
+                niners_schedule[9], niners_schedule_results[9], niners_schedule[10], niners_schedule_results[10],
+                niners_schedule[11],
+                niners_schedule_results[11], niners_schedule[12], niners_schedule_results[12], niners_schedule[13],
+                niners_schedule_results[13],
+                niners_schedule[14], niners_schedule_results[14], niners_schedule[15], niners_schedule_results[15],
+                niners_schedule[16],
+                niners_schedule_results[16])
+
+    cardinals_data = df[(df['homeTeam'] == 'Cardinals') | (df['awayTeam'] == 'Cardinals')]
+
+    cardinals_schedule = []
+    for index, row in cardinals_data.iterrows():
+        if (row['homeTeam'] == 'Cardinals'):
+            cardinals_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Cardinals'):
+            cardinals_schedule.append(row['homeTeam'])
+
+    cardinals_schedule_results = []
+    for index, row in cardinals_data.iterrows():
+        if (row['homeTeam'] == 'Cardinals' and row['homeScore'] > row['awayScore']):
+            cardinals_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Cardinals' and row['awayScore'] > row['homeScore']):
+            cardinals_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Cardinals' and row['homeScore'] < row['awayScore']):
+            cardinals_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Cardinals' and row['awayScore'] < row['homeScore']):
+            cardinals_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Cardinals' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            cardinals_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Cardinals' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            cardinals_schedule_results.append('T')
+        else:
+            cardinals_schedule_results.append('NA')
+
+    Cardinals = Team('Cardinals', 'NFC', 'NFCW', cardinals_schedule[0], cardinals_schedule_results[0],
+                    cardinals_schedule[1],
+                    cardinals_schedule_results[1], cardinals_schedule[2], cardinals_schedule_results[2],
+                    cardinals_schedule[3], cardinals_schedule_results[3],
+                    cardinals_schedule[4], cardinals_schedule_results[4], cardinals_schedule[5],
+                    cardinals_schedule_results[5], cardinals_schedule[6],
+                    cardinals_schedule_results[6], cardinals_schedule[7], cardinals_schedule_results[7],
+                    cardinals_schedule[8], cardinals_schedule_results[8],
+                    cardinals_schedule[9], cardinals_schedule_results[9], cardinals_schedule[10],
+                    cardinals_schedule_results[10], cardinals_schedule[11],
+                    cardinals_schedule_results[11], cardinals_schedule[12], cardinals_schedule_results[12],
+                    cardinals_schedule[13], cardinals_schedule_results[13],
+                    cardinals_schedule[14], cardinals_schedule_results[14], cardinals_schedule[15],
+                    cardinals_schedule_results[15], cardinals_schedule[16],
+                    cardinals_schedule_results[16])
+
+    rams_data = df[(df['homeTeam'] == 'Rams') | (df['awayTeam'] == 'Rams')]
+
+    rams_schedule = []
+    for index, row in rams_data.iterrows():
+        if (row['homeTeam'] == 'Rams'):
+            rams_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Rams'):
+            rams_schedule.append(row['homeTeam'])
+
+    rams_schedule_results = []
+    for index, row in rams_data.iterrows():
+        if (row['homeTeam'] == 'Rams' and row['homeScore'] > row['awayScore']):
+            rams_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Rams' and row['awayScore'] > row['homeScore']):
+            rams_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Rams' and row['homeScore'] < row['awayScore']):
+            rams_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Rams' and row['awayScore'] < row['homeScore']):
+            rams_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Rams' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            rams_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Rams' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            rams_schedule_results.append('T')
+        else:
+            rams_schedule_results.append('NA')
+
+    Rams = Team('Rams', 'NFC', 'NFCW', rams_schedule[0], rams_schedule_results[0], rams_schedule[1],
+                rams_schedule_results[1], rams_schedule[2], rams_schedule_results[2], rams_schedule[3],
+                rams_schedule_results[3],
+                rams_schedule[4], rams_schedule_results[4], rams_schedule[5], rams_schedule_results[5], rams_schedule[6],
+                rams_schedule_results[6], rams_schedule[7], rams_schedule_results[7], rams_schedule[8],
+                rams_schedule_results[8],
+                rams_schedule[9], rams_schedule_results[9], rams_schedule[10], rams_schedule_results[10], rams_schedule[11],
+                rams_schedule_results[11], rams_schedule[12], rams_schedule_results[12], rams_schedule[13],
+                rams_schedule_results[13],
+                rams_schedule[14], rams_schedule_results[14], rams_schedule[15], rams_schedule_results[15],
+                rams_schedule[16],
+                rams_schedule_results[16])
+
+    seahawks_data = df[(df['homeTeam'] == 'Seahawks') | (df['awayTeam'] == 'Seahawks')]
+
+    seahawks_schedule = []
+    for index, row in seahawks_data.iterrows():
+        if (row['homeTeam'] == 'Seahawks'):
+            seahawks_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Seahawks'):
+            seahawks_schedule.append(row['homeTeam'])
+
+    seahawks_schedule_results = []
+    for index, row in seahawks_data.iterrows():
+        if (row['homeTeam'] == 'Seahawks' and row['homeScore'] > row['awayScore']):
+            seahawks_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Seahawks' and row['awayScore'] > row['homeScore']):
+            seahawks_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Seahawks' and row['homeScore'] < row['awayScore']):
+            seahawks_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Seahawks' and row['awayScore'] < row['homeScore']):
+            seahawks_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Seahawks' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            seahawks_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Seahawks' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            seahawks_schedule_results.append('T')
+        else:
+            seahawks_schedule_results.append('NA')
+
+    Seahawks = Team('Seahawks', 'NFC', 'NFCW', seahawks_schedule[0], seahawks_schedule_results[0], seahawks_schedule[1],
+                    seahawks_schedule_results[1], seahawks_schedule[2], seahawks_schedule_results[2], seahawks_schedule[3],
+                    seahawks_schedule_results[3],
+                    seahawks_schedule[4], seahawks_schedule_results[4], seahawks_schedule[5], seahawks_schedule_results[5],
+                    seahawks_schedule[6],
+                    seahawks_schedule_results[6], seahawks_schedule[7], seahawks_schedule_results[7], seahawks_schedule[8],
+                    seahawks_schedule_results[8],
+                    seahawks_schedule[9], seahawks_schedule_results[9], seahawks_schedule[10],
+                    seahawks_schedule_results[10], seahawks_schedule[11],
+                    seahawks_schedule_results[11], seahawks_schedule[12], seahawks_schedule_results[12],
+                    seahawks_schedule[13], seahawks_schedule_results[13],
+                    seahawks_schedule[14], seahawks_schedule_results[14], seahawks_schedule[15],
+                    seahawks_schedule_results[15], seahawks_schedule[16],
+                    seahawks_schedule_results[16])
+
+
+fillSchedules(df)
 
 teamList = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans,
             Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings,
@@ -8301,6 +8312,9 @@ def resetStandings():
                 team.results[game_index] = 'NA'
             game_index += 1
 
+    # Print all games that are being reset:
+
+
 
 def trackScenarios(playoffs, remSchedules, Team, spot):
     resultTeamLists = []
@@ -10773,18 +10787,1588 @@ def playoffPercentages():
 
     print("Playoff odds inserted into Supabase successfully.")
 
-    
-def simulate_odds(data: dict = None) -> dict:
-    # As a test, return a dict of nonsense
-    result = {
-        "status": "success",
-        "random_number": random.randint(1, 100),
-        "message": "API test response",
-        "teams": ["Bills", "Dolphins", "Jets", "Patriots"],
-        "playoff_spots": [random.choice(range(1, 8)) for _ in range(4)]
-    }
-    return result
 
+
+    
+def simulate_odds(games_json):
+    # Convert JSON to DataFrame
+    games_df = pd.DataFrame(games_json)
+
+    # Map team IDs to team names
+    games_df['homeTeam'] = games_df['homeTeamId'].map(dict(zip(teamMap['teamId'], teamMap['teamName'])))
+    games_df['awayTeam'] = games_df['awayTeamId'].map(dict(zip(teamMap['teamId'], teamMap['teamName'])))
+
+    # Drop ID columns
+    games_df = games_df.drop(['homeTeamId', 'awayTeamId'], axis=1)
+
+    df = games_df
+    fillSchedules(df)
+
+    bills1, bills2, bills3, bills4, bills5, bills6, bills7, billsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    dolphins1, dolphins2, dolphins3, dolphins4, dolphins5, dolphins6, dolphins7, dolphinsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    jets1, jets2, jets3, jets4, jets5, jets6, jets7, jetsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    patriots1, patriots2, patriots3, patriots4, patriots5, patriots6, patriots7, patriotsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    browns1, browns2, browns3, browns4, browns5, browns6, browns7, brownsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    bengals1, bengals2, bengals3, bengals4, bengals5, bengals6, bengals7, bengalsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    ravens1, ravens2, ravens3, ravens4, ravens5, ravens6, ravens7, ravensOut = 0, 0, 0, 0, 0, 0, 0, 0
+    steelers1, steelers2, steelers3, steelers4, steelers5, steelers6, steelers7, steelersOut = 0, 0, 0, 0, 0, 0, 0, 0
+    colts1, colts2, colts3, colts4, colts5, colts6, colts7, coltsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    jaguars1, jaguars2, jaguars3, jaguars4, jaguars5, jaguars6, jaguars7, jaguarsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    titans1, titans2, titans3, titans4, titans5, titans6, titans7, titansOut = 0, 0, 0, 0, 0, 0, 0, 0
+    texans1, texans2, texans3, texans4, texans5, texans6, texans7, texansOut = 0, 0, 0, 0, 0, 0, 0, 0
+    broncos1, broncos2, broncos3, broncos4, broncos5, broncos6, broncos7, broncosOut = 0, 0, 0, 0, 0, 0, 0, 0
+    chargers1, chargers2, chargers3, chargers4, chargers5, chargers6, chargers7, chargersOut = 0, 0, 0, 0, 0, 0, 0, 0
+    chiefs1, chiefs2, chiefs3, chiefs4, chiefs5, chiefs6, chiefs7, chiefsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    raiders1, raiders2, raiders3, raiders4, raiders5, raiders6, raiders7, raidersOut = 0, 0, 0, 0, 0, 0, 0, 0
+    commanders1, commanders2, commanders3, commanders4, commanders5, commanders6, commanders7, commandersOut = 0, 0, 0, 0, 0, 0, 0, 0
+    cowboys1, cowboys2, cowboys3, cowboys4, cowboys5, cowboys6, cowboys7, cowboysOut = 0, 0, 0, 0, 0, 0, 0, 0
+    eagles1, eagles2, eagles3, eagles4, eagles5, eagles6, eagles7, eaglesOut = 0, 0, 0, 0, 0, 0, 0, 0
+    giants1, giants2, giants3, giants4, giants5, giants6, giants7, giantsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    bears1, bears2, bears3, bears4, bears5, bears6, bears7, bearsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    lions1, lions2, lions3, lions4, lions5, lions6, lions7, lionsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    packers1, packers2, packers3, packers4, packers5, packers6, packers7, packersOut = 0, 0, 0, 0, 0, 0, 0, 0
+    vikings1, vikings2, vikings3, vikings4, vikings5, vikings6, vikings7, vikingsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    buccaneers1, buccaneers2, buccaneers3, buccaneers4, buccaneers5, buccaneers6, buccaneers7, buccaneersOut = 0, 0, 0, 0, 0, 0, 0, 0
+    falcons1, falcons2, falcons3, falcons4, falcons5, falcons6, falcons7, falconsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    saints1, saints2, saints3, saints4, saints5, saints6, saints7, saintsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    panthers1, panthers2, panthers3, panthers4, panthers5, panthers6, panthers7, panthersOut = 0, 0, 0, 0, 0, 0, 0, 0
+    cardinals1, cardinals2, cardinals3, cardinals4, cardinals5, cardinals6, cardinals7, cardinalsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    niners1, niners2, niners3, niners4, niners5, niners6, niners7, ninersOut = 0, 0, 0, 0, 0, 0, 0, 0
+    rams1, rams2, rams3, rams4, rams5, rams6, rams7, ramsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    seahawks1, seahawks2, seahawks3, seahawks4, seahawks5, seahawks6, seahawks7, seahawksOut = 0, 0, 0, 0, 0, 0, 0, 0
+
+
+    playoffsList = []
+    remSchedules= []
+    for i in range(10000):
+        remSchedule = []
+        for i in range(17):
+            if (not Bills.results[i] == 'W' and not Bills.results[i] == 'L' and not Bills.results[i] == 'T'):
+                game = Bills.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Bills')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Bills.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Bills.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Bills.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Dolphins.results[i] == 'W' and not Dolphins.results[i] == 'L' and not Dolphins.results[i] == 'T'):
+                game = Dolphins.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Dolphins')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Dolphins.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Dolphins.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Dolphins.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Jets.results[i] == 'W' and not Jets.results[i] == 'L' and not Jets.results[i] == 'T'):
+                game = Jets.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Jets')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Jets.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Jets.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Jets.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Patriots.results[i] == 'W' and not Patriots.results[i] == 'L' and not Patriots.results[i] == 'T'):
+                game = Patriots.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Patriots')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Patriots.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Patriots.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Patriots.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Browns.results[i] == 'W' and not Browns.results[i] == 'L' and not Browns.results[i] == 'T'):
+                game = Browns.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Browns')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Browns.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Browns.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Browns.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Bengals.results[i] == 'W' and not Bengals.results[i] == 'L' and not Bengals.results[i] == 'T'):
+                game = Bengals.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Bengals')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Bengals.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Bengals.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Bengals.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Ravens.results[i] == 'W' and not Ravens.results[i] == 'L' and not Ravens.results[i] == 'T'):
+                game = Ravens.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Ravens')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Ravens.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Ravens.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Ravens.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Steelers.results[i] == 'W' and not Steelers.results[i] == 'L' and not Steelers.results[i] == 'T'):
+                game = Steelers.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Steelers')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Steelers.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Steelers.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Steelers.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Colts.results[i] == 'W' and not Colts.results[i] == 'L' and not Colts.results[i] == 'T'):
+                game = Colts.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Colts')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Colts.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Colts.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Colts.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Jaguars.results[i] == 'W' and not Jaguars.results[i] == 'L' and not Jaguars.results[i] == 'T'):
+                game = Jaguars.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Jaguars')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Jaguars.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Jaguars.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Jaguars.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Titans.results[i] == 'W' and not Titans.results[i] == 'L' and not Titans.results[i] == 'T'):
+                game = Titans.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Titans')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Titans.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Titans.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Titans.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Texans.results[i] == 'W' and not Texans.results[i] == 'L' and not Texans.results[i] == 'T'):
+                game = Texans.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Texans')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Texans.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Texans.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Texans.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Broncos.results[i] == 'W' and not Broncos.results[i] == 'L' and not Broncos.results[i] == 'T'):
+                game = Broncos.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Broncos')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Broncos.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Broncos.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Broncos.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Chargers.results[i] == 'W' and not Chargers.results[i] == 'L' and not Chargers.results[i] == 'T'):
+                game = Chargers.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Chargers')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Chargers.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Chargers.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Chargers.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Chiefs.results[i] == 'W' and not Chiefs.results[i] == 'L' and not Chiefs.results[i] == 'T'):
+                game = Chiefs.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Chiefs')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Chiefs.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Chiefs.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Chiefs.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Raiders.results[i] == 'W' and not Raiders.results[i] == 'L' and not Raiders.results[i] == 'T'):
+                game = Raiders.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Raiders')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Raiders.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Raiders.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Raiders.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Cowboys.results[i] == 'W' and not Cowboys.results[i] == 'L' and not Cowboys.results[i] == 'T'):
+                game = Cowboys.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Cowboys')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Cowboys.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Cowboys.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Cowboys.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Commanders.results[i] == 'W' and not Commanders.results[i] == 'L' and not Commanders.results[i] == 'T'):
+                game = Commanders.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Commanders')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Commanders.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Commanders.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Commanders.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Eagles.results[i] == 'W' and not Eagles.results[i] == 'L' and not Eagles.results[i] == 'T'):
+                game = Eagles.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Eagles')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Eagles.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Eagles.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Eagles.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Giants.results[i] == 'W' and not Giants.results[i] == 'L' and not Giants.results[i] == 'T'):
+                game = Giants.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Giants')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Giants.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Giants.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Giants.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Bears.results[i] == 'W' and not Bears.results[i] == 'L' and not Bears.results[i] == 'T'):
+                game = Bears.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Bears')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Bears.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Bears.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Bears.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Lions.results[i] == 'W' and not Lions.results[i] == 'L' and not Lions.results[i] == 'T'):
+                game = Lions.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Lions')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Lions.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Lions.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Lions.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Packers.results[i] == 'W' and not Packers.results[i] == 'L' and not Packers.results[i] == 'T'):
+                game = Packers.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Packers')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Packers.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Packers.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Packers.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Vikings.results[i] == 'W' and not Vikings.results[i] == 'L' and not Vikings.results[i] == 'T'):
+                game = Vikings.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Vikings')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Vikings.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Vikings.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Vikings.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Buccaneers.results[i] == 'W' and not Buccaneers.results[i] == 'L' and not Buccaneers.results[i] == 'T'):
+                game = Buccaneers.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Buccaneers')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Buccaneers.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Buccaneers.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Buccaneers.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Falcons.results[i] == 'W' and not Falcons.results[i] == 'L' and not Falcons.results[i] == 'T'):
+                game = Falcons.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Falcons')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Falcons.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Falcons.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Falcons.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Saints.results[i] == 'W' and not Saints.results[i] == 'L' and not Saints.results[i] == 'T'):
+                game = Saints.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Saints')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Saints.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Saints.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Saints.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Panthers.results[i] == 'W' and not Panthers.results[i] == 'L' and not Panthers.results[i] == 'T'):
+                game = Panthers.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Panthers')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Panthers.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Panthers.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Panthers.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Cardinals.results[i] == 'W' and not Cardinals.results[i] == 'L' and not Cardinals.results[i] == 'T'):
+                game = Cardinals.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Cardinals')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Cardinals.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Cardinals.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Cardinals.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Niners.results[i] == 'W' and not Niners.results[i] == 'L' and not Niners.results[i] == 'T'):
+                game = Niners.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('49ers')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Niners.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Niners.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Niners.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Rams.results[i] == 'W' and not Rams.results[i] == 'L' and not Rams.results[i] == 'T'):
+                game = Rams.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Rams')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Rams.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Rams.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Rams.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        for i in range(17):
+            if (not Seahawks.results[i] == 'W' and not Seahawks.results[i] == 'L' and not Seahawks.results[i] == 'T'):
+                game = Seahawks.matchups[i]
+                opponent = findTeam(game)
+                remSchedule.append('Seahawks')
+                remSchedule.append(game)
+                winChance = 0.0
+                winDifference = Seahawks.getWinPercentage() - opponent.getWinPercentage()
+                if (winDifference == 0):
+                    winChance = 0.5
+                elif (winDifference < 0.83):
+                    winChance = 0.5 + (winDifference * 0.6)
+                else:
+                    winChance = 0.99
+                round(winChance, 2)
+                winChance *= 100
+                rand = random.randint(1, 100)
+                if (rand <= winChance):
+                    Seahawks.results[i] = 'W'
+                    opponent.results[i] = 'L'
+                    remSchedule.append('W')
+                else:
+                    Seahawks.results[i] = 'L'
+                    opponent.results[i] = 'W'
+                    remSchedule.append('L')
+
+        playoffs = playoffStandings()
+        playoffsList.append(playoffs)
+        remSchedules.append(remSchedule)
+        for team in playoffs:
+            if (team == Bills):
+                if (playoffs[0] == Bills):
+                    bills1 += 1
+                elif (playoffs[1] == Bills):
+                    bills2 += 1
+                elif (playoffs[2] == Bills):
+                    bills3 += 1
+                elif (playoffs[3] == Bills):
+                    bills4 += 1
+                elif (playoffs[4] == Bills):
+                    bills5 += 1
+                elif (playoffs[5] == Bills):
+                    bills6 += 1
+                elif (playoffs[6] == Bills):
+                    bills7 += 1
+                else:
+                    billsOut += 1
+
+            if (team == Dolphins):
+                if (playoffs[0] == Dolphins):
+                    dolphins1 += 1
+                elif (playoffs[1] == Dolphins):
+                    dolphins2 += 1
+                elif (playoffs[2] == Dolphins):
+                    dolphins3 += 1
+                elif (playoffs[3] == Dolphins):
+                    dolphins4 += 1
+                elif (playoffs[4] == Dolphins):
+                    dolphins5 += 1
+                elif (playoffs[5] == Dolphins):
+                    dolphins6 += 1
+                elif (playoffs[6] == Dolphins):
+                    dolphins7 += 1
+                else:
+                    dolphinsOut += 1
+            if (team == Jets):
+                if (playoffs[0] == Jets):
+                    jets1 += 1
+                elif (playoffs[1] == Jets):
+                    jets2 += 1
+                elif (playoffs[2] == Jets):
+                    jets3 += 1
+                elif (playoffs[3] == Jets):
+                    jets4 += 1
+                elif (playoffs[4] == Jets):
+                    jets5 += 1
+                elif (playoffs[5] == Jets):
+                    jets6 += 1
+                elif (playoffs[6] == Jets):
+                    jets7 += 1
+                else:
+                    jetsOut += 1
+
+            if (team == Patriots):
+                if (playoffs[0] == Patriots):
+                    patriots1 += 1
+                elif (playoffs[1] == Patriots):
+                    patriots2 += 1
+                elif (playoffs[2] == Patriots):
+                    patriots3 += 1
+                elif (playoffs[3] == Patriots):
+                    patriots4 += 1
+                elif (playoffs[4] == Patriots):
+                    patriots5 += 1
+                elif (playoffs[5] == Patriots):
+                    patriots6 += 1
+                elif (playoffs[6] == Patriots):
+                    patriots7 += 1
+                else:
+                    patriotsOut += 1
+
+            if (team == Browns):
+                if (playoffs[0] == Browns):
+                    browns1 += 1
+                elif (playoffs[1] == Browns):
+                    browns2 += 1
+                elif (playoffs[2] == Browns):
+                    browns3 += 1
+                elif (playoffs[3] == Browns):
+                    browns4 += 1
+                elif (playoffs[4] == Browns):
+                    browns5 += 1
+                elif (playoffs[5] == Browns):
+                    browns6 += 1
+                elif (playoffs[6] == Browns):
+                    browns7 += 1
+                else:
+                    brownsOut += 1
+
+            if (team == Bengals):
+                if (playoffs[0] == Bengals):
+                    bengals1 += 1
+                elif (playoffs[1] == Bengals):
+                    bengals2 += 1
+                elif (playoffs[2] == Bengals):
+                    bengals3 += 1
+                elif (playoffs[3] == Bengals):
+                    bengals4 += 1
+                elif (playoffs[4] == Bengals):
+                    bengals5 += 1
+                elif (playoffs[5] == Bengals):
+                    bengals6 += 1
+                elif (playoffs[6] == Bengals):
+                    bengals7 += 1
+                else:
+                    bengalsOut += 1
+
+            if (team == Ravens):
+                if (playoffs[0] == Ravens):
+                    ravens1 += 1
+                elif (playoffs[1] == Ravens):
+                    ravens2 += 1
+                elif (playoffs[2] == Ravens):
+                    ravens3 += 1
+                elif (playoffs[3] == Ravens):
+                    ravens4 += 1
+                elif (playoffs[4] == Ravens):
+                    ravens5 += 1
+                elif (playoffs[5] == Ravens):
+                    ravens6 += 1
+                elif (playoffs[6] == Ravens):
+                    ravens7 += 1
+                else:
+                    ravensOut += 1
+
+            if (team == Steelers):
+                if (playoffs[0] == Steelers):
+                    steelers1 += 1
+                elif (playoffs[1] == Steelers):
+                    steelers2 += 1
+                elif (playoffs[2] == Steelers):
+                    steelers3 += 1
+                elif (playoffs[3] == Steelers):
+                    steelers4 += 1
+                elif (playoffs[4] == Steelers):
+                    steelers5 += 1
+                elif (playoffs[5] == Steelers):
+                    steelers6 += 1
+                elif (playoffs[6] == Steelers):
+                    steelers7 += 1
+                else:
+                    steelersOut += 1
+
+            if (team == Colts):
+                if (playoffs[0] == Colts):
+                    colts1 += 1
+                elif (playoffs[1] == Colts):
+                    colts2 += 1
+                elif (playoffs[2] == Colts):
+                    colts3 += 1
+                elif (playoffs[3] == Colts):
+                    colts4 += 1
+                elif (playoffs[4] == Colts):
+                    colts5 += 1
+                elif (playoffs[5] == Colts):
+                    colts6 += 1
+                elif (playoffs[6] == Colts):
+                    colts7 += 1
+                else:
+                    coltsOut += 1
+
+            if (team == Jaguars):
+                if (playoffs[0] == Jaguars):
+                    jaguars1 += 1
+                elif (playoffs[1] == Jaguars):
+                    jaguars2 += 1
+                elif (playoffs[2] == Jaguars):
+                    jaguars3 += 1
+                elif (playoffs[3] == Jaguars):
+                    jaguars4 += 1
+                elif (playoffs[4] == Jaguars):
+                    jaguars5 += 1
+                elif (playoffs[5] == Jaguars):
+                    jaguars6 += 1
+                elif (playoffs[6] == Jaguars):
+                    jaguars7 += 1
+                else:
+                    jaguarsOut += 1
+
+            if (team == Titans):
+                if (playoffs[0] == Titans):
+                    titans1 += 1
+                elif (playoffs[1] == Titans):
+                    titans2 += 1
+                elif (playoffs[2] == Titans):
+                    titans3 += 1
+                elif (playoffs[3] == Titans):
+                    titans4 += 1
+                elif (playoffs[4] == Titans):
+                    titans5 += 1
+                elif (playoffs[5] == Titans):
+                    titans6 += 1
+                elif (playoffs[6] == Titans):
+                    titans7 += 1
+                else:
+                    titansOut += 1
+
+            if (team == Texans):
+                if (playoffs[0] == Texans):
+                    texans1 += 1
+                elif (playoffs[1] == Texans):
+                    texans2 += 1
+                elif (playoffs[2] == Texans):
+                    texans3 += 1
+                elif (playoffs[3] == Texans):
+                    texans4 += 1
+                elif (playoffs[4] == Texans):
+                    texans5 += 1
+                elif (playoffs[5] == Texans):
+                    texans6 += 1
+                elif (playoffs[6] == Texans):
+                    texans7 += 1
+                else:
+                    texansOut += 1
+
+            if (team == Broncos):
+                if (playoffs[0] == Broncos):
+                    broncos1 += 1
+                elif (playoffs[1] == Broncos):
+                    broncos2 += 1
+                elif (playoffs[2] == Broncos):
+                    broncos3 += 1
+                elif (playoffs[3] == Broncos):
+                    broncos4 += 1
+                elif (playoffs[4] == Broncos):
+                    broncos5 += 1
+                elif (playoffs[5] == Broncos):
+                    broncos6 += 1
+                elif (playoffs[6] == Broncos):
+                    broncos7 += 1
+                else:
+                    broncosOut += 1
+
+            if (team == Chargers):
+                if (playoffs[0] == Chargers):
+                    chargers1 += 1
+                elif (playoffs[1] == Chargers):
+                    chargers2 += 1
+                elif (playoffs[2] == Chargers):
+                    chargers3 += 1
+                elif (playoffs[3] == Chargers):
+                    chargers4 += 1
+                elif (playoffs[4] == Chargers):
+                    chargers5 += 1
+                elif (playoffs[5] == Chargers):
+                    chargers6 += 1
+                elif (playoffs[6] == Chargers):
+                    chargers7 += 1
+                else:
+                    chargersOut += 1
+
+            if (team == Chiefs):
+                if (playoffs[0] == Chiefs):
+                    chiefs1 += 1
+                elif (playoffs[1] == Chiefs):
+                    chiefs2 += 1
+                elif (playoffs[2] == Chiefs):
+                    chiefs3 += 1
+                elif (playoffs[3] == Chiefs):
+                    chiefs4 += 1
+                elif (playoffs[4] == Chiefs):
+                    chiefs5 += 1
+                elif (playoffs[5] == Chiefs):
+                    chiefs6 += 1
+                elif (playoffs[6] == Chiefs):
+                    chiefs7 += 1
+                else:
+                    chiefsOut += 1
+
+            if (team == Raiders):
+                if (playoffs[0] == Raiders):
+                    raiders1 += 1
+                elif (playoffs[1] == Raiders):
+                    raiders2 += 1
+                elif (playoffs[2] == Raiders):
+                    raiders3 += 1
+                elif (playoffs[3] == Raiders):
+                    raiders4 += 1
+                elif (playoffs[4] == Raiders):
+                    raiders5 += 1
+                elif (playoffs[5] == Raiders):
+                    raiders6 += 1
+                elif (playoffs[6] == Raiders):
+                    raiders7 += 1
+                else:
+                    raidersOut += 1
+
+            if (team == Cowboys):
+                if (playoffs[7] == Cowboys):
+                    cowboys1 += 1
+                elif (playoffs[8] == Cowboys):
+                    cowboys2 += 1
+                elif (playoffs[9] == Cowboys):
+                    cowboys3 += 1
+                elif (playoffs[10] == Cowboys):
+                    cowboys4 += 1
+                elif (playoffs[11] == Cowboys):
+                    cowboys5 += 1
+                elif (playoffs[12] == Cowboys):
+                    cowboys6 += 1
+                elif (playoffs[13] == Cowboys):
+                    cowboys7 += 1
+                else:
+                    cowboysOut += 1
+
+            if (team == Commanders):
+                if (playoffs[7] == Commanders):
+                    commanders1 += 1
+                elif (playoffs[8] == Commanders):
+                    commanders2 += 1
+                elif (playoffs[9] == Commanders):
+                    commanders3 += 1
+                elif (playoffs[10] == Commanders):
+                    commanders4 += 1
+                elif (playoffs[11] == Commanders):
+                    commanders5 += 1
+                elif (playoffs[12] == Commanders):
+                    commanders6 += 1
+                elif (playoffs[13] == Commanders):
+                    commanders7 += 1
+                else:
+                    commandersOut += 1
+
+            if (team == Eagles):
+                if (playoffs[7] == Eagles):
+                    eagles1 += 1
+                elif (playoffs[8] == Eagles):
+                    eagles2 += 1
+                elif (playoffs[9] == Eagles):
+                    eagles3 += 1
+                elif (playoffs[10] == Eagles):
+                    eagles4 += 1
+                elif (playoffs[11] == Eagles):
+                    eagles5 += 1
+                elif (playoffs[12] == Eagles):
+                    eagles6 += 1
+                elif (playoffs[13] == Eagles):
+                    eagles7 += 1
+                else:
+                    eaglesOut += 1
+
+            if (team == Giants):
+                if (playoffs[7] == Giants):
+                    giants1 += 1
+                elif (playoffs[8] == Giants):
+                    giants2 += 1
+                elif (playoffs[9] == Giants):
+                    giants3 += 1
+                elif (playoffs[10] == Giants):
+                    giants4 += 1
+                elif (playoffs[11] == Giants):
+                    giants5 += 1
+                elif (playoffs[12] == Giants):
+                    giants6 += 1
+                elif (playoffs[13] == Giants):
+                    giants7 += 1
+                else:
+                    giantsOut += 1
+
+            if (team == Bears):
+                if (playoffs[7] == Bears):
+                    bears1 += 1
+                elif (playoffs[8] == Bears):
+                    bears2 += 1
+                elif (playoffs[9] == Bears):
+                    bears3 += 1
+                elif (playoffs[10] == Bears):
+                    bears4 += 1
+                elif (playoffs[11] == Bears):
+                    bears5 += 1
+                elif (playoffs[12] == Bears):
+                    bears6 += 1
+                elif (playoffs[13] == Bears):
+                    bears7 += 1
+                else:
+                    bearsOut += 1
+
+            if (team == Lions):
+                if (playoffs[7] == Lions):
+                    lions1 += 1
+                elif (playoffs[8] == Lions):
+                    lions2 += 1
+                elif (playoffs[9] == Lions):
+                    lions3 += 1
+                elif (playoffs[10] == Lions):
+                    lions4 += 1
+                elif (playoffs[11] == Lions):
+                    lions5 += 1
+                elif (playoffs[12] == Lions):
+                    lions6 += 1
+                elif (playoffs[13] == Lions):
+                    lions7 += 1
+                else:
+                    lionsOut += 1
+
+            if (team == Packers):
+                if (playoffs[7] == Packers):
+                    packers1 += 1
+                elif (playoffs[8] == Packers):
+                    packers2 += 1
+                elif (playoffs[9] == Packers):
+                    packers3 += 1
+                elif (playoffs[10] == Packers):
+                    packers4 += 1
+                elif (playoffs[11] == Packers):
+                    packers5 += 1
+                elif (playoffs[12] == Packers):
+                    packers6 += 1
+                elif (playoffs[13] == Packers):
+                    packers7 += 1
+                else:
+                    packersOut += 1
+
+            if (team == Vikings):
+                if (playoffs[7] == Vikings):
+                    vikings1 += 1
+                elif (playoffs[8] == Vikings):
+                    vikings2 += 1
+                elif (playoffs[9] == Vikings):
+                    vikings3 += 1
+                elif (playoffs[10] == Vikings):
+                    vikings4 += 1
+                elif (playoffs[11] == Vikings):
+                    vikings5 += 1
+                elif (playoffs[12] == Vikings):
+                    vikings6 += 1
+                elif (playoffs[13] == Vikings):
+                    vikings7 += 1
+                else:
+                    vikingsOut += 1
+
+            if (team == Buccaneers):
+                if (playoffs[7] == Buccaneers):
+                    buccaneers1 += 1
+                elif (playoffs[8] == Buccaneers):
+                    buccaneers2 += 1
+                elif (playoffs[9] == Buccaneers):
+                    buccaneers3 += 1
+                elif (playoffs[10] == Buccaneers):
+                    buccaneers4 += 1
+                elif (playoffs[11] == Buccaneers):
+                    buccaneers5 += 1
+                elif (playoffs[12] == Buccaneers):
+                    buccaneers6 += 1
+                elif (playoffs[13] == Buccaneers):
+                    buccaneers7 += 1
+                else:
+                    buccaneersOut += 1
+
+            if (team == Falcons):
+                if (playoffs[7] == Falcons):
+                    falcons1 += 1
+                elif (playoffs[8] == Falcons):
+                    falcons2 += 1
+                elif (playoffs[9] == Falcons):
+                    falcons3 += 1
+                elif (playoffs[10] == Falcons):
+                    falcons4 += 1
+                elif (playoffs[11] == Falcons):
+                    falcons5 += 1
+                elif (playoffs[12] == Falcons):
+                    falcons6 += 1
+                elif (playoffs[13] == Falcons):
+                    falcons7 += 1
+                else:
+                    falconsOut += 1
+
+            if (team == Saints):
+                if (playoffs[7] == Saints):
+                    saints1 += 1
+                elif (playoffs[8] == Saints):
+                    saints2 += 1
+                elif (playoffs[9] == Saints):
+                    saints3 += 1
+                elif (playoffs[10] == Saints):
+                    saints4 += 1
+                elif (playoffs[11] == Saints):
+                    saints5 += 1
+                elif (playoffs[12] == Saints):
+                    saints6 += 1
+                elif (playoffs[13] == Saints):
+                    saints7 += 1
+                else:
+                    saintsOut += 1
+
+            if (team == Panthers):
+                if (playoffs[7] == Panthers):
+                    panthers1 += 1
+                elif (playoffs[8] == Panthers):
+                    panthers2 += 1
+                elif (playoffs[9] == Panthers):
+                    panthers3 += 1
+                elif (playoffs[10] == Panthers):
+                    panthers4 += 1
+                elif (playoffs[11] == Panthers):
+                    panthers5 += 1
+                elif (playoffs[12] == Panthers):
+                    panthers6 += 1
+                elif (playoffs[13] == Panthers):
+                    panthers7 += 1
+                else:
+                    panthersOut += 1
+
+            if (team == Cardinals):
+                if (playoffs[7] == Cardinals):
+                    cardinals1 += 1
+                elif (playoffs[8] == Cardinals):
+                    cardinals2 += 1
+                elif (playoffs[9] == Cardinals):
+                    cardinals3 += 1
+                elif (playoffs[10] == Cardinals):
+                    cardinals4 += 1
+                elif (playoffs[11] == Cardinals):
+                    cardinals5 += 1
+                elif (playoffs[12] == Cardinals):
+                    cardinals6 += 1
+                elif (playoffs[13] == Cardinals):
+                    cardinals7 += 1
+                else:
+                    cardinalsOut += 1
+
+            if (team == Niners):
+                if (playoffs[7] == Niners):
+                    niners1 += 1
+                elif (playoffs[8] == Niners):
+                    niners2 += 1
+                elif (playoffs[9] == Niners):
+                    niners3 += 1
+                elif (playoffs[10] == Niners):
+                    niners4 += 1
+                elif (playoffs[11] == Niners):
+                    niners5 += 1
+                elif (playoffs[12] == Niners):
+                    niners6 += 1
+                elif (playoffs[13] == Niners):
+                    niners7 += 1
+                else:
+                    ninersOut += 1
+
+            if (team == Rams):
+                if (playoffs[7] == Rams):
+                    rams1 += 1
+                elif (playoffs[8] == Rams):
+                    rams2 += 1
+                elif (playoffs[9] == Rams):
+                    rams3 += 1
+                elif (playoffs[10] == Rams):
+                    rams4 += 1
+                elif (playoffs[11] == Rams):
+                    rams5 += 1
+                elif (playoffs[12] == Rams):
+                    rams6 += 1
+                elif (playoffs[13] == Rams):
+                    rams7 += 1
+                else:
+                    ramsOut += 1
+
+            if (team == Seahawks):
+                if (playoffs[7] == Seahawks):
+                    seahawks1 += 1
+                elif (playoffs[8] == Seahawks):
+                    seahawks2 += 1
+                elif (playoffs[9] == Seahawks):
+                    seahawks3 += 1
+                elif (playoffs[10] == Seahawks):
+                    seahawks4 += 1
+                elif (playoffs[11] == Seahawks):
+                    seahawks5 += 1
+                elif (playoffs[12] == Seahawks):
+                    seahawks6 += 1
+                elif (playoffs[13] == Seahawks):
+                    seahawks7 += 1
+                else:
+                    seahawksOut += 1
+
+        resetStandings()
+
+    #trackScenarios(playoffsList, remSchedules, Patriots, '1')
+
+    billsPlayoffs = (bills1 + bills2 + bills3 + bills4 + bills5 + bills6 + bills7) / 100.0
+    billsDiv = (bills1 + bills2 + bills3 + bills4) / 100.0
+    billsOut = 100 - billsPlayoffs
+    dolphinsPlayoffs = (dolphins1 + dolphins2 + dolphins3 + dolphins4 + dolphins5 + dolphins6 + dolphins7) / 100.0
+    dolphinsDiv = (dolphins1 + dolphins2 + dolphins3 + dolphins4) / 100.0
+    dolphinsOut = 100 - dolphinsPlayoffs
+    jetsPlayoffs = (jets1 + jets2 + jets3 + jets4 + jets5 + jets6 + jets7) / 100.0
+    jetsDiv = (jets1 + jets2 + jets3 + jets4) / 100.0
+    jetsOut = 100 - jetsPlayoffs
+    patriotsPlayoffs = (patriots1 + patriots2 + patriots3 + patriots4 + patriots5 + patriots6 + patriots7) / 100.0
+    patriotsDiv = (patriots1 + patriots2 + patriots3 + patriots4) / 100.0
+    patriotsOut = 100 - patriotsPlayoffs
+    brownsPlayoffs = (browns1 + browns2 + browns3 + browns4 + browns5 + browns6 + browns7) / 100.0
+    brownsDiv = (browns1 + browns2 + browns3 + browns4) / 100.0
+    brownsOut = 100 - brownsPlayoffs
+    bengalsPlayoffs = (bengals1 + bengals2 + bengals3 + bengals4 + bengals5 + bengals6 + bengals7) / 100.0
+    bengalsDiv = (bengals1 + bengals2 + bengals3 + bengals4) / 100.0
+    bengalsOut = 100 - bengalsPlayoffs
+    ravensPlayoffs = (ravens1 + ravens2 + ravens3 + ravens4 + ravens5 + ravens6 + ravens7) / 100.0
+    ravensDiv = (ravens1 + ravens2 + ravens3 + ravens4) / 100.0
+    ravensOut = 100 - ravensPlayoffs
+    steelersPlayoffs = (steelers1 + steelers2 + steelers3 + steelers4 + steelers5 + steelers6 + steelers7) / 100.0
+    steelersDiv = (steelers1 + steelers2 + steelers3 + steelers4) / 100.0
+    steelersOut = 100 - steelersPlayoffs
+    coltsPlayoffs = (colts1 + colts2 + colts3 + colts4 + colts5 + colts6 + colts7) / 100.0
+    coltsDiv = (colts1 + colts2 + colts3 + colts4) / 100.0
+    coltsOut = 100 - coltsPlayoffs
+    jaguarsPlayoffs = (jaguars1 + jaguars2 + jaguars3 + jaguars4 + jaguars5 + jaguars6 + jaguars7) / 100.0
+    jaguarsDiv = (jaguars1 + jaguars2 + jaguars3 + jaguars4) / 100.0
+    jaguarsOut = 100 - jaguarsPlayoffs
+    titansPlayoffs = (titans1 + titans2 + titans3 + titans4 + titans5 + titans6 + titans7) / 100.0
+    titansDiv = (titans1 + titans2 + titans3 + titans4) / 100.0
+    titansOut = 100 - titansPlayoffs
+    texansPlayoffs = (texans1 + texans2 + texans3 + texans4 + texans5 + texans6 + texans7) / 100.0
+    texansDiv = (texans1 + texans2 + texans3 + texans4) / 100.0
+    texansOut = 100 - texansPlayoffs
+    broncosPlayoffs = (broncos1 + broncos2 + broncos3 + broncos4 + broncos5 + broncos6 + broncos7) / 100.0
+    broncosDiv = (broncos1 + broncos2 + broncos3 + broncos4) / 100.0
+    broncosOut = 100 - broncosPlayoffs
+    chargersPlayoffs = (chargers1 + chargers2 + chargers3 + chargers4 + chargers5 + chargers6 + chargers7) / 100.0
+    chargersDiv = (chargers1 + chargers2 + chargers3 + chargers4) / 100.0
+    chargersOut = 100 - chargersPlayoffs
+    chiefsPlayoffs = (chiefs1 + chiefs2 + chiefs3 + chiefs4 + chiefs5 + chiefs6 + chiefs7) / 100.0
+    chiefsDiv = (chiefs1 + chiefs2 + chiefs3 + chiefs4) / 100.0
+    chiefsOut = 100 - chiefsPlayoffs
+    raidersPlayoffs = (raiders1 + raiders2 + raiders3 + raiders4 + raiders5 + raiders6 + raiders7) / 100.0
+    raidersDiv = (raiders1 + raiders2 + raiders3 + raiders4) / 100.0
+    raidersOut = 100 - raidersPlayoffs
+    cowboysPlayoffs = (cowboys1 + cowboys2 + cowboys3 + cowboys4 + cowboys5 + cowboys6 + cowboys7) / 100.0
+    cowboysDiv = (cowboys1 + cowboys2 + cowboys3 + cowboys4) / 100.0
+    cowboysOut = 100 - cowboysPlayoffs
+    commandersPlayoffs = (
+                                     commanders1 + commanders2 + commanders3 + commanders4 + commanders5 + commanders6 + commanders7) / 100.0
+    commandersDiv = (commanders1 + commanders2 + commanders3 + commanders4) / 100.0
+    commandersOut = 100 - commandersPlayoffs
+    eaglesPlayoffs = (eagles1 + eagles2 + eagles3 + eagles4 + eagles5 + eagles6 + eagles7) / 100.0
+    eaglesDiv = (eagles1 + eagles2 + eagles3 + eagles4) / 100.0
+    eaglesOut = 100 - eaglesPlayoffs
+    giantsPlayoffs = (giants1 + giants2 + giants3 + giants4 + giants5 + giants6 + giants7) / 100.0
+    giantsDiv = (giants1 + giants2 + giants3 + giants4) / 100.0
+    giantsOut = 100 - giantsPlayoffs
+    bearsPlayoffs = (bears1 + bears2 + bears3 + bears4 + bears5 + bears6 + bears7) / 100.0
+    bearsDiv = (bears1 + bears2 + bears3 + bears4) / 100.0
+    bearsOut = 100 - bearsPlayoffs
+    lionsPlayoffs = (lions1 + lions2 + lions3 + lions4 + lions5 + lions6 + lions7) / 100.0
+    lionsDiv = (lions1 + lions2 + lions3 + lions4) / 100.0
+    lionsOut = 100 - lionsPlayoffs
+    packersPlayoffs = (packers1 + packers2 + packers3 + packers4 + packers5 + packers6 + packers7) / 100.0
+    packersDiv = (packers1 + packers2 + packers3 + packers4) / 100.0
+    packersOut = 100 - packersPlayoffs
+    vikingsPlayoffs = (vikings1 + vikings2 + vikings3 + vikings4 + vikings5 + vikings6 + vikings7) / 100.0
+    vikingsDiv = (vikings1 + vikings2 + vikings3 + vikings4) / 100.0
+    vikingsOut = 100 - vikingsPlayoffs
+    buccaneersPlayoffs = (
+                                     buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4 + buccaneers5 + buccaneers6 + buccaneers7) / 100.0
+    buccaneersDiv = (buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4) / 100.0
+    buccaneersOut = 100 - buccaneersPlayoffs
+    falconsPlayoffs = (falcons1 + falcons2 + falcons3 + falcons4 + falcons5 + falcons6 + falcons7) / 100.0
+    falconsDiv = (falcons1 + falcons2 + falcons3 + falcons4) / 100.0
+    falconsOut = 100 - falconsPlayoffs
+    saintsPlayoffs = (saints1 + saints2 + saints3 + saints4 + saints5 + saints6 + saints7) / 100.0
+    saintsDiv = (saints1 + saints2 + saints3 + saints4) / 100.0
+    saintsOut = 100 - saintsPlayoffs
+    panthersPlayoffs = (panthers1 + panthers2 + panthers3 + panthers4 + panthers5 + panthers6 + panthers7) / 100.0
+    panthersDiv = (panthers1 + panthers2 + panthers3 + panthers4) / 100.0
+    panthersOut = 100 - panthersPlayoffs
+    cardinalsPlayoffs = (
+                                    cardinals1 + cardinals2 + cardinals3 + cardinals4 + cardinals5 + cardinals6 + cardinals7) / 100.0
+    cardinalsDiv = (cardinals1 + cardinals2 + cardinals3 + cardinals4) / 100.0
+    cardinalsOut = 100 - cardinalsPlayoffs
+    ninersPlayoffs = (niners1 + niners2 + niners3 + niners4 + niners5 + niners6 + niners7) / 100.0
+    ninersDiv = (niners1 + niners2 + niners3 + niners4) / 100.0
+    ninersOut = 100 - ninersPlayoffs
+    ramsPlayoffs = (rams1 + rams2 + rams3 + rams4 + rams5 + rams6 + rams7) / 100.0
+    ramsDiv = (rams1 + rams2 + rams3 + rams4) / 100.0
+    ramsOut = 100 - ramsPlayoffs
+    seahawksPlayoffs = (seahawks1 + seahawks2 + seahawks3 + seahawks4 + seahawks5 + seahawks6 + seahawks7) / 100.0
+    seahawksDiv = (seahawks1 + seahawks2 + seahawks3 + seahawks4) / 100.0
+    seahawksOut = 100 - seahawksPlayoffs
+
+    return json.dumps([{
+        'teamId': teamMap.loc[teamMap['teamName'] == team, 'teamId'].iloc[0],
+        'playoffs': globals()[f'{team.lower()}Playoffs'],
+        'division': globals()[f'{team.lower()}Div'],
+        'oneseeds': globals()[f'{team.lower()}1'] / 100.0,
+        'twoseeds': globals()[f'{team.lower()}2'] / 100.0,
+        'threeseeds': globals()[f'{team.lower()}3'] / 100.0,
+        'fourseeds': globals()[f'{team.lower()}4'] / 100.0,
+        'fiveseeds': globals()[f'{team.lower()}5'] / 100.0,
+        'sixseeds': globals()[f'{team.lower()}6'] / 100.0,
+        'sevenseeds': globals()[f'{team.lower()}7'] / 100.0
+    } for team in ['Bills', 'Dolphins', 'Jets', 'Patriots', 'Bengals', 'Browns', 'Ravens', 'Steelers', 'Colts', 'Jaguars', 'Titans', 'Texans', 'Broncos', 'Chiefs', 'Chargers', 'Raiders', 'Commanders', 'Cowboys', 'Giants', 'Eagles', 'Bears', 'Lions', 'Packers', 'Vikings', 'Buccaneers', 'Falcons', 'Saints', 'Panthers', 'Cardinals', 'Niners', 'Rams', 'Seahawks']])
 
     
     
