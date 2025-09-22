@@ -10840,7 +10840,7 @@ def simulate_odds(games_json):
 
     playoffsList = []
     remSchedules= []
-    for i in range(10000):
+    for i in range(100):
         remSchedule = []
         for i in range(17):
             if (not Bills.results[i] == 'W' and not Bills.results[i] == 'L' and not Bills.results[i] == 'T'):
