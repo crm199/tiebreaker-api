@@ -12374,7 +12374,7 @@ def simulate_odds(games_json):
     
     
 #divisionStandings()
-playoffPercentages()
+#playoffPercentages()
 
 #r = tiebreak2(Panthers, Commanders)
 #print (r[0].getName() + r[1].getName())
