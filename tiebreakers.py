@@ -10430,8 +10430,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Bills'],
-        'division': billsDiv,
-        'playoffs': billsPlayoffs,
+        'division': billsDiv * 2.0,
+        'playoffs': billsPlayoffs * 2.0,
         'oneseed': bills1 / 50.0,
         'twoseed': bills2 / 50.0,
         'threeseed': bills3 / 50.0,
@@ -10444,8 +10444,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Dolphins'],
-        'division': dolphinsDiv,
-        'playoffs': dolphinsPlayoffs,
+        'division': dolphinsDiv * 2.0,
+        'playoffs': dolphinsPlayoffs * 2.0,
         'oneseed': dolphins1 / 50.0,
         'twoseed': dolphins2 / 50.0,
         'threeseed': dolphins3 / 50.0,
@@ -10458,8 +10458,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Jets'],
-        'division': jetsDiv,
-        'playoffs': jetsPlayoffs,
+        'division': jetsDiv * 2.0,
+        'playoffs': jetsPlayoffs * 2.0,
         'oneseed': jets1 / 50.0,
         'twoseed': jets2 / 50.0,
         'threeseed': jets3 / 50.0,
@@ -10470,8 +10470,8 @@ def playoffPercentages():
     })
     odds_data.append({
         'teamId': name_to_id['Patriots'],
-        'division': patriotsDiv,
-        'playoffs': patriotsPlayoffs,
+        'division': patriotsDiv * 2.0,
+        'playoffs': patriotsPlayoffs * 2.0,
         'oneseed': patriots1 / 50.0,
         'twoseed': patriots2 / 50.0,
         'threeseed': patriots3 / 50.0,
@@ -10484,8 +10484,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Bengals'],
-        'division': bengalsDiv,
-        'playoffs': bengalsPlayoffs,
+        'division': bengalsDiv * 2.0,
+        'playoffs': bengalsPlayoffs * 2.0,
         'oneseed': bengals1 / 50.0,
         'twoseed': bengals2 / 50.0,
         'threeseed': bengals3 / 50.0,
@@ -10498,8 +10498,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Browns'],
-        'division': brownsDiv,
-        'playoffs': brownsPlayoffs,
+        'division': brownsDiv * 2.0,
+        'playoffs': brownsPlayoffs * 2.0,
         'oneseed': browns1 / 50.0,
         'twoseed': browns2 / 50.0,
         'threeseed': browns3 / 50.0,
@@ -10512,8 +10512,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Ravens'],
-        'division': ravensDiv,
-        'playoffs': ravensPlayoffs,
+        'division': ravensDiv * 2.0,
+        'playoffs': ravensPlayoffs * 2.0,
         'oneseed': ravens1 / 50.0,
         'twoseed': ravens2 / 50.0,
         'threeseed': ravens3 / 50.0,
@@ -10526,8 +10526,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Steelers'],
-        'division': steelersDiv,
-        'playoffs': steelersPlayoffs,
+        'division': steelersDiv * 2.0,
+        'playoffs': steelersPlayoffs * 2.0,
         'oneseed': steelers1 / 50.0,
         'twoseed': steelers2 / 50.0,
         'threeseed': steelers3 / 50.0,
@@ -10540,8 +10540,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Colts'],
-        'division': coltsDiv,
-        'playoffs': coltsPlayoffs,
+        'division': coltsDiv * 2.0,
+        'playoffs': coltsPlayoffs * 2.0,
         'oneseed': colts1 / 50.0,
         'twoseed': colts2 / 50.0,
         'threeseed': colts3 / 50.0,
@@ -10554,8 +10554,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Jaguars'],
-        'division': jaguarsDiv,
-        'playoffs': jaguarsPlayoffs,
+        'division': jaguarsDiv * 2.0,
+        'playoffs': jaguarsPlayoffs * 2.0,
         'oneseed': jaguars1 / 50.0,
         'twoseed': jaguars2 / 50.0,
         'threeseed': jaguars3 / 50.0,
@@ -10568,8 +10568,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Titans'],
-        'division': titansDiv,
-        'playoffs': titansPlayoffs,
+        'division': titansDiv * 2.0,
+        'playoffs': titansPlayoffs * 2.0,
         'oneseed': titans1 / 50.0,
         'twoseed': titans2 / 50.0,
         'threeseed': titans3 / 50.0,
@@ -10582,8 +10582,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Texans'],
-        'division': texansDiv,
-        'playoffs': texansPlayoffs,
+        'division': texansDiv * 2.0,
+        'playoffs': texansPlayoffs * 2.0,
         'oneseed': texans1 / 50.0,
         'twoseed': texans2 / 50.0,
         'threeseed': texans3 / 50.0,
@@ -10596,8 +10596,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Chiefs'],
-        'division': chiefsDiv,
-        'playoffs': chiefsPlayoffs,
+        'division': chiefsDiv * 2.0,
+        'playoffs': chiefsPlayoffs * 2.0,
         'oneseed': chiefs1 / 50.0,
         'twoseed': chiefs2 / 50.0,
         'threeseed': chiefs3 / 50.0,
@@ -10610,8 +10610,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Broncos'],
-        'division': broncosDiv,
-        'playoffs': broncosPlayoffs,
+        'division': broncosDiv * 2.0,
+        'playoffs': broncosPlayoffs * 2.0,
         'oneseed': broncos1 / 50.0,
         'twoseed': broncos2 / 50.0,
         'threeseed': broncos3 / 50.0,
@@ -10624,8 +10624,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Chargers'],
-        'division': chargersDiv,
-        'playoffs': chargersPlayoffs,
+        'division': chargersDiv * 2.0,
+        'playoffs': chargersPlayoffs * 2.0,
         'oneseed': chargers1 / 50.0,
         'twoseed': chargers2 / 50.0,
         'threeseed': chargers3 / 50.0,
@@ -10638,8 +10638,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Raiders'],
-        'division': raidersDiv,
-        'playoffs': raidersPlayoffs,
+        'division': raidersDiv * 2.0,
+        'playoffs': raidersPlayoffs * 2.0,
         'oneseed': raiders1 / 50.0,
         'twoseed': raiders2 / 50.0,
         'threeseed': raiders3 / 50.0,
@@ -10652,8 +10652,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Cowboys'],
-        'division': cowboysDiv,
-        'playoffs': cowboysPlayoffs,
+        'division': cowboysDiv * 2.0,
+        'playoffs': cowboysPlayoffs * 2.0,
         'oneseed': cowboys1 / 50.0,
         'twoseed': cowboys2 / 50.0,
         'threeseed': cowboys3 / 50.0,
@@ -10666,8 +10666,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Commanders'],
-        'division': commandersDiv,
-        'playoffs': commandersPlayoffs,
+        'division': commandersDiv * 2.0,
+        'playoffs': commandersPlayoffs * 2.0,
         'oneseed': commanders1 / 50.0,
         'twoseed': commanders2 / 50.0,
         'threeseed': commanders3 / 50.0,
@@ -10680,8 +10680,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Eagles'],
-        'division': eaglesDiv,
-        'playoffs': eaglesPlayoffs,
+        'division': eaglesDiv * 2.0,
+        'playoffs': eaglesPlayoffs * 2.0,
         'oneseed': eagles1 / 50.0,
         'twoseed': eagles2 / 50.0,
         'threeseed': eagles3 / 50.0,
@@ -10694,8 +10694,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Giants'],
-        'division': giantsDiv,
-        'playoffs': giantsPlayoffs,
+        'division': giantsDiv * 2.0,
+        'playoffs': giantsPlayoffs * 2.0,
         'oneseed': giants1 / 50.0,
         'twoseed': giants2 / 50.0,
         'threeseed': giants3 / 50.0,
@@ -10708,8 +10708,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Bears'],
-        'division': bearsDiv,
-        'playoffs': bearsPlayoffs,
+        'division': bearsDiv * 2.0,
+        'playoffs': bearsPlayoffs * 2.0,
         'oneseed': bears1 / 50.0,
         'twoseed': bears2 / 50.0,
         'threeseed': bears3 / 50.0,
@@ -10722,8 +10722,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Lions'],
-        'division': lionsDiv,
-        'playoffs': lionsPlayoffs,
+        'division': lionsDiv * 2.0,
+        'playoffs': lionsPlayoffs * 2.0,
         'oneseed': lions1 / 50.0,
         'twoseed': lions2 / 50.0,
         'threeseed': lions3 / 50.0,
@@ -10736,8 +10736,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Packers'],
-        'division': packersDiv,
-        'playoffs': packersPlayoffs,
+        'division': packersDiv * 2.0,
+        'playoffs': packersPlayoffs * 2.0,
         'oneseed': packers1 / 50.0,
         'twoseed': packers2 / 50.0,
         'threeseed': packers3 / 50.0,
@@ -10750,8 +10750,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Vikings'],
-        'division': vikingsDiv,
-        'playoffs': vikingsPlayoffs,
+        'division': vikingsDiv * 2.0,
+        'playoffs': vikingsPlayoffs * 2.0,
         'oneseed': vikings1 / 50.0,
         'twoseed': vikings2 / 50.0,
         'threeseed': vikings3 / 50.0,
@@ -10764,8 +10764,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Buccaneers'],
-        'division': buccaneersDiv,
-        'playoffs': buccaneersPlayoffs,
+        'division': buccaneersDiv * 2.0,
+        'playoffs': buccaneersPlayoffs * 2.0,
         'oneseed': buccaneers1 / 50.0,
         'twoseed': buccaneers2 / 50.0,
         'threeseed': buccaneers3 / 50.0,
@@ -10778,8 +10778,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Falcons'],
-        'division': falconsDiv,
-        'playoffs': falconsPlayoffs,
+        'division': falconsDiv * 2.0,
+        'playoffs': falconsPlayoffs * 2.0,
         'oneseed': falcons1 / 50.0,
         'twoseed': falcons2 / 50.0,
         'threeseed': falcons3 / 50.0,
@@ -10792,8 +10792,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Panthers'],
-        'division': panthersDiv,
-        'playoffs': panthersPlayoffs,
+        'division': panthersDiv * 2.0,
+        'playoffs': panthersPlayoffs * 2.0,
         'oneseed': panthers1 / 50.0,
         'twoseed': panthers2 / 50.0,
         'threeseed': panthers3 / 50.0,
@@ -10806,8 +10806,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Saints'],
-        'division': saintsDiv,
-        'playoffs': saintsPlayoffs,
+        'division': saintsDiv * 2.0,
+        'playoffs': saintsPlayoffs * 2.0,
         'oneseed': saints1 / 50.0,
         'twoseed': saints2 / 50.0,
         'threeseed': saints3 / 50.0,
@@ -10820,8 +10820,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Cardinals'],
-        'division': cardinalsDiv,
-        'playoffs': cardinalsPlayoffs,
+        'division': cardinalsDiv * 2.0,
+        'playoffs': cardinalsPlayoffs * 2.0,
         'oneseed': cardinals1 / 50.0,
         'twoseed': cardinals2 / 50.0,
         'threeseed': cardinals3 / 50.0,
@@ -10834,8 +10834,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['49ers'],
-        'division': ninersDiv,
-        'playoffs': ninersPlayoffs,
+        'division': ninersDiv * 2.0,
+        'playoffs': ninersPlayoffs * 2.0,
         'oneseed': niners1 / 50.0,
         'twoseed': niners2 / 50.0,
         'threeseed': niners3 / 50.0,
@@ -10848,8 +10848,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Rams'],
-        'division': ramsDiv,
-        'playoffs': ramsPlayoffs,
+        'division': ramsDiv * 2.0,
+        'playoffs': ramsPlayoffs * 2.0,
         'oneseed': rams1 / 50.0,
         'twoseed': rams2 / 50.0,
         'threeseed': rams3 / 50.0,
@@ -10862,8 +10862,8 @@ def playoffPercentages():
 
     odds_data.append({
         'teamId': name_to_id['Seahawks'],
-        'division': seahawksDiv,
-        'playoffs': seahawksPlayoffs,
+        'division': seahawksDiv * 2.0,
+        'playoffs': seahawksPlayoffs * 2.0,
         'oneseed': seahawks1 / 50.0,
         'twoseed': seahawks2 / 50.0,
         'threeseed': seahawks3 / 50.0,
@@ -10872,6 +10872,9 @@ def playoffPercentages():
         'sixseed': seahawks6 / 50.0,
         'sevenseed': seahawks7 / 50.0
     })
+
+
+
 
 
 
