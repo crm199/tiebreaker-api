@@ -1,10 +1,15 @@
 import logging
+import pandas as pd
+from supabase import create_client, Client
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
 from tiebreakers import playoffPercentages, simulate_odds
+from lines import predict_week_games
+
+TEAMS_CSV = "TeamIDMap.csv"
 
 # Logging configuration
 logging.basicConfig(
@@ -24,8 +29,11 @@ logger.info("Loaded environment variables")
 # Validate env vars
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-logger.info(f"SUPABASE_URL: {SUPABASE_URL}")
-logger.info(f"SUPABASE_KEY: {'[REDACTED]' if SUPABASE_KEY else None}")
+
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+#logger.info(f"SUPABASE_URL: {SUPABASE_URL}")
+#logger.info(f"SUPABASE_KEY: {'[REDACTED]' if SUPABASE_KEY else None}")
 if not SUPABASE_URL or not SUPABASE_KEY:
     logger.error("Missing SUPABASE_URL or SUPABASE_KEY")
     raise ValueError("Missing SUPABASE_URL or SUPABASE_KEY")
@@ -46,6 +54,9 @@ app.add_middleware(
 # Request model
 class ScheduleRequest(BaseModel):
     incomplete_games: list[dict]
+
+class WeekRequest(BaseModel):
+    week_number: int
 
 # Routes
 @app.get("/")
@@ -79,3 +90,26 @@ async def calculate_odds(request: Request):
     except Exception as e:
         logger.error(f"Error in /calculate-odds: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/predict-lines")
+async def predict_lines(week_req: WeekRequest):
+    try:
+        team_df = pd.read_csv("TeamIDMap.csv")
+        team_stats = {
+            row["ID"]: {
+                "Team": row["Team"],
+                "oPPP": row["oPPP"],
+                "dPPP": row["dPPP"],
+                "poss_per_game": row["poss_per_game"],
+                "win_pct": row["win_pct"],
+                "avg_opp_ppp_diff": row["avg_opp_ppp_diff"]
+            }
+            for _, row in team_df.iterrows()
+        }
+
+        predictions = predict_week_games(week_req.week_number, team_stats, supabase)
+        return {"status": "success", "predictions": predictions}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
