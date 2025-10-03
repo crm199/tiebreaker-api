@@ -99,10 +99,12 @@ def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> l
         .eq("stageIndex", 1).execute()
     logger.info(f"Supabase query response: {response}")
 
-    if response.error:
-        logger.error(f"Supabase query failed: {response.error}")
-        raise Exception(f"Supabase query failed: {response.error}")
+    #if response.error:
+    #    logger.error(f"Supabase query failed: {response.error}")
+    #    raise Exception(f"Supabase query failed: {response.error}")
+    
     logger.info("We got here")
+    
     games = response.data
     logger.info(f"Retrieved {len(games)} games from Supabase")
 
