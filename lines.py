@@ -103,9 +103,13 @@ def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> l
             "awayTeam": away_stats["Team"],
             "homeExpScore": result["homeExpectedScore"],
             "awayExpScore": result["awayExpectedScore"],
+            "scheuleId": game["scheduleId"],
             "spread": result["spread"],
             "ou": result["ou"],
-            "winProbHome": result["winProbHome"]
+            "winProbHome": result["winProbHome"],
+            "simmed": False,
+            "weekIndex": week_index,
+            "closed": False,
         })
 
     # Insert predictions into WeeklyOdds table
