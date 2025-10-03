@@ -136,6 +136,7 @@ def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> l
         predictions.append(pred)
 
     logger.info(f"Generated {len(predictions)} predictions. Inserting into WeeklyOdds...")
+    logger.info(f"Predctions: {predictions}")
 
     insert_resp = supabase_client.table("WeeklyOdds").insert(predictions).execute()
     if insert_resp.error:
