@@ -93,6 +93,7 @@ async def calculate_odds(request: Request):
     
 @app.post("/predict-lines")
 async def predict_lines(week_req: WeekRequest):
+    logger.info(f"POST /predict-lines called for week {week_req.week_number}")
     try:
         team_df = pd.read_csv("TeamIDMap.csv")
         team_stats = {
@@ -106,8 +107,9 @@ async def predict_lines(week_req: WeekRequest):
             }
             for _, row in team_df.iterrows()
         }
-
+        logger.info(f"Loaded team stats for {len(team_stats)} teams")
         predictions = predict_week_games(week_req.week_number, team_stats, supabase)
+        logger.info(f"Predictions generated for week {week_req.week_number}")
         return {"status": "success", "predictions": predictions}
 
     except Exception as e:
