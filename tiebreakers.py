@@ -8356,7 +8356,7 @@ def playoffStandings():
 
 def resetStandings():
     for team in teamList:
-        print(f"Resetting standings for {team.name}")
+        #print(f"Resetting standings for {team.name}")
         # Get games for this team (home or away)
         team_games = df[(df['homeTeam'] == team.name) | (df['awayTeam'] == team.name)]
         
