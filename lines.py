@@ -97,6 +97,7 @@ def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> l
         .eq("weekIndex", week_index) \
         .eq("seasonIndex", SEASON_INDEX) \
         .eq("stageIndex", 1).execute()
+    logger.info(f"Supabase query response: {response}")
 
     if response.error:
         logger.error(f"Supabase query failed: {response.error}")

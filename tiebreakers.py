@@ -1477,7 +1477,7 @@ teamList = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, 
             Buccaneers,
             Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
 
-print("In teamList: " + str(id(teamList[0])))
+#print("In teamList: " + str(id(teamList[0])))
 
 AFC = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans,
        Broncos, Chiefs, Chargers, Raiders]
