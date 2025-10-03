@@ -43,14 +43,14 @@ app = FastAPI()
 logger.info("FastAPI app initialized")
 
 # Add CORS middleware
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://crm199.github.io"],
+    allow_origins=["*"],  # Allow all origins for testing
     allow_credentials=True,
-    allow_methods=["POST", "OPTIONS"],
-    allow_headers=["Content-Type"],
+    allow_methods=["POST", "OPTIONS"],  # Explicitly allow POST and OPTIONS
+    allow_headers=["Content-Type", "Accept"],  # Allow relevant headers
 )
-
 # Request model
 class ScheduleRequest(BaseModel):
     incomplete_games: list[dict]
