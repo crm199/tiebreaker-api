@@ -3,7 +3,7 @@ import pandas as pd
 import logging
 
 # ---------------- CONFIG ----------------
-SEASON_INDEX = 0  # default season index
+SEASON_INDEX = 1  # default season index
 LOGIT_COEF = 0.2254
 LOGIT_INTERCEPT = -0.0170
 # ---------------------------------------
