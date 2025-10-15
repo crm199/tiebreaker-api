@@ -3,8 +3,6 @@ import pandas as pd
 import logging
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import os
-import json
 
 # ---------------- CONFIG ----------------
 SEASON_INDEX = 1  # current season
@@ -32,20 +30,27 @@ def round_half(x: float) -> float:
 
 
 def get_s2_ppp_data():
-    scope = ["https://spreadsheets.google.com/feeds",
-             "https://www.googleapis.com/auth/drive"]
+    """Read the S2 PPP Google Sheet into a DataFrame"""
+    logger.info("Attempting to connect to Google Sheets...")
+    try:
+        scope = [
+            "https://spreadsheets.google.com/feeds",
+            "https://www.googleapis.com/auth/drive",
+        ]
+        creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
+        client = gspread.authorize(creds)
+        logger.info("Successfully authorized Google service account.")
+    except Exception as e:
+        logger.exception(f"Failed during Google Sheets authorization: {e}")
+        raise
 
-    # Load service account credentials from environment variable
-    creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
-    if not creds_json:
-        raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_JSON environment variable")
-
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-
-    client = gspread.authorize(creds)
-    sheet = client.open(GOOGLE_SHEET_NAME).sheet1
-    data = pd.DataFrame(sheet.get_all_records())
+    try:
+        sheet = client.open(GOOGLE_SHEET_NAME).sheet1
+        data = pd.DataFrame(sheet.get_all_records())
+        logger.info(f"Retrieved {len(data)} rows from sheet '{GOOGLE_SHEET_NAME}'")
+    except Exception as e:
+        logger.exception(f"Error retrieving or parsing Google Sheet '{GOOGLE_SHEET_NAME}': {e}")
+        raise
 
     logger.debug(f"Sheet columns: {list(data.columns)}")
 
