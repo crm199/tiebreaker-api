@@ -7,15 +7,12 @@ import os
 import json
 import base64
 
-
-
-
 # ---------------- CONFIG ----------------
 SEASON_INDEX = 1  # current season
 LOGIT_COEF = 0.2254
 LOGIT_INTERCEPT = -0.0170
 GOOGLE_SHEET_NAME = "MML26 Run-Pass and PPP Tracker"  # <-- spreadsheet name
-RP_TRACKER_SHEET_NAME = "S2 PPP" 
+RP_TRACKER_SHEET_NAME = "S2 PPP"
 S2TEAMRECORDS_TABLE = "S2TeamRecords"
 # ---------------------------------------
 
@@ -27,6 +24,7 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 if not logger.hasHandlers():
     logger.addHandler(handler)
+
 
 def round_half(x: float) -> float:
     """Round to nearest 0.5, always ending in .5"""
@@ -82,7 +80,7 @@ def get_s2_win_pcts(supabase_client):
     """Fetch win percentage from Supabase S2TeamRecords"""
     logger.info("Fetching Season 2 win percentages from Supabase...")
     try:
-        records = supabase_client.table(S2TEAMRECORDS_TABLE).select("Team, wins, losses").execute().data
+        records = supabase_client.table(S2TEAMRECORDS_TABLE).select("teamId, wins, losses").execute().data
         logger.info(f"Retrieved {len(records)} records from S2TeamRecords.")
     except Exception as e:
         logger.exception(f"Supabase query failed when fetching S2TeamRecords: {e}")
@@ -90,13 +88,13 @@ def get_s2_win_pcts(supabase_client):
 
     win_pcts = {}
     for rec in records:
-        team = rec.get("Team")
-        if not team:
-            logger.warning(f"Skipping record with no Team field: {rec}")
+        team_id = rec.get("teamId")
+        if not team_id:
+            logger.warning(f"Skipping record with no teamId field: {rec}")
             continue
         wins, losses = rec.get("wins", 0), rec.get("losses", 0)
         total = wins + losses
-        win_pcts[team] = wins / total if total > 0 else 0.5
+        win_pcts[team_id] = wins / total if total > 0 else 0.5
 
     logger.debug(f"Computed win_pcts for {len(win_pcts)} teams.")
     return win_pcts
@@ -110,24 +108,24 @@ def weighted_merge_stats(team_stats, s2_ppp_df, s2_win_pcts, week_number):
 
     blended = {}
     for team_id, s1_data in team_stats.items():
-        team_name = s1_data["Team"]
+        lookup_key = team_id if team_id in s2_ppp_df.index else s1_data.get("Team")
 
-        if team_name not in s2_ppp_df.index:
-            logger.warning(f"No S2 PPP data found for {team_name}, using only S1 values.")
+        if lookup_key not in s2_ppp_df.index:
+            logger.warning(f"No S2 PPP data found for {lookup_key}, using only S1 values.")
             blended[team_id] = s1_data
             continue
 
         try:
-            s2_data = s2_ppp_df.loc[team_name]
+            s2_data = s2_ppp_df.loc[lookup_key]
             new_entry = s1_data.copy()
 
             new_entry["oPPP"] = (s1_data["oPPP"] * s1_weight) + (s2_data["oPPP"] * s2_weight)
             new_entry["dPPP"] = (s1_data["dPPP"] * s1_weight) + (s2_data["dPPP"] * s2_weight)
             new_entry["poss_per_game"] = (s1_data["poss_per_game"] * s1_weight) + (s2_data["poss_per_game"] * s2_weight)
-            new_entry["win_pct"] = s2_win_pcts.get(team_name, s1_data.get("win_pct", 0.5))
+            new_entry["win_pct"] = s2_win_pcts.get(team_id, s1_data.get("win_pct", 0.5))
             blended[team_id] = new_entry
         except Exception as e:
-            logger.exception(f"Error blending data for {team_name}: {e}")
+            logger.exception(f"Error blending data for {lookup_key}: {e}")
             blended[team_id] = s1_data
 
     logger.info(f"Blended data for {len(blended)} teams.")
