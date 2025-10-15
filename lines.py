@@ -5,6 +5,10 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import os
 import json
+import base64
+
+
+
 
 # ---------------- CONFIG ----------------
 SEASON_INDEX = 1  # current season
@@ -36,9 +40,17 @@ def get_s2_ppp_data():
              "https://www.googleapis.com/auth/drive"]
 
     # Load service account credentials from environment variable
-    creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
-    if not creds_json:
-        raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_JSON environment variable")
+    creds_b64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_B64")
+    if not creds_b64:
+        raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_B64 environment variable")
+
+    creds_json = base64.b64decode(creds_b64).decode("utf-8")
+    creds_dict = json.loads(creds_json)
+
+
+    #creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
+    #if not creds_json:
+    #    raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_JSON environment variable")
 
     creds_dict = json.loads(creds_json)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
