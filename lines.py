@@ -14,7 +14,8 @@ import base64
 SEASON_INDEX = 1  # current season
 LOGIT_COEF = 0.2254
 LOGIT_INTERCEPT = -0.0170
-GOOGLE_SHEET_NAME = "S2 PPP"
+GOOGLE_SHEET_NAME = "MML26 Run-Pass and PPP Tracker"  # <-- spreadsheet name
+RP_TRACKER_SHEET_NAME = "S2 PPP" 
 S2TEAMRECORDS_TABLE = "S2TeamRecords"
 # ---------------------------------------
 
@@ -39,24 +40,16 @@ def get_s2_ppp_data():
     scope = ["https://spreadsheets.google.com/feeds",
              "https://www.googleapis.com/auth/drive"]
 
-    # Load service account credentials from environment variable
     creds_b64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_B64")
     if not creds_b64:
         raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_B64 environment variable")
 
     creds_json = base64.b64decode(creds_b64).decode("utf-8")
     creds_dict = json.loads(creds_json)
-
-
-    #creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
-    #if not creds_json:
-    #    raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_JSON environment variable")
-
-    creds_dict = json.loads(creds_json)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 
     client = gspread.authorize(creds)
-    sheet = client.open(GOOGLE_SHEET_NAME).sheet1
+    sheet = client.open(GOOGLE_SHEET_NAME).worksheet(RP_TRACKER_SHEET_NAME)
     data = pd.DataFrame(sheet.get_all_records())
 
     logger.debug(f"Sheet columns: {list(data.columns)}")
