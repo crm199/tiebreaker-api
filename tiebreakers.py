@@ -2196,7 +2196,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
             if (Team1.matchups[i] == 'Bills' or Team1.matchups[i] == 'Jets' or Team1.matchups[i] == 'Dolphins' or
                     Team1.matchups[i] == 'Patriots'):
                 divMatchups4_1.append(Team1.results[i])
-        elif (Team1.getDivision == 'AFCN'):
+        elif (Team1.getDivision() == 'AFCN'):
             if (Team1.matchups[i] == 'Bengals' or Team1.matchups[i] == 'Bills' or Team1.matchups[i] == 'Ravens' or
                     Team1.matchups[i] == 'Steelers'):
                 divMatchups4_1.append(Team1.results[i])
@@ -4760,7 +4760,7 @@ def tiebreak3(Team1, Team2, Team3):
             print("ERROR!!! Tiebreaker between " + Team1.getName() + ", " + Team2.getName() +
                   ", and " + Team3.getName() + " could not be calculated")
 
-    elif (Team1.getDivision() == Team2.getDivision() and not Team1.getDivision == Team3.getDivision()):
+    elif (Team1.getDivision() == Team2.getDivision() and not Team1.getDivision() == Team3.getDivision()):
         order = tiebreak2(Team1, Team2)
         first = tiebreak2(order[0], Team3)
         if (first[0] == order[0]):
@@ -4769,7 +4769,7 @@ def tiebreak3(Team1, Team2, Team3):
         else:
             result = [first[0], first[1], order[1]]
 
-    elif (Team2.getDivision() == Team3.getDivision() and not Team2.getDivision == Team1.getDivision()):
+    elif (Team2.getDivision() == Team3.getDivision() and not Team2.getDivision() == Team1.getDivision()):
         order = tiebreak2(Team2, Team3)
         first = tiebreak2(order[0], Team1)
         if (first[0] == order[0]):
@@ -4778,7 +4778,7 @@ def tiebreak3(Team1, Team2, Team3):
         else:
             result = [first[0], first[1], order[1]]
 
-    elif (Team1.getDivision() == Team3.getDivision() and not Team1.getDivision == Team2.getDivision()):
+    elif (Team1.getDivision() == Team3.getDivision() and not Team1.getDivision() == Team2.getDivision()):
         order = tiebreak2(Team1, Team3)
         first = tiebreak2(order[0], Team2)
         if (first[0] == order[0]):
@@ -4820,7 +4820,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
            #", and " + Team4.getName())
     result = []
     if (Team1.getDivision() == Team2.getDivision() and Team1.getDivision() == Team3.getDivision() and
-            Team1.getDivision() == Team4.getDivision):
+            Team1.getDivision() == Team4.getDivision()):
         if (isDivRecord4(Team1, Team2, Team3, Team4)):
             result = divRecord4(Team1, Team2, Team3, Team4)
         elif (isCommonRecord4(Team1, Team2, Team3, Team4)):
@@ -4838,7 +4838,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
                   ", " + Team3.getName() + ", and" + Team4.getName() + " could not be calculated")
 
     elif (Team1.getDivision() == Team2.getDivision() and not Team1.getDivision() == Team3.getDivision() and not
-    Team1.getDivision() == Team4.getDivision() and not Team3.getDivision == Team4.getDivision()):
+    Team1.getDivision() == Team4.getDivision() and not Team3.getDivision() == Team4.getDivision()):
         order = tiebreak2(Team1, Team2)
         first = tiebreak3(order[0], Team3, Team4)
         if (first[0] == order[0]):
@@ -4852,7 +4852,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
 
 
     elif (Team1.getDivision() == Team3.getDivision() and not Team1.getDivision() == Team2.getDivision() and not
-    Team1.getDivision() == Team4.getDivision() and not Team3.getDivision == Team4.getDivision()):
+    Team1.getDivision() == Team4.getDivision() and not Team3.getDivision() == Team4.getDivision()):
         order = tiebreak2(Team1, Team3)
         first = tiebreak3(order[0], Team2, Team4)
         if (first[0] == order[0]):
@@ -4865,7 +4865,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
             result = [first[0], first[1], order[0], order[1]]
 
     elif (Team1.getDivision() == Team4.getDivision() and not Team1.getDivision() == Team2.getDivision() and not
-    Team1.getDivision() == Team3.getDivision() and not Team3.getDivision == Team2.getDivision()):
+    Team1.getDivision() == Team3.getDivision() and not Team3.getDivision() == Team2.getDivision()):
         order = tiebreak2(Team1, Team4)
         first = tiebreak3(order[0], Team3, Team2)
         if (first[0] == order[0]):
@@ -4878,7 +4878,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
             result = [first[0], first[1], order[0], order[1]]
 
     elif (Team2.getDivision() == Team3.getDivision() and not Team2.getDivision() == Team1.getDivision() and not
-    Team1.getDivision() == Team4.getDivision() and not Team3.getDivision == Team4.getDivision()):
+    Team1.getDivision() == Team4.getDivision() and not Team3.getDivision() == Team4.getDivision()):
         order = tiebreak2(Team1, Team2)
         first = tiebreak3(order[0], Team3, Team4)
         if (first[0] == order[0]):
@@ -4891,7 +4891,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
             result = [first[0], first[1], order[0], order[1]]
 
     elif (Team2.getDivision() == Team4.getDivision() and not Team2.getDivision() == Team1.getDivision() and not
-    Team1.getDivision() == Team3.getDivision() and not Team3.getDivision == Team1.getDivision()):
+    Team1.getDivision() == Team3.getDivision() and not Team3.getDivision() == Team1.getDivision()):
         order = tiebreak2(Team4, Team2)
         first = tiebreak3(order[0], Team3, Team1)
         if (first[0] == order[0]):
@@ -4904,7 +4904,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
             result = [first[0], first[1], order[0], order[1]]
 
     elif (Team3.getDivision() == Team4.getDivision() and not Team3.getDivision() == Team1.getDivision() and not
-    Team3.getDivision() == Team2.getDivision() and not Team2.getDivision == Team1.getDivision()):
+    Team3.getDivision() == Team2.getDivision() and not Team2.getDivision() == Team1.getDivision()):
         order = tiebreak2(Team4, Team3)
         first = tiebreak3(order[0], Team2, Team1)
         if (first[0] == order[0]):
@@ -4976,7 +4976,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
         else:
             result = [first[0], order[0], order[1], order[2]]
 
-    elif (Team1.getDivision() == Team2.getDivision() and Team3.getDivision() == Team4.getDivision and not
+    elif (Team1.getDivision() == Team2.getDivision() and Team3.getDivision() == Team4.getDivision() and not
     Team1.getDivision() == Team3.getDivision()):
         order1 = tiebreak2(Team1, Team2)
         order2 = tiebreak2(Team3, Team4)
@@ -4988,7 +4988,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
             second = tiebreak3(order1[0], order1[1], order2[1])
             result = [first[0], second[0], second[1], second[2]]
 
-    elif (Team1.getDivision() == Team3.getDivision() and Team2.getDivision() == Team4.getDivision and not
+    elif (Team1.getDivision() == Team3.getDivision() and Team2.getDivision() == Team4.getDivision() and not
     Team1.getDivision() == Team2.getDivision()):
         order1 = tiebreak2(Team1, Team3)
         order2 = tiebreak2(Team2, Team4)
@@ -5000,7 +5000,7 @@ def tiebreak4(Team1, Team2, Team3, Team4):
             second = tiebreak3(order1[0], order1[1], order2[1])
             result = [first[0], second[0], second[1], second[2]]
 
-    elif (Team1.getDivision() == Team4.getDivision() and Team3.getDivision() == Team2.getDivision and not
+    elif (Team1.getDivision() == Team4.getDivision() and Team3.getDivision() == Team2.getDivision() and not
     Team1.getDivision() == Team3.getDivision()):
         order1 = tiebreak2(Team1, Team4)
         order2 = tiebreak2(Team3, Team2)
@@ -8033,15 +8033,15 @@ def playoffStandings():
         afcWC = [aRest1, result1[0], result1[1]]
 
     elif (aRest3.getWinPercentage() == aRest4.getWinPercentage() and
-          aRest3.getWinPercentage == aRest5.getWinPercentage() and 
-          aRest1.getWinPercentage == aRest2.getWinPercentage()):
+          aRest3.getWinPercentage() == aRest5.getWinPercentage() and 
+          aRest1.getWinPercentage() == aRest2.getWinPercentage()):
         result1 = tiebreak3(aRest4, aRest5, aRest3)
         result2 = tiebreak2(aRest1, aRest2)
         afcWC = [result2[0], result2[1], result1[0]]
 
     elif (aRest3.getWinPercentage() == aRest4.getWinPercentage() and
-          aRest3.getWinPercentage == aRest5.getWinPercentage() and 
-          not aRest1.getWinPercentage == aRest2.getWinPercentage()):
+          aRest3.getWinPercentage() == aRest5.getWinPercentage() and 
+          not aRest1.getWinPercentage() == aRest2.getWinPercentage()):
         result1 = tiebreak3(aRest4, aRest5, aRest3)
         afcWC = [aRest1, aRest2, result1[0]]
 
@@ -8282,15 +8282,15 @@ def playoffStandings():
         nfcWC = [nRest1, result1[0], result1[1]]
 
     elif (nRest3.getWinPercentage() == nRest4.getWinPercentage() and
-          nRest3.getWinPercentage == nRest5.getWinPercentage() and 
-          nRest1.getWinPercentage == nRest2.getWinPercentage()):
+          nRest3.getWinPercentage() == nRest5.getWinPercentage() and 
+          nRest1.getWinPercentage() == nRest2.getWinPercentage()):
         result1 = tiebreak3(nRest4, nRest5, nRest3)
         result2 = tiebreak2(nRest1, nRest2)
         nfcWC = [result2[0], result2[1], result1[0]]
 
     elif (nRest3.getWinPercentage() == nRest4.getWinPercentage() and
-          nRest3.getWinPercentage == nRest5.getWinPercentage() and 
-          not nRest1.getWinPercentage == nRest2.getWinPercentage()):
+          nRest3.getWinPercentage() == nRest5.getWinPercentage() and 
+          not nRest1.getWinPercentage() == nRest2.getWinPercentage()):
         result1 = tiebreak3(nRest4, nRest5, nRest3)
         nfcWC = [nRest1, nRest2, result1[0]]
 
@@ -8366,7 +8366,7 @@ def resetStandings():
             # Check if game has no result (homeScore and awayScore both 0)
             if row['homeScore'] == 0 and row['awayScore'] == 0:
                 team.results[game_index] = 'NA'
-                print(f"Game between {row['homeTeam']} and {row['awayTeam']} is reset to 'NA'")
+                #print(f"Game between {row['homeTeam']} and {row['awayTeam']} is reset to 'NA'")
             game_index += 1
 
 def resetSimStandings(df):
@@ -8576,14 +8576,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Bills.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bills.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Bills.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bills.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Dolphins.results[i] == 'W' and not Dolphins.results[i] == 'L' and not Dolphins.results[i] == 'T'):
@@ -8602,14 +8610,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Dolphins.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Dolphins.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Dolphins.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Dolphins.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Jets.results[i] == 'W' and not Jets.results[i] == 'L' and not Jets.results[i] == 'T'):
@@ -8628,14 +8644,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Jets.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Jets.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Jets.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Jets.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Patriots.results[i] == 'W' and not Patriots.results[i] == 'L' and not Patriots.results[i] == 'T'):
@@ -8654,14 +8678,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Patriots.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Patriots.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Patriots.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Patriots.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Browns.results[i] == 'W' and not Browns.results[i] == 'L' and not Browns.results[i] == 'T'):
@@ -8680,14 +8712,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Browns.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Browns.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Browns.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Browns.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Bengals.results[i] == 'W' and not Bengals.results[i] == 'L' and not Bengals.results[i] == 'T'):
@@ -8706,14 +8746,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Bengals.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bengals.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Bengals.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bengals.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Ravens.results[i] == 'W' and not Ravens.results[i] == 'L' and not Ravens.results[i] == 'T'):
@@ -8732,14 +8780,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Ravens.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Ravens.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Ravens.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Ravens.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Steelers.results[i] == 'W' and not Steelers.results[i] == 'L' and not Steelers.results[i] == 'T'):
@@ -8758,14 +8814,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Steelers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Steelers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Steelers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Steelers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Colts.results[i] == 'W' and not Colts.results[i] == 'L' and not Colts.results[i] == 'T'):
@@ -8784,14 +8848,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Colts.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Colts.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Colts.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Colts.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Jaguars.results[i] == 'W' and not Jaguars.results[i] == 'L' and not Jaguars.results[i] == 'T'):
@@ -8810,14 +8882,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Jaguars.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Jaguars.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Jaguars.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Jaguars.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Titans.results[i] == 'W' and not Titans.results[i] == 'L' and not Titans.results[i] == 'T'):
@@ -8836,15 +8916,24 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Titans.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Titans.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Titans.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
 
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Titans.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
+
+        
         for i in range(17):
             if (not Texans.results[i] == 'W' and not Texans.results[i] == 'L' and not Texans.results[i] == 'T'):
                 game = Texans.matchups[i]
@@ -8862,14 +8951,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Texans.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Texans.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Texans.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Texans.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Broncos.results[i] == 'W' and not Broncos.results[i] == 'L' and not Broncos.results[i] == 'T'):
@@ -8888,14 +8985,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Broncos.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Broncos.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Broncos.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Broncos.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Chargers.results[i] == 'W' and not Chargers.results[i] == 'L' and not Chargers.results[i] == 'T'):
@@ -8914,14 +9019,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Chargers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Chargers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Chargers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Chargers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Chiefs.results[i] == 'W' and not Chiefs.results[i] == 'L' and not Chiefs.results[i] == 'T'):
@@ -8940,14 +9053,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Chiefs.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Chiefs.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Chiefs.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Chiefs.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Raiders.results[i] == 'W' and not Raiders.results[i] == 'L' and not Raiders.results[i] == 'T'):
@@ -8966,14 +9087,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Raiders.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Raiders.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Raiders.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Raiders.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Cowboys.results[i] == 'W' and not Cowboys.results[i] == 'L' and not Cowboys.results[i] == 'T'):
@@ -8992,14 +9121,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Cowboys.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Cowboys.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Cowboys.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Cowboys.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Commanders.results[i] == 'W' and not Commanders.results[i] == 'L' and not Commanders.results[i] == 'T'):
@@ -9018,14 +9155,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Commanders.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Commanders.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Commanders.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Commanders.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Eagles.results[i] == 'W' and not Eagles.results[i] == 'L' and not Eagles.results[i] == 'T'):
@@ -9044,14 +9189,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Eagles.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Eagles.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Eagles.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Eagles.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Giants.results[i] == 'W' and not Giants.results[i] == 'L' and not Giants.results[i] == 'T'):
@@ -9070,14 +9223,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Giants.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Giants.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Giants.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Giants.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Bears.results[i] == 'W' and not Bears.results[i] == 'L' and not Bears.results[i] == 'T'):
@@ -9096,14 +9257,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Bears.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bears.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Bears.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bears.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Lions.results[i] == 'W' and not Lions.results[i] == 'L' and not Lions.results[i] == 'T'):
@@ -9122,14 +9291,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Lions.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Lions.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Lions.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Lions.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Packers.results[i] == 'W' and not Packers.results[i] == 'L' and not Packers.results[i] == 'T'):
@@ -9148,14 +9325,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Packers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Packers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Packers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Packers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Vikings.results[i] == 'W' and not Vikings.results[i] == 'L' and not Vikings.results[i] == 'T'):
@@ -9174,14 +9359,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Vikings.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Vikings.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Vikings.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Vikings.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Buccaneers.results[i] == 'W' and not Buccaneers.results[i] == 'L' and not Buccaneers.results[i] == 'T'):
@@ -9200,14 +9393,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Buccaneers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Buccaneers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Buccaneers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Buccaneers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Falcons.results[i] == 'W' and not Falcons.results[i] == 'L' and not Falcons.results[i] == 'T'):
@@ -9226,14 +9427,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Falcons.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Falcons.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Falcons.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Falcons.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Saints.results[i] == 'W' and not Saints.results[i] == 'L' and not Saints.results[i] == 'T'):
@@ -9252,14 +9461,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Saints.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Saints.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Saints.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Saints.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Panthers.results[i] == 'W' and not Panthers.results[i] == 'L' and not Panthers.results[i] == 'T'):
@@ -9278,14 +9495,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Panthers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Panthers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Panthers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Panthers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Cardinals.results[i] == 'W' and not Cardinals.results[i] == 'L' and not Cardinals.results[i] == 'T'):
@@ -9304,14 +9529,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Cardinals.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Cardinals.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Cardinals.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Cardinals.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Niners.results[i] == 'W' and not Niners.results[i] == 'L' and not Niners.results[i] == 'T'):
@@ -9330,14 +9563,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Niners.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Niners.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Niners.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Niners.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Rams.results[i] == 'W' and not Rams.results[i] == 'L' and not Rams.results[i] == 'T'):
@@ -9356,14 +9597,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Rams.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Rams.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Rams.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Rams.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Seahawks.results[i] == 'W' and not Seahawks.results[i] == 'L' and not Seahawks.results[i] == 'T'):
@@ -9382,14 +9631,22 @@ def playoffPercentages():
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Seahawks.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Seahawks.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Seahawks.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Seahawks.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         playoffs = playoffStandings()
         playoffsList.append(playoffs)
@@ -12475,9 +12732,10 @@ def simulate_odds(games_json):
         'sevenseed': locals()[f'{team.lower()}7'] / 10.0
     } for team in ['Bills', 'Dolphins', 'Jets', 'Patriots', 'Bengals', 'Browns', 'Ravens', 'Steelers', 'Colts', 'Jaguars', 'Titans', 'Texans', 'Broncos', 'Chiefs', 'Chargers', 'Raiders', 'Commanders', 'Cowboys', 'Giants', 'Eagles', 'Bears', 'Lions', 'Packers', 'Vikings', 'Buccaneers', 'Falcons', 'Saints', 'Panthers', 'Cardinals', 'Niners', 'Rams', 'Seahawks']])       
         
-    
+
+#playoffStandings()    
 #divisionStandings()
-#playoffPercentages()
+playoffPercentages()
 
 #test_json = [{'homeTeamId': 775290905, 'awayTeamId': 775290893, 'homeScore': 39, 'awayScore': 28}, {'homeTeamId': 775290882, 'awayTeamId': 775290901, 'homeScore': 31, 'awayScore': 28}, {'homeTeamId': 775290903, 'awayTeamId': 775290881, 'homeScore': 29, 'awayScore': 12}, {'homeTeamId': 775290915, 'awayTeamId': 775290909, 'homeScore': 28, 'awayScore': 41}, {'homeTeamId': 775290894, 'awayTeamId': 775290899, 'homeScore': 14, 'awayScore': 31}, {'homeTeamId': 775290910, 'awayTeamId': 775290885, 'homeScore': 17, 'awayScore': 31}, {'homeTeamId': 775290911, 'awayTeamId': 775290880, 'homeScore': 3, 'awayScore': 35}, {'homeTeamId': 775290902, 'awayTeamId': 775290883, 'homeScore': 20, 'awayScore': 35}, {'homeTeamId': 775290895, 'awayTeamId': 775290907, 'homeScore': 0, 'awayScore': 19}, {'homeTeamId': 775290913, 'awayTeamId': 775290912, 'homeScore': 23, 'awayScore': 28}, {'homeTeamId': 775290887, 'awayTeamId': 775290906, 'homeScore': 28, 'awayScore': 52}, {'homeTeamId': 775290892, 'awayTeamId': 775290884, 'homeScore': 20, 'awayScore': 50}, {'homeTeamId': 775290891, 'awayTeamId': 775290896, 'homeScore': 29, 'awayScore': 27}, {'homeTeamId': 775290916, 'awayTeamId': 775290897, 'homeScore': 13, 'awayScore': 40}, {'homeTeamId': 775290914, 'awayTeamId': 775290886, 'homeScore': 0, 'awayScore': 35}, {'homeTeamId': 775290908, 'awayTeamId': 775290890, 'homeScore': 41, 'awayScore': 37}, {'homeTeamId': 775290896, 'awayTeamId': 775290894, 'homeScore': 28, 'awayScore': 49}, {'homeTeamId': 775290890, 'awayTeamId': 775290891, 'homeScore': 27, 'awayScore': 13}, {'homeTeamId': 775290885, 'awayTeamId': 775290882, 'homeScore': 48, 'awayScore': 29}, {'homeTeamId': 775290893, 'awayTeamId': 775290899, 'homeScore': 14, 'awayScore': 10}, {'homeTeamId': 775290902, 'awayTeamId': 775290913, 'homeScore': 31, 'awayScore': 28}, {'homeTeamId': 775290907, 'awayTeamId': 775290908, 'homeScore': 24, 'awayScore': 28}, {'homeTeamId': 775290897, 'awayTeamId': 775290886, 'homeScore': 18, 'awayScore': 28}, {'homeTeamId': 775290892, 'awayTeamId': 775290895, 'homeScore': 44, 'awayScore': 21}, {'homeTeamId': 775290901, 'awayTeamId': 775290906, 'homeScore': 33, 'awayScore': 40}, {'homeTeamId': 775290911, 'awayTeamId': 775290887, 'homeScore': 33, 'awayScore': 14}, {'homeTeamId': 775290884, 'awayTeamId': 775290915, 'homeScore': 31, 'awayScore': 27}, {'homeTeamId': 775290912, 'awayTeamId': 775290880, 'homeScore': 43, 'awayScore': 34}, {'homeTeamId': 775290909, 'awayTeamId': 775290914, 'homeScore': 42, 'awayScore': 14}, {'homeTeamId': 775290905, 'awayTeamId': 775290903, 'homeScore': 25, 'awayScore': 22}, {'homeTeamId': 775290883, 'awayTeamId': 775290910, 'homeScore': 7, 'awayScore': 28}, {'homeTeamId': 775290881, 'awayTeamId': 775290916, 'homeScore': 18, 'awayScore': 10}, {'homeTeamId': 775290883, 'awayTeamId': 775290895, 'homeScore': 16, 'awayScore': 12}, {'homeTeamId': 775290916, 'awayTeamId': 775290882, 'homeScore': 28, 'awayScore': 42}, {'homeTeamId': 775290896, 'awayTeamId': 775290909, 'homeScore': 42, 'awayScore': 38}, {'homeTeamId': 775290885, 'awayTeamId': 775290905, 'homeScore': 42, 'awayScore': 27}, {'homeTeamId': 775290893, 'awayTeamId': 775290908, 'homeScore': 21, 'awayScore': 44}, {'homeTeamId': 775290886, 'awayTeamId': 775290902, 'homeScore': 38, 'awayScore': 24}, {'homeTeamId': 775290907, 'awayTeamId': 775290913, 'homeScore': 14, 'awayScore': 21}, {'homeTeamId': 775290906, 'awayTeamId': 775290897, 'homeScore': 35, 'awayScore': 25}, {'homeTeamId': 775290915, 'awayTeamId': 775290892, 'homeScore': 17, 'awayScore': 43}, {'homeTeamId': 775290901, 'awayTeamId': 775290914, 'homeScore': 28, 'awayScore': 21}, {'homeTeamId': 775290881, 'awayTeamId': 775290894, 'homeScore': 21, 'awayScore': 34}, {'homeTeamId': 775290912, 'awayTeamId': 775290911, 'homeScore': 38, 'awayScore': 21}, {'homeTeamId': 775290890, 'awayTeamId': 775290884, 'homeScore': 45, 'awayScore': 28}, {'homeTeamId': 775290880, 'awayTeamId': 775290887, 'homeScore': 39, 'awayScore': 38}, {'homeTeamId': 775290899, 'awayTeamId': 775290891, 'homeScore': 23, 'awayScore': 12}, {'homeTeamId': 775290910, 'awayTeamId': 775290903, 'homeScore': 28, 'awayScore': 25}, {'homeTeamId': 775290887, 'awayTeamId': 775290912, 'homeScore': 28, 'awayScore': 31}, {'homeTeamId': 775290913, 'awayTeamId': 775290916, 'homeScore': 38, 'awayScore': 27}, {'homeTeamId': 775290914, 'awayTeamId': 775290915, 'homeScore': 35, 'awayScore': 41}, {'homeTeamId': 775290903, 'awayTeamId': 775290885, 'homeScore': 28, 'awayScore': 42}, {'homeTeamId': 775290899, 'awayTeamId': 775290890, 'homeScore': 20, 'awayScore': 21}, {'homeTeamId': 775290897, 'awayTeamId': 775290893, 'homeScore': 35, 'awayScore': 30}, {'homeTeamId': 775290907, 'awayTeamId': 775290906, 'homeScore': 28, 'awayScore': 31}, {'homeTeamId': 775290883, 'awayTeamId': 775290911, 'homeScore': 31, 'awayScore': 28}, {'homeTeamId': 775290886, 'awayTeamId': 775290896, 'homeScore': 17, 'awayScore': 20}, {'homeTeamId': 775290908, 'awayTeamId': 775290881, 'homeScore': 33, 'awayScore': 21}, {'homeTeamId': 775290880, 'awayTeamId': 775290901, 'homeScore': 28, 'awayScore': 21}, {'homeTeamId': 775290909, 'awayTeamId': 775290892, 'homeScore': 37, 'awayScore': 27}, {'homeTeamId': 775290891, 'awayTeamId': 775290910, 'homeScore': 24, 'awayScore': 26}, {'homeTeamId': 775290894, 'awayTeamId': 775290905, 'homeScore': 34, 'awayScore': 31}, {'homeTeamId': 775290895, 'awayTeamId': 775290902, 'homeScore': 21, 'awayScore': 31}, {'homeTeamId': 775290884, 'awayTeamId': 775290882, 'homeScore': 14, 'awayScore': 42}, {'homeTeamId': 775290895, 'awayTeamId': 775290910, 'homeScore': 0, 'awayScore': 31}, {'homeTeamId': 775290882, 'awayTeamId': 775290881, 'homeScore': 28, 'awayScore': 30}, {'homeTeamId': 775290903, 'awayTeamId': 775290916, 'homeScore': 28, 'awayScore': 31}, {'homeTeamId': 775290915, 'awayTeamId': 775290890, 'homeScore': 14, 'awayScore': 42}, {'homeTeamId': 775290899, 'awayTeamId': 775290880, 'homeScore': 31, 'awayScore': 28}, {'homeTeamId': 775290914, 'awayTeamId': 775290884, 'homeScore': 10, 'awayScore': 20}, {'homeTeamId': 775290907, 'awayTeamId': 775290897, 'homeScore': 34, 'awayScore': 28}, {'homeTeamId': 775290905, 'awayTeamId': 775290906, 'homeScore': 21, 'awayScore': 27}, {'homeTeamId': 775290913, 'awayTeamId': 775290892, 'homeScore': 14, 'awayScore': 21}, {'homeTeamId': 775290908, 'awayTeamId': 775290901, 'homeScore': 48, 'awayScore': 38}, {'homeTeamId': 775290909, 'awayTeamId': 775290911, 'homeScore': 42, 'awayScore': 45}, {'homeTeamId': 775290883, 'awayTeamId': 775290891, 'homeScore': 24, 'awayScore': 21}, {'homeTeamId': 775290893, 'awayTeamId': 775290912, 'homeScore': 21, 'awayScore': 31}, {'homeTeamId': 775290894, 'awayTeamId': 775290887, 'homeScore': 28, 'awayScore': 31}, {'homeTeamId': 775290882, 'awayTeamId': 775290913, 'homeScore': 42, 'awayScore': 39}, {'homeTeamId': 775290901, 'awayTeamId': 775290909, 'homeScore': 28, 'awayScore': 38}, {'homeTeamId': 775290885, 'awayTeamId': 775290895, 'homeScore': 29, 'awayScore': 22}, {'homeTeamId': 775290902, 'awayTeamId': 775290906, 'homeScore': 7, 'awayScore': 38}, {'homeTeamId': 775290915, 'awayTeamId': 775290907, 'homeScore': 0, 'awayScore': 23}, {'homeTeamId': 775290881, 'awayTeamId': 775290911, 'homeScore': 33, 'awayScore': 36}, {'homeTeamId': 775290916, 'awayTeamId': 775290896, 'homeScore': 35, 'awayScore': 38}, {'homeTeamId': 775290891, 'awayTeamId': 775290908, 'homeScore': 31, 'awayScore': 17}, {'homeTeamId': 775290884, 'awayTeamId': 775290899, 'homeScore': 7, 'awayScore': 10}, {'homeTeamId': 775290890, 'awayTeamId': 775290892, 'homeScore': 41, 'awayScore': 21}, {'homeTeamId': 775290887, 'awayTeamId': 775290905, 'homeScore': 27, 'awayScore': 14}, {'homeTeamId': 775290894, 'awayTeamId': 775290893, 'homeScore': 13, 'awayScore': 20}, {'homeTeamId': 775290880, 'awayTeamId': 775290897, 'homeScore': 24, 'awayScore': 23}, {'homeTeamId': 775290903, 'awayTeamId': 775290886, 'homeScore': 23, 'awayScore': 30}, {'homeTeamId': 775290912, 'awayTeamId': 775290914, 'homeScore': 45, 'awayScore': 28}, {'homeTeamId': 775290890, 'awayTeamId': 775290916, 'homeScore': 56, 'awayScore': 7}, {'homeTeamId': 775290882, 'awayTeamId': 775290902, 'homeScore': 31, 'awayScore': 25}, {'homeTeamId': 775290896, 'awayTeamId': 775290899, 'homeScore': 14, 'awayScore': 29}, {'homeTeamId': 775290907, 'awayTeamId': 775290885, 'homeScore': 42, 'awayScore': 38}, {'homeTeamId': 775290914, 'awayTeamId': 775290880, 'homeScore': 0, 'awayScore': 35}, {'homeTeamId': 775290910, 'awayTeamId': 775290881, 'homeScore': 7, 'awayScore': 0}, {'homeTeamId': 775290906, 'awayTeamId': 775290883, 'homeScore': 24, 'awayScore': 20}, {'homeTeamId': 775290897, 'awayTeamId': 775290895, 'homeScore': 42, 'awayScore': 21}, {'homeTeamId': 775290911, 'awayTeamId': 775290886, 'homeScore': 22, 'awayScore': 34}, {'homeTeamId': 775290892, 'awayTeamId': 775290915, 'homeScore': 31, 'awayScore': 21}, {'homeTeamId': 775290884, 'awayTeamId': 775290894, 'homeScore': 6, 'awayScore': 20}, {'homeTeamId': 775290913, 'awayTeamId': 775290905, 'homeScore': 21, 'awayScore': 24}, {'homeTeamId': 775290891, 'awayTeamId': 775290893, 'homeScore': 27, 'awayScore': 13}, {'homeTeamId': 775290893, 'awayTeamId': 775290894, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290916, 'awayTeamId': 775290903, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290891, 'awayTeamId': 775290884, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290905, 'awayTeamId': 775290910, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290890, 'awayTeamId': 775290914, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290882, 'awayTeamId': 775290887, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290885, 'awayTeamId': 775290913, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290902, 'awayTeamId': 775290907, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290892, 'awayTeamId': 775290901, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290895, 'awayTeamId': 775290886, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290915, 'awayTeamId': 775290911, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290906, 'awayTeamId': 775290912, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290908, 'awayTeamId': 775290899, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290883, 'awayTeamId': 775290896, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290880, 'awayTeamId': 775290881, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290897, 'awayTeamId': 775290909, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290886, 'awayTeamId': 775290897, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290882, 'awayTeamId': 775290910, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290891, 'awayTeamId': 775290890, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290899, 'awayTeamId': 775290893, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290881, 'awayTeamId': 775290885, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290901, 'awayTeamId': 775290902, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290907, 'awayTeamId': 775290883, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290896, 'awayTeamId': 775290908, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290914, 'awayTeamId': 775290887, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290911, 'awayTeamId': 775290906, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290912, 'awayTeamId': 775290892, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290884, 'awayTeamId': 775290905, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290880, 'awayTeamId': 775290915, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290909, 'awayTeamId': 775290903, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290894, 'awayTeamId': 775290916, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290913, 'awayTeamId': 775290895, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290909, 'awayTeamId': 775290880, 'homeScore': 45, 'awayScore': 42}, {'homeTeamId': 775290885, 'awayTeamId': 775290916, 'homeScore': 14, 'awayScore': 21}, {'homeTeamId': 775290911, 'awayTeamId': 775290899, 'homeScore': 37, 'awayScore': 40}, {'homeTeamId': 775290896, 'awayTeamId': 775290884, 'homeScore': 49, 'awayScore': 28}, {'homeTeamId': 775290902, 'awayTeamId': 775290894, 'homeScore': 38, 'awayScore': 37}, {'homeTeamId': 775290892, 'awayTeamId': 775290908, 'homeScore': 14, 'awayScore': 41}, {'homeTeamId': 775290910, 'awayTeamId': 775290914, 'homeScore': 42, 'awayScore': 7}, {'homeTeamId': 775290906, 'awayTeamId': 775290895, 'homeScore': 38, 'awayScore': 34}, {'homeTeamId': 775290912, 'awayTeamId': 775290886, 'homeScore': 28, 'awayScore': 31}, {'homeTeamId': 775290887, 'awayTeamId': 775290915, 'homeScore': 31, 'awayScore': 24}, {'homeTeamId': 775290890, 'awayTeamId': 775290893, 'homeScore': 30, 'awayScore': 41}, {'homeTeamId': 775290882, 'awayTeamId': 775290903, 'homeScore': 34, 'awayScore': 17}, {'homeTeamId': 775290883, 'awayTeamId': 775290907, 'homeScore': 31, 'awayScore': 27}, {'homeTeamId': 775290901, 'awayTeamId': 775290891, 'homeScore': 27, 'awayScore': 34}, {'homeTeamId': 775290899, 'awayTeamId': 775290896, 'homeScore': 34, 'awayScore': 7}, {'homeTeamId': 775290902, 'awayTeamId': 775290884, 'homeScore': 10, 'awayScore': 27}, {'homeTeamId': 775290901, 'awayTeamId': 775290912, 'homeScore': 34, 'awayScore': 42}, {'homeTeamId': 775290910, 'awayTeamId': 775290909, 'homeScore': 34, 'awayScore': 23}, {'homeTeamId': 775290895, 'awayTeamId': 775290890, 'homeScore': 20, 'awayScore': 38}, {'homeTeamId': 775290913, 'awayTeamId': 775290885, 'homeScore': 42, 'awayScore': 24}, {'homeTeamId': 775290886, 'awayTeamId': 775290880, 'homeScore': 31, 'awayScore': 21}, {'homeTeamId': 775290911, 'awayTeamId': 775290907, 'homeScore': 18, 'awayScore': 35}, {'homeTeamId': 775290906, 'awayTeamId': 775290894, 'homeScore': 31, 'awayScore': 28}, {'homeTeamId': 775290892, 'awayTeamId': 775290887, 'homeScore': 34, 'awayScore': 37}, {'homeTeamId': 775290908, 'awayTeamId': 775290915, 'homeScore': 42, 'awayScore': 7}, {'homeTeamId': 775290905, 'awayTeamId': 775290882, 'homeScore': 14, 'awayScore': 31}, {'homeTeamId': 775290891, 'awayTeamId': 775290903, 'homeScore': 22, 'awayScore': 25}, {'homeTeamId': 775290897, 'awayTeamId': 775290883, 'homeScore': 42, 'awayScore': 35}, {'homeTeamId': 775290893, 'awayTeamId': 775290881, 'homeScore': 38, 'awayScore': 35}, {'homeTeamId': 775290903, 'awayTeamId': 775290905, 'homeScore': 49, 'awayScore': 32}, {'homeTeamId': 775290894, 'awayTeamId': 775290891, 'homeScore': 27, 'awayScore': 17}, {'homeTeamId': 775290910, 'awayTeamId': 775290882, 'homeScore': 21, 'awayScore': 28}, {'homeTeamId': 775290896, 'awayTeamId': 775290881, 'homeScore': 7, 'awayScore': 24}, {'homeTeamId': 775290906, 'awayTeamId': 775290909, 'homeScore': 34, 'awayScore': 28}, {'homeTeamId': 775290885, 'awayTeamId': 775290880, 'homeScore': 24, 'awayScore': 22}, {'homeTeamId': 775290902, 'awayTeamId': 775290897, 'homeScore': 36, 'awayScore': 38}, {'homeTeamId': 775290892, 'awayTeamId': 775290914, 'homeScore': 24, 'awayScore': 28}, {'homeTeamId': 775290886, 'awayTeamId': 775290887, 'homeScore': 35, 'awayScore': 14}, {'homeTeamId': 775290895, 'awayTeamId': 775290911, 'homeScore': 32, 'awayScore': 32}, {'homeTeamId': 775290915, 'awayTeamId': 775290901, 'homeScore': 42, 'awayScore': 35}, {'homeTeamId': 775290912, 'awayTeamId': 775290916, 'homeScore': 21, 'awayScore': 20}, {'homeTeamId': 775290907, 'awayTeamId': 775290902, 'homeScore': 31, 'awayScore': 25}, {'homeTeamId': 775290895, 'awayTeamId': 775290893, 'homeScore': 7, 'awayScore': 21}, {'homeTeamId': 775290915, 'awayTeamId': 775290914, 'homeScore': 41, 'awayScore': 21}, {'homeTeamId': 775290913, 'awayTeamId': 775290882, 'homeScore': 19, 'awayScore': 35}, {'homeTeamId': 775290901, 'awayTeamId': 775290890, 'homeScore': 27, 'awayScore': 49}, {'homeTeamId': 775290899, 'awayTeamId': 775290905, 'homeScore': 24, 'awayScore': 20}, {'homeTeamId': 775290883, 'awayTeamId': 775290886, 'homeScore': 31, 'awayScore': 9}, {'homeTeamId': 775290897, 'awayTeamId': 775290906, 'homeScore': 10, 'awayScore': 41}, {'homeTeamId': 775290916, 'awayTeamId': 775290881, 'homeScore': 35, 'awayScore': 21}, {'homeTeamId': 775290887, 'awayTeamId': 775290880, 'homeScore': 44, 'awayScore': 22}, {'homeTeamId': 775290909, 'awayTeamId': 775290912, 'homeScore': 46, 'awayScore': 49}, {'homeTeamId': 775290884, 'awayTeamId': 775290891, 'homeScore': 10, 'awayScore': 27}, {'homeTeamId': 775290885, 'awayTeamId': 775290910, 'homeScore': 24, 'awayScore': 27}, {'homeTeamId': 775290896, 'awayTeamId': 775290903, 'homeScore': 35, 'awayScore': 28}, {'homeTeamId': 775290908, 'awayTeamId': 775290894, 'homeScore': 31, 'awayScore': 21}, {'homeTeamId': 775290913, 'awayTeamId': 775290883, 'homeScore': 14, 'awayScore': 28}, {'homeTeamId': 775290890, 'awayTeamId': 775290908, 'homeScore': 26, 'awayScore': 32}, {'homeTeamId': 775290903, 'awayTeamId': 775290894, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290886, 'awayTeamId': 775290911, 'homeScore': 31, 'awayScore': 21}, {'homeTeamId': 775290885, 'awayTeamId': 775290915, 'homeScore': 42, 'awayScore': 28}, {'homeTeamId': 775290916, 'awayTeamId': 775290893, 'homeScore': 25, 'awayScore': 19}, {'homeTeamId': 775290902, 'awayTeamId': 775290895, 'homeScore': 31, 'awayScore': 28}, {'homeTeamId': 775290905, 'awayTeamId': 775290881, 'homeScore': 33, 'awayScore': 42}, {'homeTeamId': 775290897, 'awayTeamId': 775290912, 'homeScore': 14, 'awayScore': 38}, {'homeTeamId': 775290901, 'awayTeamId': 775290892, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290910, 'awayTeamId': 775290913, 'homeScore': 45, 'awayScore': 14}, {'homeTeamId': 775290908, 'awayTeamId': 775290884, 'homeScore': 24, 'awayScore': 27}, {'homeTeamId': 775290887, 'awayTeamId': 775290909, 'homeScore': 31, 'awayScore': 30}, {'homeTeamId': 775290883, 'awayTeamId': 775290882, 'homeScore': 0, 'awayScore': 28}, {'homeTeamId': 775290891, 'awayTeamId': 775290914, 'homeScore': 21, 'awayScore': 20}, {'homeTeamId': 775290890, 'awayTeamId': 775290896, 'homeScore': 35, 'awayScore': 38}, {'homeTeamId': 775290893, 'awayTeamId': 775290884, 'homeScore': 21, 'awayScore': 24}, {'homeTeamId': 775290907, 'awayTeamId': 775290899, 'homeScore': 41, 'awayScore': 38}, {'homeTeamId': 775290884, 'awayTeamId': 775290908, 'homeScore': 28, 'awayScore': 33}, {'homeTeamId': 775290892, 'awayTeamId': 775290897, 'homeScore': 37, 'awayScore': 34}, {'homeTeamId': 775290881, 'awayTeamId': 775290899, 'homeScore': 0, 'awayScore': 14}, {'homeTeamId': 775290902, 'awayTeamId': 775290885, 'homeScore': 34, 'awayScore': 21}, {'homeTeamId': 775290886, 'awayTeamId': 775290907, 'homeScore': 14, 'awayScore': 28}, {'homeTeamId': 775290895, 'awayTeamId': 775290883, 'homeScore': 27, 'awayScore': 38}, {'homeTeamId': 775290916, 'awayTeamId': 775290910, 'homeScore': 17, 'awayScore': 42}, {'homeTeamId': 775290906, 'awayTeamId': 775290911, 'homeScore': 38, 'awayScore': 22}, {'homeTeamId': 775290914, 'awayTeamId': 775290901, 'homeScore': 7, 'awayScore': 27}, {'homeTeamId': 775290912, 'awayTeamId': 775290887, 'homeScore': 31, 'awayScore': 28}, {'homeTeamId': 775290880, 'awayTeamId': 775290909, 'homeScore': 52, 'awayScore': 37}, {'homeTeamId': 775290893, 'awayTeamId': 775290903, 'homeScore': 14, 'awayScore': 34}, {'homeTeamId': 775290890, 'awayTeamId': 775290913, 'homeScore': 48, 'awayScore': 25}, {'homeTeamId': 775290905, 'awayTeamId': 775290896, 'homeScore': 31, 'awayScore': 38}, {'homeTeamId': 775290896, 'awayTeamId': 775290893, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290913, 'awayTeamId': 775290910, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290901, 'awayTeamId': 775290915, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290886, 'awayTeamId': 775290906, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290914, 'awayTeamId': 775290892, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290897, 'awayTeamId': 775290911, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290907, 'awayTeamId': 775290895, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290883, 'awayTeamId': 775290902, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290899, 'awayTeamId': 775290894, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290881, 'awayTeamId': 775290903, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290882, 'awayTeamId': 775290885, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290908, 'awayTeamId': 775290891, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290880, 'awayTeamId': 775290912, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290884, 'awayTeamId': 775290890, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290909, 'awayTeamId': 775290887, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290916, 'awayTeamId': 775290905, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290912, 'awayTeamId': 775290909, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290893, 'awayTeamId': 775290896, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290881, 'awayTeamId': 775290905, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290894, 'awayTeamId': 775290890, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290899, 'awayTeamId': 775290916, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290885, 'awayTeamId': 775290883, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290911, 'awayTeamId': 775290902, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290910, 'awayTeamId': 775290907, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290887, 'awayTeamId': 775290897, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290915, 'awayTeamId': 775290891, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290906, 'awayTeamId': 775290886, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290914, 'awayTeamId': 775290908, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290884, 'awayTeamId': 775290901, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290903, 'awayTeamId': 775290913, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290895, 'awayTeamId': 775290882, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290892, 'awayTeamId': 775290880, 'homeScore': 0, 'awayScore': 0}, {'homeTeamId': 775290914, 'awayTeamId': 775290883, 'homeScore': 13, 'awayScore': 28}, {'homeTeamId': 775290915, 'awayTeamId': 775290912, 'homeScore': 30, 'awayScore': 31}, {'homeTeamId': 775290882, 'awayTeamId': 775290907, 'homeScore': 25, 'awayScore': 21}, {'homeTeamId': 775290903, 'awayTeamId': 775290899, 'homeScore': 14, 'awayScore': 17}, {'homeTeamId': 775290910, 'awayTeamId': 775290902, 'homeScore': 34, 'awayScore': 42}, {'homeTeamId': 775290881, 'awayTeamId': 775290913, 'homeScore': 14, 'awayScore': 31}, {'homeTeamId': 775290905, 'awayTeamId': 775290916, 'homeScore': 29, 'awayScore': 31}, {'homeTeamId': 775290891, 'awayTeamId': 775290892, 'homeScore': 43, 'awayScore': 21}, {'homeTeamId': 775290887, 'awayTeamId': 775290901, 'homeScore': 41, 'awayScore': 28}, {'homeTeamId': 775290908, 'awayTeamId': 775290885, 'homeScore': 13, 'awayScore': 35}, {'homeTeamId': 775290894, 'awayTeamId': 775290896, 'homeScore': 45, 'awayScore': 44}, {'homeTeamId': 775290911, 'awayTeamId': 775290897, 'homeScore': 17, 'awayScore': 24}, {'homeTeamId': 775290909, 'awayTeamId': 775290886, 'homeScore': 53, 'awayScore': 55}, {'homeTeamId': 775290880, 'awayTeamId': 775290906, 'homeScore': 45, 'awayScore': 28}]
 #results = simulate_odds(test_json)
