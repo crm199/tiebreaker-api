@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 from tiebreakers import playoffPercentages, simulate_odds
 from lines import predict_week_games
+import traceback
 
 TEAMS_CSV = "TeamIDMap.csv"
 
@@ -73,6 +74,7 @@ async def update_odds():
         return {"status": "success", "playoff_odds": results}
     except Exception as e:
         logger.error(f"Error in /update-odds: {str(e)}")
+        logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/calculate-odds")
