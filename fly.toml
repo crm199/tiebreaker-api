@@ -1,22 +1,21 @@
-# fly.toml app configuration file generated for tiebreaker-api-green-thunder-630 on 2025-10-03T18:52:50-04:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'tiebreaker-api-green-thunder-630'
-primary_region = 'iad'
+# fly.toml app configuration file
+app = "tiebreaker-api-green-thunder-630"
+primary_region = "iad"
 
 [build]
+
+[processes]
+app = "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = "stop"
   auto_start_machines = true
   min_machines_running = 0
-  processes = ['app']
+  processes = ["app"]
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
+  memory = "1gb"
+  cpu_kind = "shared"
   cpus = 1
