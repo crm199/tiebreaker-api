@@ -1,11 +1,10 @@
-# fly.toml app configuration file
 app = "tiebreaker-api-green-thunder-630"
 primary_region = "iad"
 
 [build]
 
 [processes]
-app = "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"
+app = "uvicorn main:app --host 0.0.0.0 --port $PORT"
 
 [http_service]
   internal_port = 8080
