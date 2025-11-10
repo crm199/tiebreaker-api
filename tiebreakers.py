@@ -11218,16 +11218,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Bills.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bills.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Bills.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
-        #print (Bills.matchups)
-        #print (Bills.results)
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bills.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Dolphins.results[i] == 'W' and not Dolphins.results[i] == 'L' and not Dolphins.results[i] == 'T'):
@@ -11246,14 +11252,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Dolphins.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Dolphins.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Dolphins.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Dolphins.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Jets.results[i] == 'W' and not Jets.results[i] == 'L' and not Jets.results[i] == 'T'):
@@ -11272,14 +11286,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Jets.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Jets.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Jets.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Jets.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Patriots.results[i] == 'W' and not Patriots.results[i] == 'L' and not Patriots.results[i] == 'T'):
@@ -11298,14 +11320,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Patriots.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Patriots.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Patriots.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Patriots.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Browns.results[i] == 'W' and not Browns.results[i] == 'L' and not Browns.results[i] == 'T'):
@@ -11324,14 +11354,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Browns.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Browns.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Browns.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Browns.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Bengals.results[i] == 'W' and not Bengals.results[i] == 'L' and not Bengals.results[i] == 'T'):
@@ -11350,14 +11388,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Bengals.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bengals.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Bengals.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bengals.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Ravens.results[i] == 'W' and not Ravens.results[i] == 'L' and not Ravens.results[i] == 'T'):
@@ -11376,14 +11422,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Ravens.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Ravens.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Ravens.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Ravens.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Steelers.results[i] == 'W' and not Steelers.results[i] == 'L' and not Steelers.results[i] == 'T'):
@@ -11402,14 +11456,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Steelers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Steelers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Steelers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Steelers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Colts.results[i] == 'W' and not Colts.results[i] == 'L' and not Colts.results[i] == 'T'):
@@ -11428,14 +11490,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Colts.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Colts.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Colts.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Colts.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Jaguars.results[i] == 'W' and not Jaguars.results[i] == 'L' and not Jaguars.results[i] == 'T'):
@@ -11454,14 +11524,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Jaguars.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Jaguars.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Jaguars.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Jaguars.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Titans.results[i] == 'W' and not Titans.results[i] == 'L' and not Titans.results[i] == 'T'):
@@ -11480,15 +11558,24 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Titans.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Titans.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Titans.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
 
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Titans.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
+
+        
         for i in range(17):
             if (not Texans.results[i] == 'W' and not Texans.results[i] == 'L' and not Texans.results[i] == 'T'):
                 game = Texans.matchups[i]
@@ -11506,14 +11593,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Texans.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Texans.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Texans.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Texans.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Broncos.results[i] == 'W' and not Broncos.results[i] == 'L' and not Broncos.results[i] == 'T'):
@@ -11532,14 +11627,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Broncos.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Broncos.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Broncos.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Broncos.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Chargers.results[i] == 'W' and not Chargers.results[i] == 'L' and not Chargers.results[i] == 'T'):
@@ -11558,14 +11661,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Chargers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Chargers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Chargers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Chargers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Chiefs.results[i] == 'W' and not Chiefs.results[i] == 'L' and not Chiefs.results[i] == 'T'):
@@ -11584,14 +11695,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Chiefs.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Chiefs.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Chiefs.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Chiefs.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Raiders.results[i] == 'W' and not Raiders.results[i] == 'L' and not Raiders.results[i] == 'T'):
@@ -11610,14 +11729,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Raiders.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Raiders.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Raiders.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Raiders.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Cowboys.results[i] == 'W' and not Cowboys.results[i] == 'L' and not Cowboys.results[i] == 'T'):
@@ -11636,14 +11763,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Cowboys.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Cowboys.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Cowboys.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Cowboys.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Commanders.results[i] == 'W' and not Commanders.results[i] == 'L' and not Commanders.results[i] == 'T'):
@@ -11662,14 +11797,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Commanders.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Commanders.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Commanders.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Commanders.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Eagles.results[i] == 'W' and not Eagles.results[i] == 'L' and not Eagles.results[i] == 'T'):
@@ -11688,14 +11831,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Eagles.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Eagles.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Eagles.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Eagles.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Giants.results[i] == 'W' and not Giants.results[i] == 'L' and not Giants.results[i] == 'T'):
@@ -11714,14 +11865,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Giants.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Giants.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Giants.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Giants.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Bears.results[i] == 'W' and not Bears.results[i] == 'L' and not Bears.results[i] == 'T'):
@@ -11740,14 +11899,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Bears.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bears.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Bears.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Bears.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Lions.results[i] == 'W' and not Lions.results[i] == 'L' and not Lions.results[i] == 'T'):
@@ -11766,14 +11933,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Lions.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Lions.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Lions.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Lions.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Packers.results[i] == 'W' and not Packers.results[i] == 'L' and not Packers.results[i] == 'T'):
@@ -11792,14 +11967,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Packers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Packers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Packers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Packers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Vikings.results[i] == 'W' and not Vikings.results[i] == 'L' and not Vikings.results[i] == 'T'):
@@ -11818,14 +12001,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Vikings.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Vikings.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Vikings.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Vikings.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Buccaneers.results[i] == 'W' and not Buccaneers.results[i] == 'L' and not Buccaneers.results[i] == 'T'):
@@ -11844,14 +12035,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Buccaneers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Buccaneers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Buccaneers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Buccaneers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Falcons.results[i] == 'W' and not Falcons.results[i] == 'L' and not Falcons.results[i] == 'T'):
@@ -11870,14 +12069,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Falcons.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Falcons.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Falcons.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Falcons.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Saints.results[i] == 'W' and not Saints.results[i] == 'L' and not Saints.results[i] == 'T'):
@@ -11896,14 +12103,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Saints.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Saints.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Saints.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Saints.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Panthers.results[i] == 'W' and not Panthers.results[i] == 'L' and not Panthers.results[i] == 'T'):
@@ -11922,14 +12137,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Panthers.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Panthers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Panthers.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Panthers.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Cardinals.results[i] == 'W' and not Cardinals.results[i] == 'L' and not Cardinals.results[i] == 'T'):
@@ -11948,14 +12171,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Cardinals.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Cardinals.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Cardinals.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Cardinals.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Niners.results[i] == 'W' and not Niners.results[i] == 'L' and not Niners.results[i] == 'T'):
@@ -11974,14 +12205,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Niners.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Niners.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Niners.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Niners.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Rams.results[i] == 'W' and not Rams.results[i] == 'L' and not Rams.results[i] == 'T'):
@@ -12000,14 +12239,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Rams.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Rams.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Rams.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Rams.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         for i in range(17):
             if (not Seahawks.results[i] == 'W' and not Seahawks.results[i] == 'L' and not Seahawks.results[i] == 'T'):
@@ -12026,14 +12273,22 @@ def simulate_odds(games_json):
                 round(winChance, 2)
                 winChance *= 100
                 rand = random.randint(1, 100)
-                if (rand <= winChance):
+                if rand <= winChance:
                     Seahawks.results[i] = 'W'
-                    opponent.results[i] = 'L'
-                    remSchedule.append('W')
+
+                    # Find the correct opponent schedule slot to update
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Seahawks.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'L'
+                            break  # <-- very important
                 else:
                     Seahawks.results[i] = 'L'
-                    opponent.results[i] = 'W'
-                    remSchedule.append('L')
+
+                    # Find correct opponent slot for a win
+                    for idx, opp in enumerate(opponent.matchups):
+                        if opp == Seahawks.getName() and opponent.results[idx] == 'NA':
+                            opponent.results[idx] = 'W'
+                            break
 
         playoffs = playoffStandings()
         playoffsList.append(playoffs)
