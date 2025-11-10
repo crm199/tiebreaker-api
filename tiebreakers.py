@@ -8557,7 +8557,7 @@ def playoffPercentages():
 
     playoffsList = []
     remSchedules= []
-    for i in range(5000):
+    for i in range(1000):
         remSchedule = []
         for i in range(17):
             if (not Bills.results[i] == 'W' and not Bills.results[i] == 'L' and not Bills.results[i] == 'T'):
