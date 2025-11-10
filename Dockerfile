@@ -3,4 +3,4 @@ WORKDIR /app
 COPY . .
 RUN pip install -r requirements.txt
 # Use exec form to ensure $PORT is resolved by the shell
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--log-level", "info"]
