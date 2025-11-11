@@ -10855,7 +10855,7 @@ def simulate_odds(games_json):
 
     df = games_df
     #print (df)
-    fillSchedules(df)
+    clearGlobals(df)
 
 
     bills1, bills2, bills3, bills4, bills5, bills6, bills7, billsOut = 0, 0, 0, 0, 0, 0, 0, 0
@@ -10896,10 +10896,8 @@ def simulate_odds(games_json):
     #remSchedules= []
     for i in range(1000):
         remSchedule = []
-        print ("Got here 1")
         for i in range(17):
             if (not Bills.results[i] == 'W' and not Bills.results[i] == 'L' and not Bills.results[i] == 'T'):
-                print ("Got here 2")
                 game = Bills.matchups[i]
                 opponent = findTeam(game)
                 remSchedule.append('Bills')
