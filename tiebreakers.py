@@ -10896,8 +10896,10 @@ def simulate_odds(games_json):
     #remSchedules= []
     for i in range(1000):
         remSchedule = []
+        print ("Got here 1")
         for i in range(17):
             if (not Bills.results[i] == 'W' and not Bills.results[i] == 'L' and not Bills.results[i] == 'T'):
+                print ("Got here 2")
                 game = Bills.matchups[i]
                 opponent = findTeam(game)
                 remSchedule.append('Bills')
