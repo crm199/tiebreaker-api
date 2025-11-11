@@ -10834,6 +10834,14 @@ def playoffPercentages():
 
     
 def simulate_odds(games_json):
+    global Bills, Dolphins, Jets, Patriots
+    global Browns, Bengals, Ravens, Steelers
+    global Colts, Jaguars, Titans, Texans
+    global Broncos, Chargers, Chiefs, Raiders
+    global Commanders, Cowboys, Eagles, Giants
+    global Bears, Lions, Packers, Vikings
+    global Buccaneers, Falcons, Panthers, Saints
+    global Cardinals, Niners, Rams, Seahawks
     # Convert JSON to DataFrame
     games_df = pd.DataFrame(games_json)
 
