@@ -10834,14 +10834,6 @@ def playoffPercentages():
 
     
 def simulate_odds(games_json):
-    global Bills, Dolphins, Jets, Patriots
-    global Browns, Bengals, Ravens, Steelers
-    global Colts, Jaguars, Titans, Texans
-    global Broncos, Chargers, Chiefs, Raiders
-    global Commanders, Cowboys, Eagles, Giants
-    global Bears, Lions, Packers, Vikings
-    global Buccaneers, Falcons, Panthers, Saints
-    global Cardinals, Niners, Rams, Seahawks
     # Convert JSON to DataFrame
     games_df = pd.DataFrame(games_json)
 
@@ -10854,9 +10846,73 @@ def simulate_odds(games_json):
 
 
     df = games_df
-    #print (df)
-    clearGlobals(df)
 
+    global teamList, AFC, NFC, AFCE, AFCN, AFCS, AFCW, NFCE, NFCN, NFCS, NFCW
+    global Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans, Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers, Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks
+
+    Bills = Team("Bills", 'AFC', 'AFCE')
+    Dolphins = Team("Dolphins", 'AFC', 'AFCE')
+    Jets = Team("Jets", 'AFC', 'AFCE')
+    Patriots = Team("Patriots", 'AFC', 'AFCE')
+
+    Bengals = Team("Bengals", 'AFC', 'AFCN')
+    Browns = Team("Browns", 'AFC', 'AFCN')
+    Ravens = Team("Ravens", 'AFC', 'AFCN')
+    Steelers = Team("Steelers", 'AFC', 'AFCN')
+
+    Colts = Team("Colts", 'AFC', 'AFCS')
+    Jaguars = Team("Jaguars", 'AFC', 'AFCS')
+    Titans = Team("Titans", 'AFC', 'AFCS')
+    Texans = Team("Texans", 'AFC', 'AFCS')
+
+    Broncos = Team("Broncos", 'AFC', 'AFCW')
+    Chiefs = Team("Chiefs", 'AFC', 'AFCW')
+    Chargers = Team("Chargers", 'AFC', 'AFCW')
+    Raiders = Team("Raiders", 'AFC', 'AFCW')
+
+    Commanders = Team("Commanders", 'NFC', 'NFCE')
+    Cowboys = Team("Cowboys", 'NFC', 'NFCE')
+    Giants = Team("Giants", 'NFC', 'NFCE')
+    Eagles = Team("Eagles", 'NFC', 'NFCE')
+
+    Bears = Team("Bears", 'NFC', 'NFCN')
+    Lions = Team("Lions", 'NFC', 'NFCN')
+    Packers = Team("Packers", 'NFC', 'NFCN')
+    Vikings = Team("Vikings", 'NFC', 'NFCN')
+
+    Buccaneers = Team("Buccaneers", 'NFC', 'NFCS')
+    Falcons = Team("Falcons", 'NFC', 'NFCS')
+    Saints = Team("Saints", 'NFC', 'NFCS')
+    Panthers = Team("Panthers", 'NFC', 'NFCS')
+
+    Niners = Team("49ers", 'NFC', 'NFCW')
+    Cardinals = Team("Cardinals", 'NFC', 'NFCW')
+    Rams = Team("Rams", 'NFC', 'NFCW')
+    Seahawks = Team("Seahawks", 'NFC', 'NFCW')
+
+    teamList = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans,
+            Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings,
+            Buccaneers,
+            Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
+
+    #print("In teamList: " + str(id(teamList[0])))
+
+    AFC = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans,
+        Broncos, Chiefs, Chargers, Raiders]
+    NFC = [Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers,
+        Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
+
+    AFCE = [Bills, Dolphins, Jets, Patriots]
+    AFCN = [Bengals, Browns, Ravens, Steelers]
+    AFCS = [Colts, Jaguars, Titans, Texans]
+    AFCW = [Broncos, Chiefs, Chargers, Raiders]
+    NFCE = [Commanders, Cowboys, Giants, Eagles]
+    NFCN = [Bears, Lions, Packers, Vikings]
+    NFCS = [Buccaneers, Falcons, Saints, Panthers]
+    NFCW = [Niners, Cardinals, Rams, Seahawks]
+
+    fillSchedules(df)
+    
 
     bills1, bills2, bills3, bills4, bills5, bills6, bills7, billsOut = 0, 0, 0, 0, 0, 0, 0, 0
     dolphins1, dolphins2, dolphins3, dolphins4, dolphins5, dolphins6, dolphins7, dolphinsOut = 0, 0, 0, 0, 0, 0, 0, 0
