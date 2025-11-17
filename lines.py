@@ -193,8 +193,8 @@ def lines(team1_stats: dict, team2_stats: dict):
     return {
         "spread": spread,
         "ou": ou,
-        "homeExpScore": t1_exp,
-        "awayExpScore": t2_exp,
+        "homeExpectedScore": t1_exp,
+        "awayExpectedScore": t2_exp,
         "winProbHome": win_prob_home,
         "pre_round_spread": pre_round_spread,
     }
@@ -245,8 +245,8 @@ def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> l
             predictions.append({
                 "homeTeam": home_stats["Team"],
                 "awayTeam": away_stats["Team"],
-                "homeExpScore": result["homeExpectedScore"],
-                "awayExpScore": result["awayExpectedScore"],
+                "homeExpectedScore": result["homeExpectedScore"],
+                "awayExpectedScore": result["awayExpectedScore"],
                 "scheduleId": game["scheduleId"],
                 "spread": result["spread"],
                 "ou": result["ou"],
