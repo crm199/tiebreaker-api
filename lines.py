@@ -8,8 +8,8 @@ import json
 import base64
 
 # ---------------- CONFIG ----------------
-SEASON_INDEX = 1  # current season
-LOGIT_COEF = 0.2254
+SEASON_INDEX = 2  # current season
+LOGIT_COEF = 0.165
 LOGIT_INTERCEPT = -0.0170
 GOOGLE_SHEET_NAME = "MML26 Run-Pass and PPP Tracker"  # <-- spreadsheet name
 RP_TRACKER_SHEET_NAME = "S2 PPP"
@@ -102,7 +102,7 @@ def get_s2_win_pcts(supabase_client):
 
 def weighted_merge_stats(team_stats, s2_ppp_df, s2_win_pcts, week_number):
     """Blend Season 1 and Season 2 stats by weighting"""
-    s2_weight = min(0.05 * (week_number - 1), 1.0)  # 5% more S2 per week
+    s2_weight = 0.8  # 5% more S2 per week
     s1_weight = 1 - s2_weight
     logger.info(f"Blending stats with weights: {s1_weight:.2f} S1 | {s2_weight:.2f} S2")
 
@@ -134,55 +134,67 @@ def weighted_merge_stats(team_stats, s2_ppp_df, s2_win_pcts, week_number):
 
 def lines(team1_stats: dict, team2_stats: dict):
     """Compute expected scores, spread, O/U, and pre-round spread"""
-    logger.debug(f"Calculating line for {team1_stats.get('Team')} vs {team2_stats.get('Team')}")
+    t1 = team1_stats.copy()
+    t2 = team2_stats.copy()
 
-    # Apply weights
-    team1_stats["win_pct_weight"] = ((team1_stats["win_pct"] - 0.5) + 35) / 35
-    team2_stats["win_pct_weight"] = ((team2_stats["win_pct"] - 0.5) + 35) / 35
+    # WIN % + SOS adjustments
+    t1["win_pct_weight"] = ((t1["win_pct"] - 0.5) + 35) / 35
+    t2["win_pct_weight"] = ((t2["win_pct"] - 0.5) + 35) / 35
 
-    team1_stats["sos_weight"] = ((team1_stats["avg_opp_ppp_diff"] + 35) / 35)
-    team2_stats["sos_weight"] = ((team2_stats["avg_opp_ppp_diff"] + 35) / 35)
+    t1["sos_weight"] = ((t1["avg_opp_ppp_diff"] + 60) / 60)
+    t2["sos_weight"] = ((t2["avg_opp_ppp_diff"] + 60) / 60)
 
-    team1_stats["oPPP"] *= team1_stats["win_pct_weight"] * team1_stats["sos_weight"]
-    team1_stats["dPPP"] /= team1_stats["win_pct_weight"] * team1_stats["sos_weight"]
-    team2_stats["oPPP"] *= team2_stats["win_pct_weight"] * team2_stats["sos_weight"]
-    team2_stats["dPPP"] /= team2_stats["win_pct_weight"] * team2_stats["sos_weight"]
+    t1["oPPP"] *= t1["win_pct_weight"] * t1["sos_weight"]
+    t1["dPPP"] /= t1["win_pct_weight"] * t1["sos_weight"]
 
-    # Possession adjustments
-    for team, stats in [("home", team1_stats), ("away", team2_stats)]:
+    t2["oPPP"] *= t2["win_pct_weight"] * t2["sos_weight"]
+    t2["dPPP"] /= t2["win_pct_weight"] * t2["sos_weight"]
+
+    # Possession scaling
+    for stats in [t1, t2]:
         if stats["poss_per_game"] <= 14:
             stats["poss_per_game"] *= 0.99
         elif stats["poss_per_game"] >= 15.5:
-            stats["poss_per_game"] *= 1.01
+            stats["poss_per_game"] *= 1.02
 
     # Expected scores
-    team1_expected = (team1_stats["oPPP"] + team2_stats["dPPP"]) / 2 * (
-        (team1_stats["poss_per_game"] + team2_stats["poss_per_game"]) / 4
-    )
-    team2_expected = (team2_stats["oPPP"] + team1_stats["dPPP"]) / 2 * (
-        (team1_stats["poss_per_game"] + team2_stats["poss_per_game"]) / 4
-    )
+    t1_exp = (t1["oPPP"] + t2["dPPP"]) / 2 * ((t1["poss_per_game"] + t2["poss_per_game"]) / 4)
+    t2_exp = (t2["oPPP"] + t1["dPPP"]) / 2 * ((t1["poss_per_game"] + t2["poss_per_game"]) / 4)
 
-    if (team1_stats["poss_per_game"] > 15.5) and (team2_stats["poss_per_game"] > 15.5):
-        team1_expected *= 1.02
-        team2_expected *= 1.02
-    elif (team1_stats["poss_per_game"] < 14) and (team2_stats["poss_per_game"] < 14):
-        team1_expected *= 0.98
-        team2_expected *= 0.98
+    if (t1["poss_per_game"] > 15.5 and t2["poss_per_game"] > 15.5):
+        t1_exp *= 1.02
+        t2_exp *= 1.02
 
-    ou = round_half(team1_expected + team2_expected)
-    pre_round_spread = (team1_expected - team2_expected) * 1.17
-    spread = round_half(pre_round_spread)
-    if spread > 9:
-        spread += (spread + 0.5 - 9) / 3
+    if t1["oPPP"] > 4 and t2["oPPP"] > 4:
+        t1_exp *= 1.03
+        t2_exp *= 1.03
+    elif t1["oPPP"] > 4 and t2["oPPP"] < 3.3:
+        t2_exp *= 0.985
+    elif t1["oPPP"] < 3.3 and t2["oPPP"] > 4:
+        t1_exp *= 0.985
 
+    ou = (t1_exp + t2_exp)
+    if ou > 54:
+        ou += (ou + 0.5 - 54) / 2.1
+    ou = round_half(ou)
+
+    pre_round_spread = (t1_exp - t2_exp) * 1.25
+    #spread = round_half(pre_round_spread)
+    spread = pre_round_spread
+    if spread > 6.5:
+        spread += (spread + 0.5 - 6.5) / 2.2
+    elif spread > 2.5:
+        spread += (spread + 0.5 - 2.5) / 3.3
+    spread = round_half(spread)
+
+    # NEW WIN PROBABILITY (flatter logistic)
     win_prob_home = 1 / (1 + np.exp(-(LOGIT_COEF * pre_round_spread + LOGIT_INTERCEPT)))
 
     return {
-        "homeExpectedScore": team1_expected,
-        "awayExpectedScore": team2_expected,
         "spread": spread,
         "ou": ou,
+        "homeExpScore": t1_exp,
+        "awayExpScore": t2_exp,
         "winProbHome": win_prob_home,
         "pre_round_spread": pre_round_spread,
     }

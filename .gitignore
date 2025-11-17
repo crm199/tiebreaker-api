@@ -1,1 +1,14 @@
 .env
+adjusting_lines.py
+AllBets_Regraded.csv
+AllLinesS2.csv
+BetsS2.csv
+GamesS2.csv
+WeeklyOddsS2.csv
+normalize.py
+playoff_lines.csv
+playoff_lines.py
+playoff_lines_updated.csv
+playoff_sim_results.csv
+season3wintotals.py
+UpcomingSeason_Lines.csv
