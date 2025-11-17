@@ -245,8 +245,8 @@ def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> l
             predictions.append({
                 "homeTeam": home_stats["Team"],
                 "awayTeam": away_stats["Team"],
-                "homeExpectedScore": result["homeExpectedScore"],
-                "awayExpectedScore": result["awayExpectedScore"],
+                "homeExpScore": result["homeExpectedScore"],
+                "awayExpScore": result["awayExpectedScore"],
                 "scheduleId": game["scheduleId"],
                 "spread": result["spread"],
                 "ou": result["ou"],
