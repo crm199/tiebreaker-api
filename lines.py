@@ -15,6 +15,7 @@ GOOGLE_SHEET_NAME = "MML26 Run-Pass and PPP Tracker"  # <-- spreadsheet name
 RP_TRACKER_SHEET_NAME = "S2 PPP"
 RP_TRACKER_SHEET_NAME_S3 = "S3 PPP"
 S2TEAMRECORDS_TABLE = "S2TeamRecords"
+S3TEAMRECORDS_TABLE = "S3TeamRecords"
 # ---------------------------------------
 
 logger = logging.getLogger(__name__)
@@ -142,15 +143,38 @@ def get_s2_win_pcts(supabase_client):
     logger.debug(f"Computed win_pcts for {len(win_pcts)} teams.")
     return win_pcts
 
+def get_s3_win_pcts(supabase_client):
+    """Fetch win percentage from Supabase S2TeamRecords"""
+    logger.info("Fetching Season 2 win percentages from Supabase...")
+    try:
+        records = supabase_client.table(S3TEAMRECORDS_TABLE).select("teamId, wins, losses").execute().data
+        logger.info(f"Retrieved {len(records)} records from S2TeamRecords.")
+    except Exception as e:
+        logger.exception(f"Supabase query failed when fetching S2TeamRecords: {e}")
+        raise
 
-def weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s2_win_pcts, week_number):
+    win_pcts = {}
+    for rec in records:
+        team_id = rec.get("teamId")
+        if not team_id:
+            logger.warning(f"Skipping record with no teamId field: {rec}")
+            continue
+        wins, losses = rec.get("wins", 0), rec.get("losses", 0)
+        total = wins + losses
+        win_pcts[team_id] = wins / total if total > 0 else 0.5
+
+    logger.debug(f"Computed win_pcts for {len(win_pcts)} teams.")
+    return win_pcts
+
+
+def weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s2_win_pcts, s3_win_pcts, week_number):
     # Season 3 gains +5% every week
     s3_weight = max(0, min(0.05 * (week_number - 1), 0.80))  # capped at 80%
 
     # Remaining weight split 1:4 between S1 and S2
     remaining = 1 - s3_weight
-    s1_weight = remaining * (1/5)   # 20% of remaining
-    s2_weight = remaining * (4/5)   # 80% of remaining
+    s1_weight = remaining * (0.2)   # 20% of remaining
+    s2_weight = remaining * (0.8)   # 80% of remaining
 
     logger.info(f"Blending weights: S1={s1_weight:.2%} | S2={s2_weight:.2%} | S3={s3_weight:.2%}")
 
@@ -185,6 +209,18 @@ def weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s2_win_pcts, week_num
                 s2_data["poss_per_game"] * s2_weight +
                 s3_data["poss_per_game"] * s3_weight
             )
+
+            s1_win = s1_data.get("win_pct", 0.5)
+            s2_win = s2_win_pcts.get(team_id, 0.5)
+            s3_win = s3_win_pcts.get(team_id, 0.5)
+
+            new_entry["win_pct"] = (
+                s1_win * s1_weight +
+                s2_win * s2_weight +
+                s3_win * s3_weight
+            )
+
+            blended[team_id] = new_entry
         except Exception as e:
             logger.exception(f"Error blending data for {lookup_key}: {e}")
             blended[team_id] = s1_data
@@ -270,13 +306,14 @@ def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> l
         s2_ppp_df = get_s2_ppp_data()
         s3_ppp_df = get_s3_ppp_data()
         s2_win_pcts = get_s2_win_pcts(supabase_client)
+        s3_win_pcts = get_s3_win_pcts(supabase_client)
         logger.info("Loaded both S2 PPP data and win_pcts successfully.")
     except Exception as e:
         logger.exception(f"Failed during S2 data loading: {e}")
         raise
 
     try:
-        team_stats = weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s2_win_pcts, week_number)
+        team_stats = weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s2_win_pcts, s3_win_pcts, week_number)
     except Exception as e:
         logger.exception(f"Error blending season stats: {e}")
         raise
