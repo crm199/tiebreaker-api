@@ -8204,7 +8204,7 @@ def trackScenarios(playoffs, remSchedules, Team, spot):
     #findPatterns(spotList, resultsList, Team, resultTeamLists, opponentTeamLists, spot)
     
 
-
+name_to_id = dict(zip(teamMap['teamName'], teamMap['teamId']))
 
 def playoffPercentages():
     bills1, bills2, bills3, bills4, bills5, bills6, bills7, billsOut = 0, 0, 0, 0, 0, 0, 0, 0
@@ -8244,7 +8244,7 @@ def playoffPercentages():
 
     playoffsList = []
     remSchedules= []
-    for i in range(5000):
+    for i in range(50):
         remSchedule = []
         for i in range(17):
             if (not Bills.results[i] == 'W' and not Bills.results[i] == 'L' and not Bills.results[i] == 'T'):
@@ -9918,105 +9918,102 @@ def playoffPercentages():
 
     #trackScenarios(playoffsList, remSchedules, Patriots, '1')
 
-    billsPlayoffs = (bills1 + bills2 + bills3 + bills4 + bills5 + bills6 + bills7) / 100.0
-    billsDiv = (bills1 + bills2 + bills3 + bills4) / 100.0
-    billsOut = 100 - billsPlayoffs
-    dolphinsPlayoffs = (dolphins1 + dolphins2 + dolphins3 + dolphins4 + dolphins5 + dolphins6 + dolphins7) / 100.0
-    dolphinsDiv = (dolphins1 + dolphins2 + dolphins3 + dolphins4) / 100.0
-    dolphinsOut = 100 - dolphinsPlayoffs
-    jetsPlayoffs = (jets1 + jets2 + jets3 + jets4 + jets5 + jets6 + jets7) / 100.0
-    jetsDiv = (jets1 + jets2 + jets3 + jets4) / 100.0
-    jetsOut = 100 - jetsPlayoffs
-    patriotsPlayoffs = (patriots1 + patriots2 + patriots3 + patriots4 + patriots5 + patriots6 + patriots7) / 100.0
-    patriotsDiv = (patriots1 + patriots2 + patriots3 + patriots4) / 100.0
-    patriotsOut = 100 - patriotsPlayoffs
-    brownsPlayoffs = (browns1 + browns2 + browns3 + browns4 + browns5 + browns6 + browns7) / 100.0
-    brownsDiv = (browns1 + browns2 + browns3 + browns4) / 100.0
-    brownsOut = 100 - brownsPlayoffs
-    bengalsPlayoffs = (bengals1 + bengals2 + bengals3 + bengals4 + bengals5 + bengals6 + bengals7) / 100.0
-    bengalsDiv = (bengals1 + bengals2 + bengals3 + bengals4) / 100.0
-    bengalsOut = 100 - bengalsPlayoffs
-    ravensPlayoffs = (ravens1 + ravens2 + ravens3 + ravens4 + ravens5 + ravens6 + ravens7) / 100.0
-    ravensDiv = (ravens1 + ravens2 + ravens3 + ravens4) / 100.0
-    ravensOut = 100 - ravensPlayoffs
-    steelersPlayoffs = (steelers1 + steelers2 + steelers3 + steelers4 + steelers5 + steelers6 + steelers7) / 100.0
-    steelersDiv = (steelers1 + steelers2 + steelers3 + steelers4) / 100.0
-    steelersOut = 100 - steelersPlayoffs
-    coltsPlayoffs = (colts1 + colts2 + colts3 + colts4 + colts5 + colts6 + colts7) / 100.0
-    coltsDiv = (colts1 + colts2 + colts3 + colts4) / 100.0
-    coltsOut = 100 - coltsPlayoffs
-    jaguarsPlayoffs = (jaguars1 + jaguars2 + jaguars3 + jaguars4 + jaguars5 + jaguars6 + jaguars7) / 100.0
-    jaguarsDiv = (jaguars1 + jaguars2 + jaguars3 + jaguars4) / 100.0
-    jaguarsOut = 100 - jaguarsPlayoffs
-    titansPlayoffs = (titans1 + titans2 + titans3 + titans4 + titans5 + titans6 + titans7) / 100.0
-    titansDiv = (titans1 + titans2 + titans3 + titans4) / 100.0
-    titansOut = 100 - titansPlayoffs
-    texansPlayoffs = (texans1 + texans2 + texans3 + texans4 + texans5 + texans6 + texans7) / 100.0
-    texansDiv = (texans1 + texans2 + texans3 + texans4) / 100.0
-    texansOut = 100 - texansPlayoffs
-    broncosPlayoffs = (broncos1 + broncos2 + broncos3 + broncos4 + broncos5 + broncos6 + broncos7) / 100.0
-    broncosDiv = (broncos1 + broncos2 + broncos3 + broncos4) / 100.0
-    broncosOut = 100 - broncosPlayoffs
-    chargersPlayoffs = (chargers1 + chargers2 + chargers3 + chargers4 + chargers5 + chargers6 + chargers7) / 100.0
-    chargersDiv = (chargers1 + chargers2 + chargers3 + chargers4) / 100.0
-    chargersOut = 100 - chargersPlayoffs
-    chiefsPlayoffs = (chiefs1 + chiefs2 + chiefs3 + chiefs4 + chiefs5 + chiefs6 + chiefs7) / 100.0
-    chiefsDiv = (chiefs1 + chiefs2 + chiefs3 + chiefs4) / 100.0
-    chiefsOut = 100 - chiefsPlayoffs
-    raidersPlayoffs = (raiders1 + raiders2 + raiders3 + raiders4 + raiders5 + raiders6 + raiders7) / 100.0
-    raidersDiv = (raiders1 + raiders2 + raiders3 + raiders4) / 100.0
-    raidersOut = 100 - raidersPlayoffs
-    cowboysPlayoffs = (cowboys1 + cowboys2 + cowboys3 + cowboys4 + cowboys5 + cowboys6 + cowboys7) / 100.0
-    cowboysDiv = (cowboys1 + cowboys2 + cowboys3 + cowboys4) / 100.0
-    cowboysOut = 100 - cowboysPlayoffs
-    commandersPlayoffs = (
-                                     commanders1 + commanders2 + commanders3 + commanders4 + commanders5 + commanders6 + commanders7) / 100.0
-    commandersDiv = (commanders1 + commanders2 + commanders3 + commanders4) / 100.0
-    commandersOut = 100 - commandersPlayoffs
-    eaglesPlayoffs = (eagles1 + eagles2 + eagles3 + eagles4 + eagles5 + eagles6 + eagles7) / 100.0
-    eaglesDiv = (eagles1 + eagles2 + eagles3 + eagles4) / 100.0
-    eaglesOut = 100 - eaglesPlayoffs
-    giantsPlayoffs = (giants1 + giants2 + giants3 + giants4 + giants5 + giants6 + giants7) / 100.0
-    giantsDiv = (giants1 + giants2 + giants3 + giants4) / 100.0
-    giantsOut = 100 - giantsPlayoffs
-    bearsPlayoffs = (bears1 + bears2 + bears3 + bears4 + bears5 + bears6 + bears7) / 100.0
-    bearsDiv = (bears1 + bears2 + bears3 + bears4) / 100.0
-    bearsOut = 100 - bearsPlayoffs
-    lionsPlayoffs = (lions1 + lions2 + lions3 + lions4 + lions5 + lions6 + lions7) / 100.0
-    lionsDiv = (lions1 + lions2 + lions3 + lions4) / 100.0
-    lionsOut = 100 - lionsPlayoffs
-    packersPlayoffs = (packers1 + packers2 + packers3 + packers4 + packers5 + packers6 + packers7) / 100.0
-    packersDiv = (packers1 + packers2 + packers3 + packers4) / 100.0
-    packersOut = 100 - packersPlayoffs
-    vikingsPlayoffs = (vikings1 + vikings2 + vikings3 + vikings4 + vikings5 + vikings6 + vikings7) / 100.0
-    vikingsDiv = (vikings1 + vikings2 + vikings3 + vikings4) / 100.0
-    vikingsOut = 100 - vikingsPlayoffs
-    buccaneersPlayoffs = (
-                                     buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4 + buccaneers5 + buccaneers6 + buccaneers7) / 100.0
-    buccaneersDiv = (buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4) / 100.0
-    buccaneersOut = 100 - buccaneersPlayoffs
-    falconsPlayoffs = (falcons1 + falcons2 + falcons3 + falcons4 + falcons5 + falcons6 + falcons7) / 100.0
-    falconsDiv = (falcons1 + falcons2 + falcons3 + falcons4) / 100.0
-    falconsOut = 100 - falconsPlayoffs
-    saintsPlayoffs = (saints1 + saints2 + saints3 + saints4 + saints5 + saints6 + saints7) / 100.0
-    saintsDiv = (saints1 + saints2 + saints3 + saints4) / 100.0
-    saintsOut = 100 - saintsPlayoffs
-    panthersPlayoffs = (panthers1 + panthers2 + panthers3 + panthers4 + panthers5 + panthers6 + panthers7) / 100.0
-    panthersDiv = (panthers1 + panthers2 + panthers3 + panthers4) / 100.0
-    panthersOut = 100 - panthersPlayoffs
-    cardinalsPlayoffs = (
-                                    cardinals1 + cardinals2 + cardinals3 + cardinals4 + cardinals5 + cardinals6 + cardinals7) / 100.0
-    cardinalsDiv = (cardinals1 + cardinals2 + cardinals3 + cardinals4) / 100.0
-    cardinalsOut = 100 - cardinalsPlayoffs
-    ninersPlayoffs = (niners1 + niners2 + niners3 + niners4 + niners5 + niners6 + niners7) / 100.0
-    ninersDiv = (niners1 + niners2 + niners3 + niners4) / 100.0
-    ninersOut = 100 - ninersPlayoffs
-    ramsPlayoffs = (rams1 + rams2 + rams3 + rams4 + rams5 + rams6 + rams7) / 100.0
-    ramsDiv = (rams1 + rams2 + rams3 + rams4) / 100.0
-    ramsOut = 100 - ramsPlayoffs
-    seahawksPlayoffs = (seahawks1 + seahawks2 + seahawks3 + seahawks4 + seahawks5 + seahawks6 + seahawks7) / 100.0
-    seahawksDiv = (seahawks1 + seahawks2 + seahawks3 + seahawks4) / 100.0
-    seahawksOut = 100 - seahawksPlayoffs
+    billsPlayoffs = (bills1 + bills2 + bills3 + bills4 + bills5 + bills6 + bills7)
+    billsDiv = (bills1 + bills2 + bills3 + bills4)
+
+    dolphinsPlayoffs = (dolphins1 + dolphins2 + dolphins3 + dolphins4 + dolphins5 + dolphins6 + dolphins7)
+    dolphinsDiv = (dolphins1 + dolphins2 + dolphins3 + dolphins4)
+
+    jetsPlayoffs = (jets1 + jets2 + jets3 + jets4 + jets5 + jets6 + jets7)
+    jetsDiv = (jets1 + jets2 + jets3 + jets4)
+
+    patriotsPlayoffs = (patriots1 + patriots2 + patriots3 + patriots4 + patriots5 + patriots6 + patriots7)
+    patriotsDiv = (patriots1 + patriots2 + patriots3 + patriots4)
+
+    brownsPlayoffs = (browns1 + browns2 + browns3 + browns4 + browns5 + browns6 + browns7)
+    brownsDiv = (browns1 + browns2 + browns3 + browns4)
+
+    bengalsPlayoffs = (bengals1 + bengals2 + bengals3 + bengals4 + bengals5 + bengals6 + bengals7)
+    bengalsDiv = (bengals1 + bengals2 + bengals3 + bengals4)
+
+    ravensPlayoffs = (ravens1 + ravens2 + ravens3 + ravens4 + ravens5 + ravens6 + ravens7)
+    ravensDiv = (ravens1 + ravens2 + ravens3 + ravens4)
+
+    steelersPlayoffs = (steelers1 + steelers2 + steelers3 + steelers4 + steelers5 + steelers6 + steelers7)
+    steelersDiv = (steelers1 + steelers2 + steelers3 + steelers4)
+
+    coltsPlayoffs = (colts1 + colts2 + colts3 + colts4 + colts5 + colts6 + colts7)
+    coltsDiv = (colts1 + colts2 + colts3 + colts4)
+
+    jaguarsPlayoffs = (jaguars1 + jaguars2 + jaguars3 + jaguars4 + jaguars5 + jaguars6 + jaguars7)
+    jaguarsDiv = (jaguars1 + jaguars2 + jaguars3 + jaguars4)
+
+    titansPlayoffs = (titans1 + titans2 + titans3 + titans4 + titans5 + titans6 + titans7)
+    titansDiv = (titans1 + titans2 + titans3 + titans4)
+
+    texansPlayoffs = (texans1 + texans2 + texans3 + texans4 + texans5 + texans6 + texans7)
+    texansDiv = (texans1 + texans2 + texans3 + texans4)
+
+    broncosPlayoffs = (broncos1 + broncos2 + broncos3 + broncos4 + broncos5 + broncos6 + broncos7)
+    broncosDiv = (broncos1 + broncos2 + broncos3 + broncos4)
+
+    chargersPlayoffs = (chargers1 + chargers2 + chargers3 + chargers4 + chargers5 + chargers6 + chargers7)
+    chargersDiv = (chargers1 + chargers2 + chargers3 + chargers4)
+
+    chiefsPlayoffs = (chiefs1 + chiefs2 + chiefs3 + chiefs4 + chiefs5 + chiefs6 + chiefs7)
+    chiefsDiv = (chiefs1 + chiefs2 + chiefs3 + chiefs4)
+
+    raidersPlayoffs = (raiders1 + raiders2 + raiders3 + raiders4 + raiders5 + raiders6 + raiders7)
+    raidersDiv = (raiders1 + raiders2 + raiders3 + raiders4)
+
+    cowboysPlayoffs = (cowboys1 + cowboys2 + cowboys3 + cowboys4 + cowboys5 + cowboys6 + cowboys7)
+    cowboysDiv = (cowboys1 + cowboys2 + cowboys3 + cowboys4)
+
+    commandersPlayoffs = (commanders1 + commanders2 + commanders3 + commanders4 + commanders5 + commanders6 + commanders7)
+    commandersDiv = (commanders1 + commanders2 + commanders3 + commanders4)
+
+    eaglesPlayoffs = (eagles1 + eagles2 + eagles3 + eagles4 + eagles5 + eagles6 + eagles7)
+    eaglesDiv = (eagles1 + eagles2 + eagles3 + eagles4)
+
+    giantsPlayoffs = (giants1 + giants2 + giants3 + giants4 + giants5 + giants6 + giants7)
+    giantsDiv = (giants1 + giants2 + giants3 + giants4)
+
+    bearsPlayoffs = (bears1 + bears2 + bears3 + bears4 + bears5 + bears6 + bears7)
+    bearsDiv = (bears1 + bears2 + bears3 + bears4)
+
+    lionsPlayoffs = (lions1 + lions2 + lions3 + lions4 + lions5 + lions6 + lions7)
+    lionsDiv = (lions1 + lions2 + lions3 + lions4)
+
+    packersPlayoffs = (packers1 + packers2 + packers3 + packers4 + packers5 + packers6 + packers7)
+    packersDiv = (packers1 + packers2 + packers3 + packers4)
+
+    vikingsPlayoffs = (vikings1 + vikings2 + vikings3 + vikings4 + vikings5 + vikings6 + vikings7)
+    vikingsDiv = (vikings1 + vikings2 + vikings3 + vikings4)
+
+    buccaneersPlayoffs = (buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4 + buccaneers5 + buccaneers6 + buccaneers7)
+    buccaneersDiv = (buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4)
+
+    falconsPlayoffs = (falcons1 + falcons2 + falcons3 + falcons4 + falcons5 + falcons6 + falcons7)
+    falconsDiv = (falcons1 + falcons2 + falcons3 + falcons4)
+
+    saintsPlayoffs = (saints1 + saints2 + saints3 + saints4 + saints5 + saints6 + saints7)
+    saintsDiv = (saints1 + saints2 + saints3 + saints4)
+
+    panthersPlayoffs = (panthers1 + panthers2 + panthers3 + panthers4 + panthers5 + panthers6 + panthers7)
+    panthersDiv = (panthers1 + panthers2 + panthers3 + panthers4)
+
+    cardinalsPlayoffs = (cardinals1 + cardinals2 + cardinals3 + cardinals4 + cardinals5 + cardinals6 + cardinals7)
+    cardinalsDiv = (cardinals1 + cardinals2 + cardinals3 + cardinals4)
+
+    ninersPlayoffs = (niners1 + niners2 + niners3 + niners4 + niners5 + niners6 + niners7)
+    ninersDiv = (niners1 + niners2 + niners3 + niners4)
+
+    ramsPlayoffs = (rams1 + rams2 + rams3 + rams4 + rams5 + rams6 + rams7)
+    ramsDiv = (rams1 + rams2 + rams3 + rams4)
+
+    seahawksPlayoffs = (seahawks1 + seahawks2 + seahawks3 + seahawks4 + seahawks5 + seahawks6 + seahawks7)
+    seahawksDiv = (seahawks1 + seahawks2 + seahawks3 + seahawks4)
+
     '''
     print("bills miss playoffs: " + str(billsOut) + "%")
     print("bills win division:  " + str(billsDiv) + "%")
@@ -10370,8 +10367,8 @@ def playoffPercentages():
     print("seahawks 6 seed: " + str((seahawks6 / 100.0)) + "%")
     print("seahawks 7 seed: " + str((seahawks7 / 100.0)) + "%\n")
     '''
-    name_to_id = dict(zip(teamMap['teamName'], teamMap['teamId']))
-
+    
+    '''
     odds_data = []
 
     odds_data.append({
@@ -10820,15 +10817,51 @@ def playoffPercentages():
     })
 
 
-
-
-
-
-
     supabase.table('PlayoffOdds').delete().neq('teamId', -1).execute() # Clear all rows
     supabase.table('PlayoffOdds').insert(odds_data).execute()
+    '''
 
-    print("Playoff odds inserted into Supabase successfully.")
+
+    batch_counts = {
+        'Bills': [billsDiv, billsPlayoffs, bills1, bills2, bills3, bills4, bills5, bills6, bills7],
+        'Dolphins': [dolphinsDiv, dolphinsPlayoffs, dolphins1, dolphins2, dolphins3, dolphins4, dolphins5, dolphins6, dolphins7],
+        'Jets': [jetsDiv, jetsPlayoffs, jets1, jets2, jets3, jets4, jets5, jets6, jets7],
+        'Patriots': [patriotsDiv, patriotsPlayoffs, patriots1, patriots2, patriots3, patriots4, patriots5, patriots6, patriots7],
+        'Bengals': [bengalsDiv, bengalsPlayoffs, bengals1, bengals2, bengals3, bengals4, bengals5, bengals6, bengals7],
+        'Browns': [brownsDiv, brownsPlayoffs, browns1, browns2, browns3, browns4, browns5, browns6, browns7],
+        'Ravens': [ravensDiv, ravensPlayoffs, ravens1, ravens2, ravens3, ravens4, ravens5, ravens6, ravens7],
+        'Steelers': [steelersDiv, steelersPlayoffs, steelers1, steelers2, steelers3, steelers4, steelers5, steelers6, steelers7],
+        'Colts': [coltsDiv, coltsPlayoffs, colts1, colts2, colts3, colts4, colts5, colts6, colts7],
+        'Jaguars': [jaguarsDiv, jaguarsPlayoffs, jaguars1, jaguars2, jaguars3, jaguars4, jaguars5, jaguars6, jaguars7],
+        'Titans': [titansDiv, titansPlayoffs, titans1, titans2, titans3, titans4, titans5, titans6, titans7],
+        'Texans': [texansDiv, texansPlayoffs, texans1, texans2, texans3, texans4, texans5, texans6, texans7],
+        'Chiefs': [chiefsDiv, chiefsPlayoffs, chiefs1, chiefs2, chiefs3, chiefs4, chiefs5, chiefs6, chiefs7],
+        'Broncos': [broncosDiv, broncosPlayoffs, broncos1, broncos2, broncos3, broncos4, broncos5, broncos6, broncos7],
+        'Chargers': [chargersDiv, chargersPlayoffs, chargers1, chargers2, chargers3, chargers4, chargers5, chargers6, chargers7],
+        'Raiders': [raidersDiv, raidersPlayoffs, raiders1, raiders2, raiders3, raiders4, raiders5, raiders6, raiders7],
+        'Cowboys': [cowboysDiv, cowboysPlayoffs, cowboys1, cowboys2, cowboys3, cowboys4, cowboys5, cowboys6, cowboys7],
+        'Commanders': [commandersDiv, commandersPlayoffs, commanders1, commanders2, commanders3, commanders4, commanders5, commanders6, commanders7],
+        'Eagles': [eaglesDiv, eaglesPlayoffs, eagles1, eagles2, eagles3, eagles4, eagles5, eagles6, eagles7],
+        'Giants': [giantsDiv, giantsPlayoffs, giants1, giants2, giants3, giants4, giants5, giants6, giants7],
+        'Bears': [bearsDiv, bearsPlayoffs, bears1, bears2, bears3, bears4, bears5, bears6, bears7],
+        'Lions': [lionsDiv, lionsPlayoffs, lions1, lions2, lions3, lions4, lions5, lions6, lions7],
+        'Packers': [packersDiv, packersPlayoffs, packers1, packers2, packers3, packers4, packers5, packers6, packers7],
+        'Vikings': [vikingsDiv, vikingsPlayoffs, vikings1, vikings2, vikings3, vikings4, vikings5, vikings6, vikings7],
+        'Buccaneers': [buccaneersDiv, buccaneersPlayoffs, buccaneers1, buccaneers2, buccaneers3, buccaneers4, buccaneers5, buccaneers6, buccaneers7],
+        'Falcons': [falconsDiv, falconsPlayoffs, falcons1, falcons2, falcons3, falcons4, falcons5, falcons6, falcons7],
+        'Panthers': [panthersDiv, panthersPlayoffs, panthers1, panthers2, panthers3, panthers4, panthers5, panthers6, panthers7],
+        'Saints': [saintsDiv, saintsPlayoffs, saints1, saints2, saints3, saints4, saints5, saints6, saints7],
+        'Cardinals': [cardinalsDiv, cardinalsPlayoffs, cardinals1, cardinals2, cardinals3, cardinals4, cardinals5, cardinals6, cardinals7],
+        '49ers': [ninersDiv, ninersPlayoffs, niners1, niners2, niners3, niners4, niners5, niners6, niners7],
+        'Rams': [ramsDiv, ramsPlayoffs, rams1, rams2, rams3, rams4, rams5, rams6, rams7],
+        'Seahawks': [seahawksDiv, seahawksPlayoffs, seahawks1, seahawks2, seahawks3, seahawks4, seahawks5, seahawks6, seahawks7],
+    }
+
+    print("Batch ran successfully.")
+
+
+    return batch_counts
+
 
 
 

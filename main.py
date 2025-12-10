@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
-from tiebreakers import playoffPercentages, simulate_odds
+from tiebreakers import playoffPercentages, simulate_odds, name_to_id
 from lines import predict_week_games
 import traceback
 
@@ -15,11 +15,8 @@ TEAMS_CSV = "TeamIDMap.csv"
 # Logging configuration
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("/tmp/app.log"),
-        logging.StreamHandler()
-    ]
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler()]
 )
 logger = logging.getLogger(__name__)
 
@@ -65,17 +62,54 @@ async def root():
     logger.info("GET / called")
     return {"message": "Server is running. Use /update-odds or /calculate-odds."}
 
+
 @app.post("/update-odds")
 async def update_odds():
     logger.info("POST /update-odds called")
     try:
-        results = playoffPercentages()
-        logger.info("playoffPercentages ran successfully")
-        return {"status": "success", "playoff_odds": results}
+        total_sims = 5000
+        batch_size = 50
+        batches = total_sims // batch_size
+
+        # running total accumulator
+        accumulator = {team: [0]*9 for team in name_to_id.keys()}
+
+        for _ in range(batches):
+            # run batch simulations and get counts for that batch
+            batch_counts = playoffPercentages()
+
+            # add batch counts into the running total
+            for team, counts in batch_counts.items():
+                accumulator[team] = [x + y for x, y in zip(accumulator[team], counts)]
+
+        # convert accumulator into odds_data for Supabase
+        odds_data = []
+        for team, counts in accumulator.items():
+            odds_data.append({
+                'teamId': name_to_id[team],
+                'division': counts[0] / batch_size,
+                'playoffs': counts[1] / batch_size,
+                'oneseed': counts[2] / batch_size,
+                'twoseed': counts[3] / batch_size,
+                'threeseed': counts[4] / batch_size,
+                'fourseed': counts[5] / batch_size,
+                'fiveseed': counts[6] / batch_size,
+                'sixseed': counts[7] / batch_size,
+                'sevenseed': counts[8] / batch_size
+            })
+
+        # insert into Supabase once
+        supabase.table('PlayoffOdds').delete().neq('teamId', -1).execute()
+        supabase.table('PlayoffOdds').insert(odds_data).execute()
+
+        logger.info("Playoff odds inserted into Supabase successfully.")
+        return {"status": "success", "playoff_odds": odds_data}
+
     except Exception as e:
         logger.error(f"Error in /update-odds: {str(e)}")
         logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/calculate-odds")
 async def calculate_odds(request: Request):
