@@ -8,14 +8,16 @@ import json
 import base64
 
 # ---------------- CONFIG ----------------
-SEASON_INDEX = 2  # current season
+SEASON_INDEX = 3  # current season
 LOGIT_COEF = 0.165
 LOGIT_INTERCEPT = -0.0170
 GOOGLE_SHEET_NAME = "MML26 Run-Pass and PPP Tracker"  # <-- spreadsheet name
 RP_TRACKER_SHEET_NAME = "S2 PPP"
 RP_TRACKER_SHEET_NAME_S3 = "S3 PPP"
+RP_TRACKER_SHEET_NAME_S4 = "S4 PPP"
 S2TEAMRECORDS_TABLE = "S2TeamRecords"
 S3TEAMRECORDS_TABLE = "S3TeamRecords"
+S4TEAMRECORDS_TABLE = "S4TeamRecords"
 # ---------------------------------------
 
 logger = logging.getLogger(__name__)
@@ -115,7 +117,48 @@ def get_s3_ppp_data():
         logger.exception(f"Error processing Google Sheet data: {e}")
         raise
 
-    logger.info("Successfully loaded S2 PPP data from Google Sheets.")
+    logger.info("Successfully loaded S3 PPP data from Google Sheets.")
+    return data
+
+def get_s4_ppp_data():
+    scope = ["https://spreadsheets.google.com/feeds",
+             "https://www.googleapis.com/auth/drive"]
+
+    creds_b64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_B64")
+    if not creds_b64:
+        raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_B64 environment variable")
+
+    creds_json = base64.b64decode(creds_b64).decode("utf-8")
+    creds_dict = json.loads(creds_json)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+
+    client = gspread.authorize(creds)
+    sheet = client.open(GOOGLE_SHEET_NAME).worksheet(RP_TRACKER_SHEET_NAME_S4)
+    data = pd.DataFrame(sheet.get_all_records())
+
+    logger.debug(f"Sheet columns: {list(data.columns)}")
+
+    try:
+        # Normalize columns
+        data = data.rename(columns={
+            "Team": "Team",
+            "oPPP": "oPPP",
+            "dPPP": "dPPP",
+            "O Poss / Game": "oPoss",
+            "D Poss / Game": "dPoss"
+        })
+
+        if not all(col in data.columns for col in ["Team", "oPPP", "dPPP", "oPoss", "dPoss"]):
+            logger.error("Missing one or more required columns in Google Sheet data!")
+            raise KeyError(f"Columns found: {data.columns}")
+
+        data["poss_per_game"] = data["oPoss"] + data["dPoss"]
+        data.set_index("Team", inplace=True)
+    except Exception as e:
+        logger.exception(f"Error processing Google Sheet data: {e}")
+        raise
+
+    logger.info("Successfully loaded S4 PPP data from Google Sheets.")
     return data
 
 
@@ -144,11 +187,11 @@ def get_s2_win_pcts(supabase_client):
     return win_pcts
 
 def get_s3_win_pcts(supabase_client):
-    """Fetch win percentage from Supabase S2TeamRecords"""
-    logger.info("Fetching Season 2 win percentages from Supabase...")
+    """Fetch win percentage from Supabase S3TeamRecords"""
+    logger.info("Fetching Season 3 win percentages from Supabase...")
     try:
         records = supabase_client.table(S3TEAMRECORDS_TABLE).select("teamId, wins, losses").execute().data
-        logger.info(f"Retrieved {len(records)} records from S2TeamRecords.")
+        logger.info(f"Retrieved {len(records)} records from S3TeamRecords.")
     except Exception as e:
         logger.exception(f"Supabase query failed when fetching S2TeamRecords: {e}")
         raise
@@ -167,16 +210,40 @@ def get_s3_win_pcts(supabase_client):
     return win_pcts
 
 
-def weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s2_win_pcts, s3_win_pcts, week_number):
-    # Season 3 gains +5% every week
-    s3_weight = max(0, min(0.05 * (week_number - 1), 0.80))  # capped at 80%
+def get_s4_win_pcts(supabase_client):
+    """Fetch win percentage from Supabase S4TeamRecords"""
+    logger.info("Fetching Season 4 win percentages from Supabase...")
+    try:
+        records = supabase_client.table(S4TEAMRECORDS_TABLE).select("teamId, wins, losses").execute().data
+        logger.info(f"Retrieved {len(records)} records from S4TeamRecords.")
+    except Exception as e:
+        logger.exception(f"Supabase query failed when fetching S4TeamRecords: {e}")
+        raise
 
+    win_pcts = {}
+    for rec in records:
+        team_id = rec.get("teamId")
+        if not team_id:
+            logger.warning(f"Skipping record with no teamId field: {rec}")
+            continue
+        wins, losses = rec.get("wins", 0), rec.get("losses", 0)
+        total = wins + losses
+        win_pcts[team_id] = wins / total if total > 0 else 0.5
+
+    logger.debug(f"Computed win_pcts for {len(win_pcts)} teams.")
+    return win_pcts
+
+def weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s4_ppp_df, s2_win_pcts, s3_win_pcts, s4_win_pcts, week_number):
+    s4_weight = min(0.05 * week_number, 0.75)
+    # Season 3 gains +5% every week
+    #s3_weight = max(0, min(0.05 * (week_number - 1), 0.80))  # capped at 80%
+    s3_weight = (1 - s4_weight) * 0.7
     # Remaining weight split 1:4 between S1 and S2
-    remaining = 1 - s3_weight
+    remaining = 1 - s3_weight - s4_weight
     s1_weight = remaining * (0.2)   # 20% of remaining
     s2_weight = remaining * (0.8)   # 80% of remaining
 
-    logger.info(f"Blending weights: S1={s1_weight:.2%} | S2={s2_weight:.2%} | S3={s3_weight:.2%}")
+    logger.info(f"Blending weights: S1={s1_weight:.2%} | S2={s2_weight:.2%} | S3={s3_weight:.2%} | S4={s4_weight:.2%}")
 
     blended = {}
     for team_id, s1_data in team_stats.items():
@@ -191,33 +258,39 @@ def weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s2_win_pcts, s3_win_p
             s2_data = s2_ppp_df.loc[lookup_key]
             new_entry = s1_data.copy()
             s3_data = s3_ppp_df.loc[lookup_key]
+            s4_data = s4_ppp_df.loc[lookup_key]
 
             new_entry["oPPP"] = (
                 s1_data["oPPP"] * s1_weight +
                 s2_data["oPPP"] * s2_weight +
-                s3_data["oPPP"] * s3_weight
+                s3_data["oPPP"] * s3_weight +
+                s4_data["oPPP"] * s4_weight
             )
 
             new_entry["dPPP"] = (
                 s1_data["dPPP"] * s1_weight +
                 s2_data["dPPP"] * s2_weight +
-                s3_data["dPPP"] * s3_weight
+                s3_data["dPPP"] * s3_weight +
+                s4_data["dPPP"] * s4_weight
             )
 
             new_entry["poss_per_game"] = (
                 s1_data["poss_per_game"] * s1_weight +
                 s2_data["poss_per_game"] * s2_weight +
-                s3_data["poss_per_game"] * s3_weight
+                s3_data["poss_per_game"] * s3_weight +
+                s4_data["poss_per_game"] * s4_weight
             )
 
             s1_win = s1_data.get("win_pct", 0.5)
             s2_win = s2_win_pcts.get(team_id, 0.5)
             s3_win = s3_win_pcts.get(team_id, 0.5)
+            s4_win = s4_win_pcts.get(team_id, 0.5)
 
             new_entry["win_pct"] = (
                 s1_win * s1_weight +
                 s2_win * s2_weight +
-                s3_win * s3_weight
+                s3_win * s3_weight + 
+                s4_win * s4_weight
             )
 
             blended[team_id] = new_entry
@@ -305,15 +378,17 @@ def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> l
     try:
         s2_ppp_df = get_s2_ppp_data()
         s3_ppp_df = get_s3_ppp_data()
+        s4_ppp_df = get_s4_ppp_data()
         s2_win_pcts = get_s2_win_pcts(supabase_client)
         s3_win_pcts = get_s3_win_pcts(supabase_client)
+        s4_win_pcts = get_s4_win_pcts(supabase_client)
         logger.info("Loaded both S2 PPP data and win_pcts successfully.")
     except Exception as e:
         logger.exception(f"Failed during S2 data loading: {e}")
         raise
 
     try:
-        team_stats = weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s2_win_pcts, s3_win_pcts, week_number)
+        team_stats = weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s4_ppp_df, s2_win_pcts, s3_win_pcts, s4_win_pcts, week_number)
     except Exception as e:
         logger.exception(f"Error blending season stats: {e}")
         raise
