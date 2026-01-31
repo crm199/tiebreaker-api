@@ -1613,7 +1613,7 @@ def isDivRecord2(Team1, Team2):
                     Team1.matchups[i] == 'Patriots'):
                 divMatchups2_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'AFCN'):
-            if (Team1.matchups[i] == 'Bengals' or Team1.matchups[i] == 'Bills' or Team1.matchups[i] == 'Ravens' or
+            if (Team1.matchups[i] == 'Bengals' or Team1.matchups[i] == 'Browns' or Team1.matchups[i] == 'Ravens' or
                     Team1.matchups[i] == 'Steelers'):
                 divMatchups2_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'AFCS'):
@@ -1647,7 +1647,7 @@ def isDivRecord2(Team1, Team2):
                     Team2.matchups[i] == 'Patriots'):
                 divMatchups2_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'AFCN'):
-            if (Team2.matchups[i] == 'Bengals' or Team2.matchups[i] == 'Bills' or Team2.matchups[i] == 'Ravens' or
+            if (Team2.matchups[i] == 'Bengals' or Team2.matchups[i] == 'Browns' or Team2.matchups[i] == 'Ravens' or
                     Team2.matchups[i] == 'Steelers'):
                 divMatchups2_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'AFCS'):
@@ -1708,7 +1708,7 @@ def isDivRecord3(Team1, Team2, Team3):
                     Team1.matchups[i] == 'Patriots'):
                 divMatchups3_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'AFCN'):
-            if (Team1.matchups[i] == 'Bengals' or Team1.matchups[i] == 'Bills' or Team1.matchups[i] == 'Ravens' or
+            if (Team1.matchups[i] == 'Bengals' or Team1.matchups[i] == 'Browns' or Team1.matchups[i] == 'Ravens' or
                     Team1.matchups[i] == 'Steelers'):
                 divMatchups3_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'AFCS'):
@@ -1743,7 +1743,7 @@ def isDivRecord3(Team1, Team2, Team3):
                     Team2.matchups[i] == 'Patriots'):
                 divMatchups3_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'AFCN'):
-            if (Team2.matchups[i] == 'Bengals' or Team2.matchups[i] == 'Bills' or Team2.matchups[i] == 'Ravens' or
+            if (Team2.matchups[i] == 'Bengals' or Team2.matchups[i] == 'Browns' or Team2.matchups[i] == 'Ravens' or
                     Team2.matchups[i] == 'Steelers'):
                 divMatchups3_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'AFCS'):
@@ -1778,7 +1778,7 @@ def isDivRecord3(Team1, Team2, Team3):
                     Team3.matchups[i] == 'Patriots'):
                 divMatchups3_3.append(Team3.results[i])
         elif (Team3.getDivision() == 'AFCN'):
-            if (Team3.matchups[i] == 'Bengals' or Team3.matchups[i] == 'Bills' or Team3.matchups[i] == 'Ravens' or
+            if (Team3.matchups[i] == 'Bengals' or Team3.matchups[i] == 'Browns' or Team3.matchups[i] == 'Ravens' or
                     Team3.matchups[i] == 'Steelers'):
                 divMatchups3_2.append(Team3.results[i])
         elif (Team3.getDivision() == 'AFCS'):
@@ -1883,7 +1883,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
                     Team1.matchups[i] == 'Patriots'):
                 divMatchups4_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'AFCN'):
-            if (Team1.matchups[i] == 'Bengals' or Team1.matchups[i] == 'Bills' or Team1.matchups[i] == 'Ravens' or
+            if (Team1.matchups[i] == 'Bengals' or Team1.matchups[i] == 'Browns' or Team1.matchups[i] == 'Ravens' or
                     Team1.matchups[i] == 'Steelers'):
                 divMatchups4_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'AFCS'):
@@ -1918,7 +1918,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
                     Team2.matchups[i] == 'Patriots'):
                 divMatchups4_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'AFCN'):
-            if (Team2.matchups[i] == 'Bengals' or Team2.matchups[i] == 'Bills' or Team2.matchups[i] == 'Ravens' or
+            if (Team2.matchups[i] == 'Bengals' or Team2.matchups[i] == 'Browns' or Team2.matchups[i] == 'Ravens' or
                     Team2.matchups[i] == 'Steelers'):
                 divMatchups4_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'AFCS'):
@@ -1952,7 +1952,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
                     Team3.matchups[i] == 'Patriots'):
                 divMatchups4_3.append(Team3.results[i])
         elif (Team3.getDivision() == 'AFCN'):
-            if (Team3.matchups[i] == 'Bengals' or Team3.matchups[i] == 'Bills' or Team3.matchups[i] == 'Ravens' or
+            if (Team3.matchups[i] == 'Bengals' or Team3.matchups[i] == 'Browns' or Team3.matchups[i] == 'Ravens' or
                     Team3.matchups[i] == 'Steelers'):
                 divMatchups4_3.append(Team3.results[i])
         elif (Team3.getDivision() == 'AFCS'):
@@ -1987,7 +1987,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
                     Team4.matchups[i] == 'Patriots'):
                 divMatchups4_4.append(Team4.results[i])
         elif (Team4.getDivision() == 'AFCN'):
-            if (Team4.matchups[i] == 'Bengals' or Team4.matchups[i] == 'Bills' or Team4.matchups[i] == 'Ravens' or
+            if (Team4.matchups[i] == 'Bengals' or Team4.matchups[i] == 'Browns' or Team4.matchups[i] == 'Ravens' or
                     Team4.matchups[i] == 'Steelers'):
                 divMatchups4_4.append(Team4.results[i])
         elif (Team4.getDivision() == 'AFCS'):
@@ -4334,7 +4334,7 @@ def tiebreak2(Team1, Team2):
                 #print (Team1.getName() + " wins via div h2h over " + Team2.getName())
                 result = [Team1, Team2]
             else:
-                #print (Team1.getName() + " wins via div h2h over " + Team2.getName())
+                #print (Team2.getName() + " wins via div h2h over " + Team1.getName())
                 result = [Team2, Team1]
 
         elif (isDivRecord2(Team1, Team2)):
