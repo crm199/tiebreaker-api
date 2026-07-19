@@ -8206,7 +8206,8 @@ def trackScenarios(playoffs, remSchedules, Team, spot):
 
 name_to_id = dict(zip(teamMap['teamName'], teamMap['teamId']))
 
-def playoffPercentages():
+def playoffPercentages(games_df=None):
+    global df
     bills1, bills2, bills3, bills4, bills5, bills6, bills7, billsOut = 0, 0, 0, 0, 0, 0, 0, 0
     dolphins1, dolphins2, dolphins3, dolphins4, dolphins5, dolphins6, dolphins7, dolphinsOut = 0, 0, 0, 0, 0, 0, 0, 0
     jets1, jets2, jets3, jets4, jets5, jets6, jets7, jetsOut = 0, 0, 0, 0, 0, 0, 0, 0
@@ -8241,6 +8242,11 @@ def playoffPercentages():
     seahawks1, seahawks2, seahawks3, seahawks4, seahawks5, seahawks6, seahawks7, seahawksOut = 0, 0, 0, 0, 0, 0, 0, 0
 
     clearGlobals()
+    if games_df is not None:
+        # Keep the team objects created by clearGlobals, but run this batch against
+        # the caller's hypothetical schedule instead of the persisted schedule.
+        df = games_df.copy()
+        fillSchedules(df)
 
     playoffsList = []
     remSchedules= []
@@ -10866,7 +10872,8 @@ def playoffPercentages():
 
 
     
-def simulate_odds(games_json):
+# Retained temporarily for reference; simulate_odds below is the active batched implementation.
+def _simulate_odds_legacy(games_json):
     # Convert JSON to DataFrame
     games_df = pd.DataFrame(games_json)
 
@@ -12771,6 +12778,47 @@ def simulate_odds(games_json):
         'sevenseed': locals()[f'{team.lower()}7'] / 10.0
     } for team in ['Bills', 'Dolphins', 'Jets', 'Patriots', 'Bengals', 'Browns', 'Ravens', 'Steelers', 'Colts', 'Jaguars', 'Titans', 'Texans', 'Broncos', 'Chiefs', 'Chargers', 'Raiders', 'Commanders', 'Cowboys', 'Giants', 'Eagles', 'Bears', 'Lions', 'Packers', 'Vikings', 'Buccaneers', 'Falcons', 'Saints', 'Panthers', 'Cardinals', 'Niners', 'Rams', 'Seahawks']])       
         
+
+def simulate_odds(games_json, total_sims=1000, batch_size=50):
+    """Calculate hypothetical playoff odds using the same batched engine as update_odds."""
+    if total_sims <= 0 or batch_size <= 0 or total_sims % batch_size:
+        raise ValueError("total_sims must be a positive multiple of batch_size")
+
+    games_df = pd.DataFrame(games_json)
+    required_columns = {'homeTeamId', 'awayTeamId', 'homeScore', 'awayScore'}
+    missing_columns = required_columns - set(games_df.columns)
+    if missing_columns:
+        raise ValueError(f"Missing required game fields: {', '.join(sorted(missing_columns))}")
+
+    id_to_name = dict(zip(teamMap['teamId'], teamMap['teamName']))
+    games_df['homeTeam'] = games_df['homeTeamId'].map(id_to_name)
+    games_df['awayTeam'] = games_df['awayTeamId'].map(id_to_name)
+    if games_df[['homeTeam', 'awayTeam']].isna().any().any():
+        raise ValueError("The schedule contains an unknown team ID")
+    games_df = games_df.drop(columns=['homeTeamId', 'awayTeamId'])
+
+    accumulator = {team: [0] * 9 for team in name_to_id}
+    for _ in range(total_sims // batch_size):
+        batch_counts = playoffPercentages(games_df)
+        for team, counts in batch_counts.items():
+            accumulator[team] = [current + count for current, count in zip(accumulator[team], counts)]
+
+    return [
+        {
+            'teamId': name_to_id[team],
+            'division': counts[0] / batch_size,
+            'playoffs': counts[1] / batch_size,
+            'oneseed': counts[2] / batch_size,
+            'twoseed': counts[3] / batch_size,
+            'threeseed': counts[4] / batch_size,
+            'fourseed': counts[5] / batch_size,
+            'fiveseed': counts[6] / batch_size,
+            'sixseed': counts[7] / batch_size,
+            'sevenseed': counts[8] / batch_size,
+        }
+        for team, counts in accumulator.items()
+    ]
+
 
 #playoffStandings()    
 #divisionStandings()
