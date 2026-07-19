@@ -88,15 +88,15 @@ async def update_odds():
         for team, counts in accumulator.items():
             odds_data.append({
                 'teamId': name_to_id[team],
-                'division': counts[0] / batch_size,
-                'playoffs': counts[1] / batch_size,
-                'oneseed': counts[2] / batch_size,
-                'twoseed': counts[3] / batch_size,
-                'threeseed': counts[4] / batch_size,
-                'fourseed': counts[5] / batch_size,
-                'fiveseed': counts[6] / batch_size,
-                'sixseed': counts[7] / batch_size,
-                'sevenseed': counts[8] / batch_size
+                'division': counts[0] * 100 / total_sims,
+                'playoffs': counts[1] * 100 / total_sims,
+                'oneseed': counts[2] * 100 / total_sims,
+                'twoseed': counts[3] * 100 / total_sims,
+                'threeseed': counts[4] * 100 / total_sims,
+                'fourseed': counts[5] * 100 / total_sims,
+                'fiveseed': counts[6] * 100 / total_sims,
+                'sixseed': counts[7] * 100 / total_sims,
+                'sevenseed': counts[8] * 100 / total_sims
             })
 
         # insert into Supabase once
