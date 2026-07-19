@@ -8206,8 +8206,10 @@ def trackScenarios(playoffs, remSchedules, Team, spot):
 
 name_to_id = dict(zip(teamMap['teamName'], teamMap['teamId']))
 
-def playoffPercentages(games_df=None):
+def playoffPercentages(games_df=None, simulations_per_batch=50):
     global df
+    if simulations_per_batch <= 0:
+        raise ValueError("simulations_per_batch must be positive")
     bills1, bills2, bills3, bills4, bills5, bills6, bills7, billsOut = 0, 0, 0, 0, 0, 0, 0, 0
     dolphins1, dolphins2, dolphins3, dolphins4, dolphins5, dolphins6, dolphins7, dolphinsOut = 0, 0, 0, 0, 0, 0, 0, 0
     jets1, jets2, jets3, jets4, jets5, jets6, jets7, jetsOut = 0, 0, 0, 0, 0, 0, 0, 0
@@ -8250,7 +8252,7 @@ def playoffPercentages(games_df=None):
 
     playoffsList = []
     remSchedules= []
-    for i in range(50):
+    for i in range(simulations_per_batch):
         remSchedule = []
         for i in range(17):
             if (not Bills.results[i] == 'W' and not Bills.results[i] == 'L' and not Bills.results[i] == 'T'):
@@ -12797,24 +12799,28 @@ def simulate_odds(games_json, total_sims=1000, batch_size=50):
         raise ValueError("The schedule contains an unknown team ID")
     games_df = games_df.drop(columns=['homeTeamId', 'awayTeamId'])
 
+    has_unplayed_games = ((games_df['homeScore'] == 0) & (games_df['awayScore'] == 0)).any()
+    effective_total_sims = total_sims if has_unplayed_games else 1
+    effective_batch_size = batch_size if has_unplayed_games else 1
+
     accumulator = {team: [0] * 9 for team in name_to_id}
-    for _ in range(total_sims // batch_size):
-        batch_counts = playoffPercentages(games_df)
+    for _ in range(effective_total_sims // effective_batch_size):
+        batch_counts = playoffPercentages(games_df, simulations_per_batch=effective_batch_size)
         for team, counts in batch_counts.items():
             accumulator[team] = [current + count for current, count in zip(accumulator[team], counts)]
 
     return [
         {
             'teamId': name_to_id[team],
-            'division': counts[0] * 100 / total_sims,
-            'playoffs': counts[1] * 100 / total_sims,
-            'oneseed': counts[2] * 100 / total_sims,
-            'twoseed': counts[3] * 100 / total_sims,
-            'threeseed': counts[4] * 100 / total_sims,
-            'fourseed': counts[5] * 100 / total_sims,
-            'fiveseed': counts[6] * 100 / total_sims,
-            'sixseed': counts[7] * 100 / total_sims,
-            'sevenseed': counts[8] * 100 / total_sims,
+            'division': counts[0] * 100 / effective_total_sims,
+            'playoffs': counts[1] * 100 / effective_total_sims,
+            'oneseed': counts[2] * 100 / effective_total_sims,
+            'twoseed': counts[3] * 100 / effective_total_sims,
+            'threeseed': counts[4] * 100 / effective_total_sims,
+            'fourseed': counts[5] * 100 / effective_total_sims,
+            'fiveseed': counts[6] * 100 / effective_total_sims,
+            'sixseed': counts[7] * 100 / effective_total_sims,
+            'sevenseed': counts[8] * 100 / effective_total_sims,
         }
         for team, counts in accumulator.items()
     ]
