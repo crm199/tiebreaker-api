@@ -1,4 +1,5 @@
 import logging
+import json
 import pandas as pd
 from supabase import create_client, Client
 from fastapi import FastAPI, HTTPException, Request
@@ -122,7 +123,9 @@ async def calculate_odds(request: Request):
         # Pass the JSON data directly to simulate_odds
         results = simulate_odds(json_data)
         logger.info("simulate_odds ran successfully")
-        return {"status": "success", "playoff_odds": results}
+        response_payload = {"status": "success", "playoff_odds": results}
+        logger.info("Returning playoff seeding JSON: %s", json.dumps(response_payload))
+        return response_payload
     except Exception as e:
         logger.error(f"Error in /calculate-odds: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
