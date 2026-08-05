@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 from tiebreakers import playoffPercentages, simulate_odds, name_to_id
 from lines import predict_week_games
+from gotw_lines import generate_gotw_lines
 import traceback
 
 TEAMS_CSV = "TeamIDMap.csv"
@@ -56,6 +57,9 @@ class ScheduleRequest(BaseModel):
 
 class WeekRequest(BaseModel):
     week_number: int
+
+class GOTWLinesRequest(BaseModel):
+    scheduleId: int
 
 # Routes
 @app.get("/")
@@ -130,6 +134,7 @@ async def calculate_odds(request: Request):
         logger.error(f"Error in /calculate-odds: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
     
+    
 @app.post("/predict-lines")
 async def predict_lines(week_req: WeekRequest):
     logger.info(f"POST /predict-lines called for week {week_req.week_number}")
@@ -154,3 +159,20 @@ async def predict_lines(week_req: WeekRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+@app.post("/gotw-lines")
+async def gotw_lines(request: GOTWLinesRequest):
+    logger.info(f"POST /gotw-lines called for scheduleId {request.scheduleId}")
+
+    try:
+        lines = generate_gotw_lines(request.scheduleId)
+
+        return {
+            "status": "success",
+            "lines": lines
+        }
+
+    except Exception as e:
+        logger.error(f"Error in /gotw-lines: {str(e)}")
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=str(e))
