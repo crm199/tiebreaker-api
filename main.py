@@ -137,28 +137,17 @@ async def calculate_odds(request: Request):
     
 @app.post("/predict-lines")
 async def predict_lines(week_req: WeekRequest):
-    logger.info(f"POST /predict-lines called for week {week_req.week_number}")
+    logger.info("POST /predict-lines called for week %s", week_req.week_number)
     try:
-        team_df = pd.read_csv("TeamIDMap.csv")
-        team_stats = {
-            row["ID"]: {
-                "Team": row["Team"],
-                "oPPP": row["oPPP"],
-                "dPPP": row["dPPP"],
-                "poss_per_game": row["poss_per_game"],
-                "win_pct": row["win_pct"],
-                "avg_opp_ppp_diff": row["avg_opp_ppp_diff"]
-            }
-            for _, row in team_df.iterrows()
-        }
-        logger.info(f"Loaded team stats for {len(team_stats)} teams")
-        predictions = predict_week_games(week_req.week_number, team_stats, supabase)
-        logger.info(f"Predictions generated for week {week_req.week_number}")
+        predictions = predict_week_games(
+            week_req.week_number,
+            supabase_client=supabase,
+        )
         return {"status": "success", "predictions": predictions}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
+    except Exception as exc:
+        logger.exception("Unable to generate lines")
+        raise HTTPException(status_code=500, detail=str(exc))
+    
 
 @app.post("/gotw-lines")
 async def gotw_lines(request: GOTWLinesRequest):

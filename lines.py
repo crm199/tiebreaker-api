@@ -1,520 +1,471 @@
-import numpy as np
-import pandas as pd
 import logging
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+import math
 import os
-import json
-import base64
+from collections import defaultdict
+from typing import Any
 
-# ---------------- CONFIG ----------------
-SEASON_INDEX = 4  # current season
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
+from supabase import Client, create_client
+
+# -------------------------------------------------------------------
+# Configuration
+# -------------------------------------------------------------------
+
+SUPABASE_URL = os.environ["SUPABASE_URL"]
+SUPABASE_SERVICE_ROLE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
 LOGIT_COEF = 0.165
 LOGIT_INTERCEPT = -0.0170
-GOOGLE_SHEET_NAME = "MML26 Run-Pass and PPP Tracker"  # <-- spreadsheet name
-RP_TRACKER_SHEET_NAME = "S2 PPP"
-RP_TRACKER_SHEET_NAME_S3 = "S3 PPP"
-RP_TRACKER_SHEET_NAME_S4 = "S4 PPP"
-RP_TRACKER_SHEET_NAME_S5 = "S5 PPP"
-S2TEAMRECORDS_TABLE = "S2TeamRecords"
-S3TEAMRECORDS_TABLE = "S3TeamRecords"
-S4TEAMRECORDS_TABLE = "S4TeamRecords"
-S5TEAMRECORDS_TABLE = "S5TeamRecords"
-# ---------------------------------------
 
+# WeeklyOdds stores a positive value when the HOME team is favored.
+# The Discord bot displays 0.5 as: Home Team (-0.5).
+DEFAULT_HOME_SPREAD = 0.5
+DEFAULT_TOTAL = 60.5
+
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-handler = logging.StreamHandler()
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-handler.setFormatter(formatter)
-if not logger.hasHandlers():
-    logger.addHandler(handler)
 
 
-def round_half(x: float) -> float:
-    """Round to nearest 0.5, always ending in .5"""
-    x = round(x * 2) / 2.0
-    if x == int(x):
-        x += 0.5
-    return x
+# -------------------------------------------------------------------
+# General helpers
+# -------------------------------------------------------------------
+
+def number(row: dict[str, Any], field: str) -> float:
+    """Safely read a numeric database value."""
+    return float(row.get(field) or 0)
 
 
-def get_s2_ppp_data():
-    scope = ["https://spreadsheets.google.com/feeds",
-             "https://www.googleapis.com/auth/drive"]
-
-    creds_b64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_B64")
-    if not creds_b64:
-        raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_B64 environment variable")
-
-    creds_json = base64.b64decode(creds_b64).decode("utf-8")
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-
-    client = gspread.authorize(creds)
-    sheet = client.open(GOOGLE_SHEET_NAME).worksheet(RP_TRACKER_SHEET_NAME)
-    data = pd.DataFrame(sheet.get_all_records())
-
-    logger.debug(f"Sheet columns: {list(data.columns)}")
-
-    try:
-        # Normalize columns
-        data = data.rename(columns={
-            "Team": "Team",
-            "oPPP": "oPPP",
-            "dPPP": "dPPP",
-            "O Poss / Game": "oPoss",
-            "D Poss / Game": "dPoss"
-        })
-
-        if not all(col in data.columns for col in ["Team", "oPPP", "dPPP", "oPoss", "dPoss"]):
-            logger.error("Missing one or more required columns in Google Sheet data!")
-            raise KeyError(f"Columns found: {data.columns}")
-
-        data["poss_per_game"] = data["oPoss"] + data["dPoss"]
-        data.set_index("Team", inplace=True)
-    except Exception as e:
-        logger.exception(f"Error processing Google Sheet data: {e}")
-        raise
-
-    logger.info("Successfully loaded S2 PPP data from Google Sheets.")
-    return data
-
-def get_s3_ppp_data():
-    scope = ["https://spreadsheets.google.com/feeds",
-             "https://www.googleapis.com/auth/drive"]
-
-    creds_b64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_B64")
-    if not creds_b64:
-        raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_B64 environment variable")
-
-    creds_json = base64.b64decode(creds_b64).decode("utf-8")
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-
-    client = gspread.authorize(creds)
-    sheet = client.open(GOOGLE_SHEET_NAME).worksheet(RP_TRACKER_SHEET_NAME_S3)
-    data = pd.DataFrame(sheet.get_all_records())
-
-    logger.debug(f"Sheet columns: {list(data.columns)}")
-
-    try:
-        # Normalize columns
-        data = data.rename(columns={
-            "Team": "Team",
-            "oPPP": "oPPP",
-            "dPPP": "dPPP",
-            "O Poss / Game": "oPoss",
-            "D Poss / Game": "dPoss"
-        })
-
-        if not all(col in data.columns for col in ["Team", "oPPP", "dPPP", "oPoss", "dPoss"]):
-            logger.error("Missing one or more required columns in Google Sheet data!")
-            raise KeyError(f"Columns found: {data.columns}")
-
-        data["poss_per_game"] = data["oPoss"] + data["dPoss"]
-        data.set_index("Team", inplace=True)
-    except Exception as e:
-        logger.exception(f"Error processing Google Sheet data: {e}")
-        raise
-
-    logger.info("Successfully loaded S3 PPP data from Google Sheets.")
-    return data
-
-def get_s4_ppp_data():
-    scope = ["https://spreadsheets.google.com/feeds",
-             "https://www.googleapis.com/auth/drive"]
-
-    creds_b64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_B64")
-    if not creds_b64:
-        raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_B64 environment variable")
-
-    creds_json = base64.b64decode(creds_b64).decode("utf-8")
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-
-    client = gspread.authorize(creds)
-    sheet = client.open(GOOGLE_SHEET_NAME).worksheet(RP_TRACKER_SHEET_NAME_S4)
-    data = pd.DataFrame(sheet.get_all_records())
-
-    logger.debug(f"Sheet columns: {list(data.columns)}")
-
-    try:
-        # Normalize columns
-        data = data.rename(columns={
-            "Team": "Team",
-            "oPPP": "oPPP",
-            "dPPP": "dPPP",
-            "O Poss / Game": "oPoss",
-            "D Poss / Game": "dPoss"
-        })
-
-        if not all(col in data.columns for col in ["Team", "oPPP", "dPPP", "oPoss", "dPoss"]):
-            logger.error("Missing one or more required columns in Google Sheet data!")
-            raise KeyError(f"Columns found: {data.columns}")
-
-        data["poss_per_game"] = data["oPoss"] + data["dPoss"]
-        data.set_index("Team", inplace=True)
-    except Exception as e:
-        logger.exception(f"Error processing Google Sheet data: {e}")
-        raise
-
-    logger.info("Successfully loaded S4 PPP data from Google Sheets.")
-    return data
-
-def get_s5_ppp_data():
-    scope = ["https://spreadsheets.google.com/feeds",
-             "https://www.googleapis.com/auth/drive"]
-
-    creds_b64 = os.getenv("GOOGLE_SERVICE_ACCOUNT_B64")
-    if not creds_b64:
-        raise ValueError("Missing GOOGLE_SERVICE_ACCOUNT_B64 environment variable")
-
-    creds_json = base64.b64decode(creds_b64).decode("utf-8")
-    creds_dict = json.loads(creds_json)
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-
-    client = gspread.authorize(creds)
-    sheet = client.open(GOOGLE_SHEET_NAME).worksheet(RP_TRACKER_SHEET_NAME_S5)
-    data = pd.DataFrame(sheet.get_all_records())
-
-    logger.debug(f"Sheet columns: {list(data.columns)}")
-
-    try:
-        # Normalize columns
-        data = data.rename(columns={
-            "Team": "Team",
-            "oPPP": "oPPP",
-            "dPPP": "dPPP",
-            "O Poss / Game": "oPoss",
-            "D Poss / Game": "dPoss"
-        })
-
-        if not all(col in data.columns for col in ["Team", "oPPP", "dPPP", "oPoss", "dPoss"]):
-            logger.error("Missing one or more required columns in Google Sheet data!")
-            raise KeyError(f"Columns found: {data.columns}")
-
-        data["poss_per_game"] = data["oPoss"] + data["dPoss"]
-        data.set_index("Team", inplace=True)
-    except Exception as e:
-        logger.exception(f"Error processing Google Sheet data: {e}")
-        raise
-
-    logger.info("Successfully loaded S5 PPP data from Google Sheets.")
-    return data
+def round_half(value: float) -> float:
+    """Round to a half-point line, avoiding whole numbers."""
+    value = round(value * 2) / 2.0
+    return value + 0.5 if value == int(value) else value
 
 
-def get_s2_win_pcts(supabase_client):
-    """Fetch win percentage from Supabase S2TeamRecords"""
-    logger.info("Fetching Season 2 win percentages from Supabase...")
-    try:
-        records = supabase_client.table(S2TEAMRECORDS_TABLE).select("teamId, wins, losses").execute().data
-        logger.info(f"Retrieved {len(records)} records from S2TeamRecords.")
-    except Exception as e:
-        logger.exception(f"Supabase query failed when fetching S2TeamRecords: {e}")
-        raise
+def current_season_index(client: Client) -> int:
+    """Find the newest scheduled season automatically."""
+    rows = (
+        client.table("Games")
+        .select("seasonIndex")
+        .order("seasonIndex", desc=True)
+        .limit(1)
+        .execute()
+        .data
+        or []
+    )
 
-    win_pcts = {}
-    for rec in records:
-        team_id = rec.get("teamId")
-        if not team_id:
-            logger.warning(f"Skipping record with no teamId field: {rec}")
-            continue
-        wins, losses = rec.get("wins", 0), rec.get("losses", 0)
-        total = wins + losses
-        win_pcts[team_id] = wins / total if total > 0 else 0.5
+    if not rows:
+        raise RuntimeError("No Games rows found; cannot determine current season.")
 
-    logger.debug(f"Computed win_pcts for {len(win_pcts)} teams.")
-    return win_pcts
-
-def get_s3_win_pcts(supabase_client):
-    """Fetch win percentage from Supabase S3TeamRecords"""
-    logger.info("Fetching Season 3 win percentages from Supabase...")
-    try:
-        records = supabase_client.table(S3TEAMRECORDS_TABLE).select("teamId, wins, losses").execute().data
-        logger.info(f"Retrieved {len(records)} records from S3TeamRecords.")
-    except Exception as e:
-        logger.exception(f"Supabase query failed when fetching S3TeamRecords: {e}")
-        raise
-
-    win_pcts = {}
-    for rec in records:
-        team_id = rec.get("teamId")
-        if not team_id:
-            logger.warning(f"Skipping record with no teamId field: {rec}")
-            continue
-        wins, losses = rec.get("wins", 0), rec.get("losses", 0)
-        total = wins + losses
-        win_pcts[team_id] = wins / total if total > 0 else 0.5
-
-    logger.debug(f"Computed win_pcts for {len(win_pcts)} teams.")
-    return win_pcts
+    return int(rows[0]["seasonIndex"])
 
 
-def get_s4_win_pcts(supabase_client):
-    """Fetch win percentage from Supabase S4TeamRecords"""
-    logger.info("Fetching Season 4 win percentages from Supabase...")
-    try:
-        records = supabase_client.table(S4TEAMRECORDS_TABLE).select("teamId, wins, losses").execute().data
-        logger.info(f"Retrieved {len(records)} records from S4TeamRecords.")
-    except Exception as e:
-        logger.exception(f"Supabase query failed when fetching S4TeamRecords: {e}")
-        raise
+def season_weights(current_season: int, week_number: int) -> dict[int, float]:
+    """
+    Weight seasons dynamically.
 
-    win_pcts = {}
-    for rec in records:
-        team_id = rec.get("teamId")
-        if not team_id:
-            logger.warning(f"Skipping record with no teamId field: {rec}")
-            continue
-        wins, losses = rec.get("wins", 0), rec.get("losses", 0)
-        total = wins + losses
-        win_pcts[team_id] = wins / total if total > 0 else 0.5
+    - Season 1: 100% Season 1.
+    - Later seasons: current season gains 5% after each completed week,
+      capped at 75%.
+    - The immediately prior season gets 75% of the remaining weight,
+      then the next-oldest gets 75% of what remains, etc.
+    - Season 1 receives the final remaining weight.
+    """
+    if current_season < 0:
+        raise ValueError("seasonIndex cannot be negative.")
 
-    logger.debug(f"Computed win_pcts for {len(win_pcts)} teams.")
-    return win_pcts
+    if current_season == 0:
+        return {0: 1.0}
 
-def get_s5_win_pcts(supabase_client):
-    """Fetch win percentage from Supabase S5TeamRecords"""
-    logger.info("Fetching Season 5 win percentages from Supabase...")
-    try:
-        records = supabase_client.table(S5TEAMRECORDS_TABLE).select("teamId, wins, losses").execute().data
-        logger.info(f"Retrieved {len(records)} records from S5TeamRecords.")
-    except Exception as e:
-        logger.exception(f"Supabase query failed when fetching S5TeamRecords: {e}")
-        raise
+    # Lines are made before the requested week's games are played.
+    # Week 1 therefore has 0% current-season data, Week 2 has 5%, etc.
+    completed_weeks = max(week_number - 1, 0)
+    current_weight = min(0.05 * completed_weeks, 0.75)
 
-    win_pcts = {}
-    for rec in records:
-        team_id = rec.get("teamId")
-        if not team_id:
-            logger.warning(f"Skipping record with no teamId field: {rec}")
-            continue
-        wins, losses = rec.get("wins", 0), rec.get("losses", 0)
-        total = wins + losses
-        win_pcts[team_id] = wins / total if total > 0 else 0.5
+    weights = {current_season: current_weight}
+    remaining = 1.0 - current_weight
 
-    logger.debug(f"Computed win_pcts for {len(win_pcts)} teams.")
-    return win_pcts
+    for season in range(current_season - 1, 0, -1):
+        weight = remaining * 0.75
+        weights[season] = weight
+        remaining -= weight
+
+    weights[0] = remaining
+    return weights
 
 
-def weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s4_ppp_df, s5_ppp_df, s2_win_pcts, s3_win_pcts, s4_win_pcts, s5_win_pcts, week_number):
-    s5_weight = min(0.05 * week_number, 0.75)
-    # Season 5 gains +5% every week
-    s4_weight = (1 - s5_weight) * 0.6
-    s3_weight = (1 - s4_weight - s5_weight) * 0.6
-    # Remaining weight split 1:4 between S1 and S2
-    remaining = 1 - s3_weight - s4_weight - s5_weight
-    s1_weight = remaining * (0.2)   # 20% of remaining
-    s2_weight = remaining * (0.8)   # 80% of remaining
+# -------------------------------------------------------------------
+# Supabase data loading
+# -------------------------------------------------------------------
 
-    logger.info(f"Blending weights: S1={s1_weight:.2%} | S2={s2_weight:.2%} | S3={s3_weight:.2%} | S4={s4_weight:.2%} | S5={s5_weight:.2%}")
+def fetch_team_names(client: Client) -> dict[int, str]:
+    rows = client.table("Teams").select("teamId,displayName").execute().data or []
 
-    blended = {}
-    for team_id, s1_data in team_stats.items():
-        lookup_key = team_id if team_id in s2_ppp_df.index else s1_data.get("Team")
+    return {
+        int(row["teamId"]): row.get("displayName") or f"Team {row['teamId']}"
+        for row in rows
+    }
 
-        if lookup_key not in s2_ppp_df.index:
-            logger.warning(f"No S2 PPP data found for {lookup_key}, using only S1 values.")
-            blended[team_id] = s1_data
+
+def fetch_season_stats(
+    client: Client,
+    season_index: int,
+    through_week_index: int | None = None,
+) -> dict[int, dict[str, float]]:
+    """
+    Build per-team season ratings from PPP and TeamRecords.
+
+    Current-season data is limited to completed weeks. Historical seasons
+    use their complete data.
+    """
+    ppp_query = (
+        client.table("PPP")
+        .select(
+            "teamId,weekIndex,isSimmed,"
+            "offPoss,defPoss,"
+            "offTDs,offFGsMade,"
+            "defTDs,defFGsMade"
+        )
+        .eq("seasonIndex", season_index)
+    )
+
+    if through_week_index is not None:
+        ppp_query = ppp_query.lte("weekIndex", through_week_index)
+
+    ppp_rows = ppp_query.execute().data or []
+
+    totals: dict[int, dict[str, float]] = defaultdict(lambda: defaultdict(float))
+
+    for row in ppp_rows:
+        # Simmed games should not influence the betting model.
+        if row.get("isSimmed") is True:
             continue
 
-        try:
-            s2_data = s2_ppp_df.loc[lookup_key]
-            new_entry = s1_data.copy()
-            s3_data = s3_ppp_df.loc[lookup_key]
-            s4_data = s4_ppp_df.loc[lookup_key]
-            s5_data = s5_ppp_df.loc[lookup_key]
+        team_id = int(row["teamId"])
 
-            new_entry["oPPP"] = (
-                s1_data["oPPP"] * s1_weight +
-                s2_data["oPPP"] * s2_weight +
-                s3_data["oPPP"] * s3_weight +
-                s4_data["oPPP"] * s4_weight +
-                s5_data["oPPP"] * s5_weight
-            )
+        for field in (
+            "offPoss",
+            "defPoss",
+            "offTDs",
+            "offFGsMade",
+            "defTDs",
+            "defFGsMade",
+        ):
+            totals[team_id][field] += number(row, field)
 
-            new_entry["dPPP"] = (
-                s1_data["dPPP"] * s1_weight +
-                s2_data["dPPP"] * s2_weight +
-                s3_data["dPPP"] * s3_weight +
-                s4_data["dPPP"] * s4_weight +
-                s5_data["dPPP"] * s5_weight
-            )
+        totals[team_id]["games"] += 1
 
-            new_entry["poss_per_game"] = (
-                s1_data["poss_per_game"] * s1_weight +
-                s2_data["poss_per_game"] * s2_weight +
-                s3_data["poss_per_game"] * s3_weight +
-                s4_data["poss_per_game"] * s4_weight +
-                s5_data["poss_per_game"] * s5_weight
-            )
+    stats: dict[int, dict[str, float]] = {}
 
-            s1_win = s1_data.get("win_pct", 0.5)
-            s2_win = s2_win_pcts.get(team_id, 0.5)
-            s3_win = s3_win_pcts.get(team_id, 0.5)
-            s4_win = s4_win_pcts.get(team_id, 0.5)
-            s5_win = s5_win_pcts.get(team_id, 0.5)
-            
-            new_entry["win_pct"] = (
-                s1_win * s1_weight +
-                s2_win * s2_weight +
-                s3_win * s3_weight + 
-                s4_win * s4_weight +
-                s5_win * s5_weight
-            )
+    for team_id, total in totals.items():
+        if total["offPoss"] <= 0 or total["defPoss"] <= 0:
+            continue
 
-            blended[team_id] = new_entry
-        except Exception as e:
-            logger.exception(f"Error blending data for {lookup_key}: {e}")
-            blended[team_id] = s1_data
+        stats[team_id] = {
+            "oPPP": (
+                7 * total["offTDs"] + 3 * total["offFGsMade"]
+            ) / total["offPoss"],
+            "dPPP": (
+                7 * total["defTDs"] + 3 * total["defFGsMade"]
+            ) / total["defPoss"],
+            # Average possessions for one team in a game.
+            "poss_per_game": (
+                total["offPoss"] + total["defPoss"]
+            ) / (2 * total["games"]),
+            "win_pct": 0.5,
+            "avg_opp_ppp_diff": 0.0,
+        }
 
-    logger.info(f"Blended data for {len(blended)} teams.")
+    record_query = (
+        client.table("TeamRecords")
+        .select("teamId,wins,losses")
+        .eq("seasonIndex", season_index)
+    )
+
+    records = record_query.execute().data or []
+
+    for row in records:
+        team_id = int(row["teamId"])
+
+        if team_id not in stats:
+            continue
+
+        wins = number(row, "wins")
+        losses = number(row, "losses")
+        games = wins + losses
+
+        stats[team_id]["win_pct"] = wins / games if games > 0 else 0.5
+
+    game_query = (
+        client.table("Games")
+        .select("homeTeamId,awayTeamId,weekIndex")
+        .eq("seasonIndex", season_index)
+        .eq("stageIndex", 1)
+    )
+
+    if through_week_index is not None:
+        game_query = game_query.lte("weekIndex", through_week_index)
+
+    games = game_query.execute().data or []
+    opponent_differentials: dict[int, list[float]] = defaultdict(list)
+
+    for game in games:
+        home_id = int(game["homeTeamId"])
+        away_id = int(game["awayTeamId"])
+
+        if home_id not in stats or away_id not in stats:
+            continue
+
+        home_net_ppp = stats[home_id]["oPPP"] - stats[home_id]["dPPP"]
+        away_net_ppp = stats[away_id]["oPPP"] - stats[away_id]["dPPP"]
+
+        opponent_differentials[home_id].append(away_net_ppp)
+        opponent_differentials[away_id].append(home_net_ppp)
+
+    for team_id, team_stats in stats.items():
+        opponents = opponent_differentials[team_id]
+
+        if opponents:
+            team_stats["avg_opp_ppp_diff"] = sum(opponents) / len(opponents)
+
+    return stats
+
+
+def weighted_team_stats(
+    client: Client,
+    current_season: int,
+    week_number: int,
+) -> dict[int, dict[str, float]]:
+    """Blend every available season into one current team rating."""
+    weights = season_weights(current_season, week_number)
+
+    all_season_stats: dict[int, dict[int, dict[str, float]]] = {}
+
+    for season_index in weights:
+        # Only current-season ratings need to exclude the requested week.
+        through_week = week_number - 2 if season_index == current_season else None
+
+        all_season_stats[season_index] = fetch_season_stats(
+            client,
+            season_index,
+            through_week_index=through_week,
+        )
+
+    team_ids = set()
+
+    for stats in all_season_stats.values():
+        team_ids.update(stats.keys())
+
+    fields = (
+        "oPPP",
+        "dPPP",
+        "poss_per_game",
+        "win_pct",
+        "avg_opp_ppp_diff",
+    )
+
+    blended: dict[int, dict[str, float]] = {}
+
+    for team_id in team_ids:
+        available = [
+            (season, all_season_stats[season][team_id])
+            for season in weights
+            if team_id in all_season_stats[season] and weights[season] > 0
+        ]
+
+        # A team with no usable data in any season will receive the
+        # standard -0.5 / 60.5 fallback when its game is generated.
+        if not available:
+            continue
+
+        total_weight = sum(weights[season] for season, _ in available)
+
+        blended[team_id] = {
+            field: sum(
+                weights[season] * stats[field]
+                for season, stats in available
+            ) / total_weight
+            for field in fields
+        }
+
+    logger.info(
+        "Season weights for Week %s: %s",
+        week_number,
+        {
+            f"Season {season + 1}": f"{weight:.1%}"
+            for season, weight in sorted(weights.items())
+        },
+    )
+
     return blended
 
 
-def lines(team1_stats: dict, team2_stats: dict):
-    """Compute expected scores, spread, O/U, and pre-round spread"""
-    t1 = team1_stats.copy()
-    t2 = team2_stats.copy()
+# -------------------------------------------------------------------
+# Line calculation
+# -------------------------------------------------------------------
 
-    # WIN % + SOS adjustments
-    t1["win_pct_weight"] = ((t1["win_pct"] - 0.5) + 35) / 35
-    t2["win_pct_weight"] = ((t2["win_pct"] - 0.5) + 35) / 35
+def calculate_lines(
+    home_stats: dict[str, float],
+    away_stats: dict[str, float],
+) -> dict[str, float]:
+    """Calculate the spread, total, expected scores, and home win chance."""
+    home = home_stats.copy()
+    away = away_stats.copy()
 
-    t1["sos_weight"] = ((t1["avg_opp_ppp_diff"] + 60) / 60)
-    t2["sos_weight"] = ((t2["avg_opp_ppp_diff"] + 60) / 60)
+    for stats in (home, away):
+        win_pct_weight = ((stats["win_pct"] - 0.5) + 35) / 35
+        sos_weight = max(0.5, (stats["avg_opp_ppp_diff"] + 60) / 60)
 
-    t1["oPPP"] *= t1["win_pct_weight"] * t1["sos_weight"]
-    t1["dPPP"] /= t1["win_pct_weight"] * t1["sos_weight"]
+        stats["oPPP"] *= win_pct_weight * sos_weight
+        stats["dPPP"] /= win_pct_weight * sos_weight
 
-    t2["oPPP"] *= t2["win_pct_weight"] * t2["sos_weight"]
-    t2["dPPP"] /= t2["win_pct_weight"] * t2["sos_weight"]
-
-    # Possession scaling
-    for stats in [t1, t2]:
         if stats["poss_per_game"] <= 14:
             stats["poss_per_game"] *= 0.99
         elif stats["poss_per_game"] >= 15.5:
             stats["poss_per_game"] *= 1.02
 
-    # Expected scores
-    t1_exp = (t1["oPPP"] + t2["dPPP"]) / 2 * ((t1["poss_per_game"] + t2["poss_per_game"]) / 4)
-    t2_exp = (t2["oPPP"] + t1["dPPP"]) / 2 * ((t1["poss_per_game"] + t2["poss_per_game"]) / 4)
+    average_possessions = (
+        home["poss_per_game"] + away["poss_per_game"]
+    ) / 2
 
-    if (t1["poss_per_game"] > 15.5 and t2["poss_per_game"] > 15.5):
-        t1_exp *= 1.02
-        t2_exp *= 1.02
+    home_expected = (
+        (home["oPPP"] + away["dPPP"]) / 2
+    ) * average_possessions
 
-    if t1["oPPP"] > 4 and t2["oPPP"] > 4:
-        t1_exp *= 1.03
-        t2_exp *= 1.03
-    elif t1["oPPP"] > 4 and t2["oPPP"] < 3.3:
-        t2_exp *= 0.985
-    elif t1["oPPP"] < 3.3 and t2["oPPP"] > 4:
-        t1_exp *= 0.985
+    away_expected = (
+        (away["oPPP"] + home["dPPP"]) / 2
+    ) * average_possessions
 
-    ou = (t1_exp + t2_exp)
-    if ou > 54:
-        ou += (ou + 0.5 - 54) / 2.1
-    ou = round_half(ou)
+    if home["poss_per_game"] > 15.5 and away["poss_per_game"] > 15.5:
+        home_expected *= 1.02
+        away_expected *= 1.02
 
-    pre_round_spread = (t1_exp - t2_exp) * 1.25
-    #spread = round_half(pre_round_spread)
+    if home["oPPP"] > 4 and away["oPPP"] > 4:
+        home_expected *= 1.03
+        away_expected *= 1.03
+    elif home["oPPP"] > 4 and away["oPPP"] < 3.3:
+        away_expected *= 0.985
+    elif home["oPPP"] < 3.3 and away["oPPP"] > 4:
+        home_expected *= 0.985
+
+    total = home_expected + away_expected
+
+    if total > 54:
+        total += (total + 0.5 - 54) / 2.1
+
+    pre_round_spread = (home_expected - away_expected) * 1.25
     spread = pre_round_spread
+
     if spread > 6.5:
         spread += (spread + 0.5 - 6.5) / 2.2
     elif spread > 2.5:
         spread += (spread + 0.5 - 2.5) / 3.3
-    spread = round_half(spread)
 
-    # NEW WIN PROBABILITY (flatter logistic)
-    win_prob_home = 1 / (1 + np.exp(-(LOGIT_COEF * pre_round_spread + LOGIT_INTERCEPT)))
+    home_win_probability = 1 / (
+        1 + math.exp(-(LOGIT_COEF * pre_round_spread + LOGIT_INTERCEPT))
+    )
 
     return {
-        "spread": spread,
-        "ou": ou,
-        "homeExpectedScore": t1_exp,
-        "awayExpectedScore": t2_exp,
-        "winProbHome": win_prob_home,
-        "pre_round_spread": pre_round_spread,
+        "spread": round_half(spread),
+        "ou": round_half(total),
+        "homeExpectedScore": home_expected,
+        "awayExpectedScore": away_expected,
+        "winProbHome": home_win_probability,
     }
 
 
-def predict_week_games(week_number: int, team_stats: dict, supabase_client) -> list[dict]:
-    """Main entry: predict all games for a week"""
-    logger.info(f"=== Predicting week {week_number} ===")
+def default_line() -> dict[str, float]:
+    """Use this whenever either team has no usable historical PPP data."""
+    return {
+        "spread": DEFAULT_HOME_SPREAD,
+        "ou": DEFAULT_TOTAL,
+        "homeExpectedScore": 30.5,
+        "awayExpectedScore": 30.0,
+        "winProbHome": 0.5,
+    }
+
+
+# -------------------------------------------------------------------
+# Weekly generation and API endpoint
+# -------------------------------------------------------------------
+
+def predict_week_games(
+    week_number: int,
+    supabase_client: Client,
+    season_index: int | None = None,
+) -> list[dict[str, Any]]:
+    """Create or update WeeklyOdds for the requested week."""
+    current_season = (
+        current_season_index(supabase_client)
+        if season_index is None
+        else season_index
+    )
+
     week_index = week_number - 1
 
-    try:
-        s2_ppp_df = get_s2_ppp_data()
-        s3_ppp_df = get_s3_ppp_data()
-        s4_ppp_df = get_s4_ppp_data()
-        s5_ppp_df = get_s5_ppp_data()
-        s2_win_pcts = get_s2_win_pcts(supabase_client)
-        s3_win_pcts = get_s3_win_pcts(supabase_client)
-        s4_win_pcts = get_s4_win_pcts(supabase_client)
-        s5_win_pcts = get_s5_win_pcts(supabase_client)
-        logger.info("Loaded both S2 PPP data and win_pcts successfully.")
-    except Exception as e:
-        logger.exception(f"Failed during S2 data loading: {e}")
-        raise
+    ratings = weighted_team_stats(
+        supabase_client,
+        current_season,
+        week_number,
+    )
 
-    try:
-        team_stats = weighted_merge_stats(team_stats, s2_ppp_df, s3_ppp_df, s4_ppp_df, s5_ppp_df, s2_win_pcts, s3_win_pcts, s4_win_pcts, s5_win_pcts, week_number)
-    except Exception as e:
-        logger.exception(f"Error blending season stats: {e}")
-        raise
+    names = fetch_team_names(supabase_client)
 
-    try:
-        response = (
-            supabase_client.table("Games")
-            .select("*")
-            .eq("weekIndex", week_index)
-            .eq("seasonIndex", SEASON_INDEX)
-            .eq("stageIndex", 1)
+    games = (
+        supabase_client.table("Games")
+        .select("scheduleId,homeTeamId,awayTeamId")
+        .eq("seasonIndex", current_season)
+        .eq("weekIndex", week_index)
+        .eq("stageIndex", 1)
+        .execute()
+        .data
+        or []
+    )
+
+    predictions: list[dict[str, Any]] = []
+
+    for game in games:
+        home_id = int(game["homeTeamId"])
+        away_id = int(game["awayTeamId"])
+
+        # If either team has no usable data, use the standard line.
+        if home_id not in ratings or away_id not in ratings:
+            line = default_line()
+            logger.info(
+                "Using default line for %s at %s because one or both teams lack data.",
+                names.get(away_id, away_id),
+                names.get(home_id, home_id),
+            )
+        else:
+            line = calculate_lines(ratings[home_id], ratings[away_id])
+
+        predictions.append(
+            {
+                "scheduleId": game["scheduleId"],
+                "seasonIndex": current_season,
+                "weekIndex": week_index,
+                "homeTeam": names.get(home_id, f"Team {home_id}"),
+                "awayTeam": names.get(away_id, f"Team {away_id}"),
+                "simmed": False,
+                "closed": False,
+                **line,
+            }
+        )
+
+    if predictions:
+        (
+            supabase_client.table("WeeklyOdds")
+            .upsert(predictions, on_conflict="scheduleId,seasonIndex")
             .execute()
         )
-        games = response.data
-        logger.info(f"Retrieved {len(games)} games from Supabase for weekIndex={week_index}")
-    except Exception as e:
-        logger.exception(f"Supabase query failed for Games table: {e}")
-        raise
 
-    predictions = []
-    for game in games:
-        try:
-            home_id, away_id = game["homeTeamId"], game["awayTeamId"]
-            home_stats = team_stats[home_id]
-            away_stats = team_stats[away_id]
-            result = lines(home_stats, away_stats)
-
-            predictions.append({
-                "homeTeam": home_stats["Team"],
-                "awayTeam": away_stats["Team"],
-                "homeExpScore": result["homeExpectedScore"],
-                "awayExpScore": result["awayExpectedScore"],
-                "scheduleId": game["scheduleId"],
-                "spread": result["spread"],
-                "ou": result["ou"],
-                "winProbHome": result["winProbHome"],
-                "simmed": False,
-                "weekIndex": week_index,
-                "closed": False,
-            })
-        except Exception as e:
-            logger.exception(f"Error processing game {game}: {e}")
-
-    try:
-        logger.info(f"Inserting {len(predictions)} predictions into WeeklyOdds...")
-        supabase_client.table("WeeklyOdds").insert(predictions).execute()
-        logger.info("✅ Successfully inserted predictions into WeeklyOdds.")
-    except Exception as e:
-        logger.exception(f"Error inserting predictions into WeeklyOdds: {e}")
-        raise
-
-    print(
-        f"✅ Updated WeeklyOdds for Week {week_number} "
+    logger.info(
+        "Generated %s lines for Season %s, Week %s.",
+        len(predictions),
+        current_season + 1,
+        week_number,
     )
+
     return predictions
