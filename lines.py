@@ -370,8 +370,8 @@ def calculate_lines(
     return {
         "spread": round_half(spread),
         "ou": round_half(total),
-        "homeExpectedScore": home_expected,
-        "awayExpectedScore": away_expected,
+        "homeExpScore": home_expected,
+        "awayExpScore": away_expected,
         "winProbHome": home_win_probability,
     }
 
@@ -381,8 +381,8 @@ def default_line() -> dict[str, float]:
     return {
         "spread": DEFAULT_HOME_SPREAD,
         "ou": DEFAULT_TOTAL,
-        "homeExpectedScore": 30.5,
-        "awayExpectedScore": 30.0,
+        "homeExpScore": 30.5,
+        "awayExpScore": 30.0,
         "winProbHome": 0.5,
     }
 
