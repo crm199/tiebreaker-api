@@ -68,7 +68,7 @@ def clearGlobals():
     df = games_df  # Now df has name-based columns like original CSV
 
     global teamList, AFC, NFC, AFCE, AFCN, AFCS, AFCW, NFCE, NFCN, NFCS, NFCW
-    global Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans, Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers, Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks
+    global Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans, Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers, Antlers, Saints, Panthers, Niners, Cardinals, Rams, Seahawks
 
     Bills = Team("Bills", 'AFC', 'AFCE')
     Dolphins = Team("Dolphins", 'AFC', 'AFCE')
@@ -101,7 +101,7 @@ def clearGlobals():
     Vikings = Team("Vikings", 'NFC', 'NFCN')
 
     Buccaneers = Team("Buccaneers", 'NFC', 'NFCS')
-    Falcons = Team("Falcons", 'NFC', 'NFCS')
+    Antlers = Team("Antlers", 'NFC', 'NFCS')
     Saints = Team("Saints", 'NFC', 'NFCS')
     Panthers = Team("Panthers", 'NFC', 'NFCS')
 
@@ -113,14 +113,14 @@ def clearGlobals():
     teamList = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans,
             Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings,
             Buccaneers,
-            Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
+            Antlers, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
 
     #print("In teamList: " + str(id(teamList[0])))
 
     AFC = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans,
         Broncos, Chiefs, Chargers, Raiders]
     NFC = [Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers,
-        Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
+        Antlers, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
 
     AFCE = [Bills, Dolphins, Jets, Patriots]
     AFCN = [Bengals, Browns, Ravens, Steelers]
@@ -128,7 +128,7 @@ def clearGlobals():
     AFCW = [Broncos, Chiefs, Chargers, Raiders]
     NFCE = [Commanders, Cowboys, Giants, Eagles]
     NFCN = [Bears, Lions, Packers, Vikings]
-    NFCS = [Buccaneers, Falcons, Saints, Panthers]
+    NFCS = [Buccaneers, Antlers, Saints, Panthers]
     NFCW = [Niners, Cardinals, Rams, Seahawks]
 
     fillSchedules(df)
@@ -136,7 +136,7 @@ def clearGlobals():
 
 
 def fillSchedules(df):
-    global Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans, Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers, Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks
+    global Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans, Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers, Antlers, Saints, Panthers, Niners, Cardinals, Rams, Seahawks
     #print object id of Bills
 
     bills_data = df[(df['homeTeam'] == 'Bills') | (df['awayTeam'] == 'Bills')]
@@ -963,37 +963,37 @@ def fillSchedules(df):
         setattr(Buccaneers, f"g{i+1}result", buccaneers_schedule_results[i])
 
 
-    falcons_data = df[(df['homeTeam'] == 'Falcons') | (df['awayTeam'] == 'Falcons')]
+    antlers_data = df[(df['homeTeam'] == 'Antlers') | (df['awayTeam'] == 'Antlers')]
 
-    falcons_schedule = []
-    for index, row in falcons_data.iterrows():
-        if (row['homeTeam'] == 'Falcons'):
-            falcons_schedule.append(row['awayTeam'])
-        elif (row['awayTeam'] == 'Falcons'):
-            falcons_schedule.append(row['homeTeam'])
+    antlers_schedule = []
+    for index, row in antlers_data.iterrows():
+        if (row['homeTeam'] == 'Antlers'):
+            antlers_schedule.append(row['awayTeam'])
+        elif (row['awayTeam'] == 'Antlers'):
+            antlers_schedule.append(row['homeTeam'])
 
-    falcons_schedule_results = []
-    for index, row in falcons_data.iterrows():
-        if (row['homeTeam'] == 'Falcons' and row['homeScore'] > row['awayScore']):
-            falcons_schedule_results.append('W')
-        elif (row['awayTeam'] == 'Falcons' and row['awayScore'] > row['homeScore']):
-            falcons_schedule_results.append('W')
-        elif (row['homeTeam'] == 'Falcons' and row['homeScore'] < row['awayScore']):
-            falcons_schedule_results.append('L')
-        elif (row['awayTeam'] == 'Falcons' and row['awayScore'] < row['homeScore']):
-            falcons_schedule_results.append('L')
-        elif (row['awayTeam'] == 'Falcons' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-            falcons_schedule_results.append('T')
-        elif (row['homeTeam'] == 'Falcons' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
-            falcons_schedule_results.append('T')
+    antlers_schedule_results = []
+    for index, row in antlers_data.iterrows():
+        if (row['homeTeam'] == 'Antlers' and row['homeScore'] > row['awayScore']):
+            antlers_schedule_results.append('W')
+        elif (row['awayTeam'] == 'Antlers' and row['awayScore'] > row['homeScore']):
+            antlers_schedule_results.append('W')
+        elif (row['homeTeam'] == 'Antlers' and row['homeScore'] < row['awayScore']):
+            antlers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Antlers' and row['awayScore'] < row['homeScore']):
+            antlers_schedule_results.append('L')
+        elif (row['awayTeam'] == 'Antlers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            antlers_schedule_results.append('T')
+        elif (row['homeTeam'] == 'Antlers' and row['awayScore'] == row['homeScore'] and not row['awayScore'] == 0):
+            antlers_schedule_results.append('T')
         else:
-            falcons_schedule_results.append('NA')
+            antlers_schedule_results.append('NA')
 
-    Falcons.matchups = falcons_schedule
-    Falcons.results = falcons_schedule_results
+    Antlers.matchups = antlers_schedule
+    Antlers.results = antlers_schedule_results
     for i in range(17):
-        setattr(Falcons, f"g{i+1}", falcons_schedule[i])
-        setattr(Falcons, f"g{i+1}result", falcons_schedule_results[i])
+        setattr(Antlers, f"g{i+1}", antlers_schedule[i])
+        setattr(Antlers, f"g{i+1}result", antlers_schedule_results[i])
 
 
     saints_data = df[(df['homeTeam'] == 'Saints') | (df['awayTeam'] == 'Saints')]
@@ -1633,7 +1633,7 @@ def isDivRecord2(Team1, Team2):
                     Team1.matchups[i] == 'Vikings'):
                 divMatchups2_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'NFCS'):
-            if (Team1.matchups[i] == 'Buccaneers' or Team1.matchups[i] == 'Falcons' or Team1.matchups[i] == 'Saints' or
+            if (Team1.matchups[i] == 'Buccaneers' or Team1.matchups[i] == 'Antlers' or Team1.matchups[i] == 'Saints' or
                     Team1.matchups[i] == 'Panthers'):
                 divMatchups2_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'NFCW'):
@@ -1667,7 +1667,7 @@ def isDivRecord2(Team1, Team2):
                     Team2.matchups[i] == 'Vikings'):
                 divMatchups2_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'NFCS'):
-            if (Team2.matchups[i] == 'Buccaneers' or Team2.matchups[i] == 'Falcons' or Team2.matchups[i] == 'Saints' or
+            if (Team2.matchups[i] == 'Buccaneers' or Team2.matchups[i] == 'Antlers' or Team2.matchups[i] == 'Saints' or
                     Team2.matchups[i] == 'Panthers'):
                 divMatchups2_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'NFCW'):
@@ -1728,7 +1728,7 @@ def isDivRecord3(Team1, Team2, Team3):
                     Team1.matchups[i] == 'Vikings'):
                 divMatchups3_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'NFCS'):
-            if (Team1.matchups[i] == 'Buccaneers' or Team1.matchups[i] == 'Falcons' or Team1.matchups[i] == 'Saints' or
+            if (Team1.matchups[i] == 'Buccaneers' or Team1.matchups[i] == 'Antlers' or Team1.matchups[i] == 'Saints' or
                     Team1.matchups[i] == 'Panthers'):
                 divMatchups3_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'NFCW'):
@@ -1763,7 +1763,7 @@ def isDivRecord3(Team1, Team2, Team3):
                     Team2.matchups[i] == 'Vikings'):
                 divMatchups3_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'NFCS'):
-            if (Team2.matchups[i] == 'Buccaneers' or Team2.matchups[i] == 'Falcons' or Team2.matchups[i] == 'Saints' or
+            if (Team2.matchups[i] == 'Buccaneers' or Team2.matchups[i] == 'Antlers' or Team2.matchups[i] == 'Saints' or
                     Team2.matchups[i] == 'Panthers'):
                 divMatchups3_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'NFCW'):
@@ -1798,7 +1798,7 @@ def isDivRecord3(Team1, Team2, Team3):
                     Team3.matchups[i] == 'Vikings'):
                 divMatchups3_2.append(Team3.results[i])
         elif (Team3.getDivision() == 'NFCS'):
-            if (Team3.matchups[i] == 'Buccaneers' or Team3.matchups[i] == 'Falcons' or Team3.matchups[i] == 'Saints' or
+            if (Team3.matchups[i] == 'Buccaneers' or Team3.matchups[i] == 'Antlers' or Team3.matchups[i] == 'Saints' or
                     Team3.matchups[i] == 'Panthers'):
                 divMatchups3_2.append(Team3.results[i])
         elif (Team3.getDivision() == 'NFCW'):
@@ -1903,7 +1903,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
                     Team1.matchups[i] == 'Vikings'):
                 divMatchups4_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'NFCS'):
-            if (Team1.matchups[i] == 'Buccaneers' or Team1.matchups[i] == 'Falcons' or Team1.matchups[i] == 'Saints' or
+            if (Team1.matchups[i] == 'Buccaneers' or Team1.matchups[i] == 'Antlers' or Team1.matchups[i] == 'Saints' or
                     Team1.matchups[i] == 'Panthers'):
                 divMatchups4_1.append(Team1.results[i])
         elif (Team1.getDivision() == 'NFCW'):
@@ -1938,7 +1938,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
                     Team2.matchups[i] == 'Vikings'):
                 divMatchups4_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'NFCS'):
-            if (Team2.matchups[i] == 'Buccaneers' or Team2.matchups[i] == 'Falcons' or Team2.matchups[i] == 'Saints' or
+            if (Team2.matchups[i] == 'Buccaneers' or Team2.matchups[i] == 'Antlers' or Team2.matchups[i] == 'Saints' or
                     Team2.matchups[i] == 'Panthers'):
                 divMatchups4_2.append(Team2.results[i])
         elif (Team2.getDivision() == 'NFCW'):
@@ -1972,7 +1972,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
                     Team3.matchups[i] == 'Vikings'):
                 divMatchups4_3.append(Team3.results[i])
         elif (Team3.getDivision() == 'NFCS'):
-            if (Team3.matchups[i] == 'Buccaneers' or Team3.matchups[i] == 'Falcons' or Team3.matchups[i] == 'Saints' or
+            if (Team3.matchups[i] == 'Buccaneers' or Team3.matchups[i] == 'Antlers' or Team3.matchups[i] == 'Saints' or
                     Team3.matchups[i] == 'Panthers'):
                 divMatchups4_3.append(Team3.results[i])
         elif (Team3.getDivision() == 'NFCW'):
@@ -2007,7 +2007,7 @@ def isDivRecord4(Team1, Team2, Team3, Team4):
                     Team4.matchups[i] == 'Vikings'):
                 divMatchups4_4.append(Team4.results[i])
         elif (Team4.getDivision() == 'NFCS'):
-            if (Team4.matchups[i] == 'Buccaneers' or Team4.matchups[i] == 'Falcons' or Team4.matchups[i] == 'Saints' or
+            if (Team4.matchups[i] == 'Buccaneers' or Team4.matchups[i] == 'Antlers' or Team4.matchups[i] == 'Saints' or
                     Team4.matchups[i] == 'Panthers'):
                 divMatchups4_4.append(Team4.results[i])
         elif (Team4.getDivision() == 'NFCW'):
@@ -2802,7 +2802,7 @@ def isConfRecord2(Team1, Team2):
                     Team1.matchups[i] == 'Eagles' or Team1.matchups[i] == 'Bears' or Team1.matchups[i] == 'Lions' or
                     Team1.matchups[i] == 'Packers' or Team1.matchups[i] == 'Vikings' or Team1.matchups[
                         i] == 'Buccaneers' or
-                    Team1.matchups[i] == 'Saints' or Team1.matchups[i] == 'Falcons' or Team1.matchups[
+                    Team1.matchups[i] == 'Saints' or Team1.matchups[i] == 'Antlers' or Team1.matchups[
                         i] == 'Panthers' or
                     Team1.matchups[i] == '49ers' or Team1.matchups[i] == 'Cardinals' or Team1.matchups[
                         i] == 'Seahawks' or
@@ -2825,7 +2825,7 @@ def isConfRecord2(Team1, Team2):
                     Team2.matchups[i] == 'Eagles' or Team2.matchups[i] == 'Bears' or Team2.matchups[i] == 'Lions' or
                     Team2.matchups[i] == 'Packers' or Team2.matchups[i] == 'Vikings' or Team2.matchups[
                         i] == 'Buccaneers' or
-                    Team2.matchups[i] == 'Saints' or Team2.matchups[i] == 'Falcons' or Team2.matchups[
+                    Team2.matchups[i] == 'Saints' or Team2.matchups[i] == 'Antlers' or Team2.matchups[
                         i] == 'Panthers' or
                     Team2.matchups[i] == '49ers' or Team2.matchups[i] == 'Cardinals' or Team2.matchups[
                         i] == 'Seahawks' or
@@ -2873,7 +2873,7 @@ def isConfRecord3(Team1, Team2, Team3):
                     Team1.matchups[i] == 'Eagles' or Team1.matchups[i] == 'Bears' or Team1.matchups[i] == 'Lions' or
                     Team1.matchups[i] == 'Packers' or Team1.matchups[i] == 'Vikings' or Team1.matchups[
                         i] == 'Buccaneers' or
-                    Team1.matchups[i] == 'Saints' or Team1.matchups[i] == 'Falcons' or Team1.matchups[
+                    Team1.matchups[i] == 'Saints' or Team1.matchups[i] == 'Antlers' or Team1.matchups[
                         i] == 'Panthers' or
                     Team1.matchups[i] == '49ers' or Team1.matchups[i] == 'Cardinals' or Team1.matchups[
                         i] == 'Seahawks' or
@@ -2896,7 +2896,7 @@ def isConfRecord3(Team1, Team2, Team3):
                     Team2.matchups[i] == 'Eagles' or Team2.matchups[i] == 'Bears' or Team2.matchups[i] == 'Lions' or
                     Team2.matchups[i] == 'Packers' or Team2.matchups[i] == 'Vikings' or Team2.matchups[
                         i] == 'Buccaneers' or
-                    Team2.matchups[i] == 'Saints' or Team2.matchups[i] == 'Falcons' or Team2.matchups[
+                    Team2.matchups[i] == 'Saints' or Team2.matchups[i] == 'Antlers' or Team2.matchups[
                         i] == 'Panthers' or
                     Team2.matchups[i] == '49ers' or Team2.matchups[i] == 'Cardinals' or Team2.matchups[
                         i] == 'Seahawks' or
@@ -2918,7 +2918,7 @@ def isConfRecord3(Team1, Team2, Team3):
                     Team3.matchups[i] == 'Eagles' or Team3.matchups[i] == 'Bears' or Team3.matchups[i] == 'Lions' or
                     Team3.matchups[i] == 'Packers' or Team3.matchups[i] == 'Vikings' or Team3.matchups[
                         i] == 'Buccaneers' or
-                    Team3.matchups[i] == 'Saints' or Team3.matchups[i] == 'Falcons' or Team3.matchups[
+                    Team3.matchups[i] == 'Saints' or Team3.matchups[i] == 'Antlers' or Team3.matchups[
                         i] == 'Panthers' or
                     Team3.matchups[i] == '49ers' or Team3.matchups[i] == 'Cardinals' or Team3.matchups[
                         i] == 'Seahawks' or
@@ -3022,7 +3022,7 @@ def isConfRecord4(Team1, Team2, Team3, Team4):
                     Team1.matchups[i] == 'Eagles' or Team1.matchups[i] == 'Bears' or Team1.matchups[i] == 'Lions' or
                     Team1.matchups[i] == 'Packers' or Team1.matchups[i] == 'Vikings' or Team1.matchups[
                         i] == 'Buccaneers' or
-                    Team1.matchups[i] == 'Saints' or Team1.matchups[i] == 'Falcons' or Team1.matchups[
+                    Team1.matchups[i] == 'Saints' or Team1.matchups[i] == 'Antlers' or Team1.matchups[
                         i] == 'Panthers' or
                     Team1.matchups[i] == '49ers' or Team1.matchups[i] == 'Cardinals' or Team1.matchups[
                         i] == 'Seahawks' or
@@ -3045,7 +3045,7 @@ def isConfRecord4(Team1, Team2, Team3, Team4):
                     Team2.matchups[i] == 'Eagles' or Team2.matchups[i] == 'Bears' or Team2.matchups[i] == 'Lions' or
                     Team2.matchups[i] == 'Packers' or Team2.matchups[i] == 'Vikings' or Team2.matchups[
                         i] == 'Buccaneers' or
-                    Team2.matchups[i] == 'Saints' or Team2.matchups[i] == 'Falcons' or Team2.matchups[
+                    Team2.matchups[i] == 'Saints' or Team2.matchups[i] == 'Antlers' or Team2.matchups[
                         i] == 'Panthers' or
                     Team2.matchups[i] == '49ers' or Team2.matchups[i] == 'Cardinals' or Team2.matchups[
                         i] == 'Seahawks' or
@@ -3068,7 +3068,7 @@ def isConfRecord4(Team1, Team2, Team3, Team4):
                     Team3.matchups[i] == 'Eagles' or Team3.matchups[i] == 'Bears' or Team3.matchups[i] == 'Lions' or
                     Team3.matchups[i] == 'Packers' or Team3.matchups[i] == 'Vikings' or Team3.matchups[
                         i] == 'Buccaneers' or
-                    Team3.matchups[i] == 'Saints' or Team3.matchups[i] == 'Falcons' or Team3.matchups[
+                    Team3.matchups[i] == 'Saints' or Team3.matchups[i] == 'Antlers' or Team3.matchups[
                         i] == 'Panthers' or
                     Team3.matchups[i] == '49ers' or Team3.matchups[i] == 'Cardinals' or Team3.matchups[
                         i] == 'Seahawks' or
@@ -3091,7 +3091,7 @@ def isConfRecord4(Team1, Team2, Team3, Team4):
                     Team4.matchups[i] == 'Eagles' or Team4.matchups[i] == 'Bears' or Team4.matchups[i] == 'Lions' or
                     Team4.matchups[i] == 'Packers' or Team4.matchups[i] == 'Vikings' or Team4.matchups[
                         i] == 'Buccaneers' or
-                    Team4.matchups[i] == 'Saints' or Team4.matchups[i] == 'Falcons' or Team4.matchups[
+                    Team4.matchups[i] == 'Saints' or Team4.matchups[i] == 'Antlers' or Team4.matchups[
                         i] == 'Panthers' or
                     Team4.matchups[i] == '49ers' or Team4.matchups[i] == 'Cardinals' or Team4.matchups[
                         i] == 'Seahawks' or
@@ -7266,7 +7266,7 @@ def divisionStandings():
     print (NFCN_Standings[3].getName() + ": " + str(NFCN_Standings[3].getWins()) + "-" + str(NFCN_Standings[3].getLosses()) + "\n")
     '''
     #print("NFCS:")
-    NFCS_Standings = [Buccaneers, Falcons, Panthers, Saints]
+    NFCS_Standings = [Buccaneers, Antlers, Panthers, Saints]
     NFCS_Standings.sort(key=lambda team: team.getWinPercentage(), reverse=True)
     first_nfcs = NFCS_Standings[0]
     second_nfcs = NFCS_Standings[1]
@@ -8235,7 +8235,7 @@ def playoffPercentages(games_df=None, simulations_per_batch=50):
     packers1, packers2, packers3, packers4, packers5, packers6, packers7, packersOut = 0, 0, 0, 0, 0, 0, 0, 0
     vikings1, vikings2, vikings3, vikings4, vikings5, vikings6, vikings7, vikingsOut = 0, 0, 0, 0, 0, 0, 0, 0
     buccaneers1, buccaneers2, buccaneers3, buccaneers4, buccaneers5, buccaneers6, buccaneers7, buccaneersOut = 0, 0, 0, 0, 0, 0, 0, 0
-    falcons1, falcons2, falcons3, falcons4, falcons5, falcons6, falcons7, falconsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    antlers1, antlers2, antlers3, antlers4, antlers5, antlers6, antlers7, antlersOut = 0, 0, 0, 0, 0, 0, 0, 0
     saints1, saints2, saints3, saints4, saints5, saints6, saints7, saintsOut = 0, 0, 0, 0, 0, 0, 0, 0
     panthers1, panthers2, panthers3, panthers4, panthers5, panthers6, panthers7, panthersOut = 0, 0, 0, 0, 0, 0, 0, 0
     cardinals1, cardinals2, cardinals3, cardinals4, cardinals5, cardinals6, cardinals7, cardinalsOut = 0, 0, 0, 0, 0, 0, 0, 0
@@ -9106,13 +9106,13 @@ def playoffPercentages(games_df=None, simulations_per_batch=50):
                             break
 
         for i in range(17):
-            if (not Falcons.results[i] == 'W' and not Falcons.results[i] == 'L' and not Falcons.results[i] == 'T'):
-                game = Falcons.matchups[i]
+            if (not Antlers.results[i] == 'W' and not Antlers.results[i] == 'L' and not Antlers.results[i] == 'T'):
+                game = Antlers.matchups[i]
                 opponent = findTeam(game)
-                remSchedule.append('Falcons')
+                remSchedule.append('Antlers')
                 remSchedule.append(game)
                 winChance = 0.0
-                winDifference = Falcons.getWinPercentage() - opponent.getWinPercentage()
+                winDifference = Antlers.getWinPercentage() - opponent.getWinPercentage()
                 if (winDifference == 0):
                     winChance = 0.5
                 elif (winDifference < 0.83):
@@ -9123,19 +9123,19 @@ def playoffPercentages(games_df=None, simulations_per_batch=50):
                 winChance *= 100
                 rand = random.randint(1, 100)
                 if rand <= winChance:
-                    Falcons.results[i] = 'W'
+                    Antlers.results[i] = 'W'
 
                     # Find the correct opponent schedule slot to update
                     for idx, opp in enumerate(opponent.matchups):
-                        if opp == Falcons.getName() and opponent.results[idx] == 'NA':
+                        if opp == Antlers.getName() and opponent.results[idx] == 'NA':
                             opponent.results[idx] = 'L'
                             break  # <-- very important
                 else:
-                    Falcons.results[i] = 'L'
+                    Antlers.results[i] = 'L'
 
                     # Find correct opponent slot for a win
                     for idx, opp in enumerate(opponent.matchups):
-                        if opp == Falcons.getName() and opponent.results[idx] == 'NA':
+                        if opp == Antlers.getName() and opponent.results[idx] == 'NA':
                             opponent.results[idx] = 'W'
                             break
 
@@ -9796,23 +9796,23 @@ def playoffPercentages(games_df=None, simulations_per_batch=50):
                 else:
                     buccaneersOut += 1
 
-            if (team == Falcons):
-                if (playoffs[7] == Falcons):
-                    falcons1 += 1
-                elif (playoffs[8] == Falcons):
-                    falcons2 += 1
-                elif (playoffs[9] == Falcons):
-                    falcons3 += 1
-                elif (playoffs[10] == Falcons):
-                    falcons4 += 1
-                elif (playoffs[11] == Falcons):
-                    falcons5 += 1
-                elif (playoffs[12] == Falcons):
-                    falcons6 += 1
-                elif (playoffs[13] == Falcons):
-                    falcons7 += 1
+            if (team == Antlers):
+                if (playoffs[7] == Antlers):
+                    antlers1 += 1
+                elif (playoffs[8] == Antlers):
+                    antlers2 += 1
+                elif (playoffs[9] == Antlers):
+                    antlers3 += 1
+                elif (playoffs[10] == Antlers):
+                    antlers4 += 1
+                elif (playoffs[11] == Antlers):
+                    antlers5 += 1
+                elif (playoffs[12] == Antlers):
+                    antlers6 += 1
+                elif (playoffs[13] == Antlers):
+                    antlers7 += 1
                 else:
-                    falconsOut += 1
+                    antlersOut += 1
 
             if (team == Saints):
                 if (playoffs[7] == Saints):
@@ -10001,8 +10001,8 @@ def playoffPercentages(games_df=None, simulations_per_batch=50):
     buccaneersPlayoffs = (buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4 + buccaneers5 + buccaneers6 + buccaneers7)
     buccaneersDiv = (buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4)
 
-    falconsPlayoffs = (falcons1 + falcons2 + falcons3 + falcons4 + falcons5 + falcons6 + falcons7)
-    falconsDiv = (falcons1 + falcons2 + falcons3 + falcons4)
+    antlersPlayoffs = (antlers1 + antlers2 + antlers3 + antlers4 + antlers5 + antlers6 + antlers7)
+    antlersDiv = (antlers1 + antlers2 + antlers3 + antlers4)
 
     saintsPlayoffs = (saints1 + saints2 + saints3 + saints4 + saints5 + saints6 + saints7)
     saintsDiv = (saints1 + saints2 + saints3 + saints4)
@@ -10298,16 +10298,16 @@ def playoffPercentages(games_df=None, simulations_per_batch=50):
     print("buccaneers 6 seed: " + str((buccaneers6 / 100.0)) + "%")
     print("buccaneers 7 seed: " + str((buccaneers7 / 100.0)) + "%\n")
 
-    print("falcons miss playoffs: " + str(falconsOut) + "%")
-    print("falcons win division:  " + str(falconsDiv) + "%")
-    print("falcons make playoffs: " + str(falconsPlayoffs) + "%")
-    print("falcons 1 seed: " + str((falcons1 / 100.0)) + "%")
-    print("falcons 2 seed: " + str((falcons2 / 100.0)) + "%")
-    print("falcons 3 seed: " + str((falcons3 / 100.0)) + "%")
-    print("falcons 4 seed: " + str((falcons4 / 100.0)) + "%")
-    print("falcons 5 seed: " + str((falcons5 / 100.0)) + "%")
-    print("falcons 6 seed: " + str((falcons6 / 100.0)) + "%")
-    print("falcons 7 seed: " + str((falcons7 / 100.0)) + "%\n")
+    print("antlers miss playoffs: " + str(antlersOut) + "%")
+    print("antlers win division:  " + str(antlersDiv) + "%")
+    print("antlers make playoffs: " + str(antlersPlayoffs) + "%")
+    print("antlers 1 seed: " + str((antlers1 / 100.0)) + "%")
+    print("antlers 2 seed: " + str((antlers2 / 100.0)) + "%")
+    print("antlers 3 seed: " + str((antlers3 / 100.0)) + "%")
+    print("antlers 4 seed: " + str((antlers4 / 100.0)) + "%")
+    print("antlers 5 seed: " + str((antlers5 / 100.0)) + "%")
+    print("antlers 6 seed: " + str((antlers6 / 100.0)) + "%")
+    print("antlers 7 seed: " + str((antlers7 / 100.0)) + "%\n")
 
     print("saints miss playoffs: " + str(saintsOut) + "%")
     print("saints win division:  " + str(saintsDiv) + "%")
@@ -10728,16 +10728,16 @@ def playoffPercentages(games_df=None, simulations_per_batch=50):
 
 
     odds_data.append({
-        'teamId': name_to_id['Falcons'],
-        'division': falconsDiv * 2.0,
-        'playoffs': falconsPlayoffs * 2.0,
-        'oneseed': falcons1 / 50.0,
-        'twoseed': falcons2 / 50.0,
-        'threeseed': falcons3 / 50.0,
-        'fourseed': falcons4 / 50.0,
-        'fiveseed': falcons5 / 50.0,
-        'sixseed': falcons6 / 50.0,
-        'sevenseed': falcons7 / 50.0
+        'teamId': name_to_id['Antlers'],
+        'division': antlersDiv * 2.0,
+        'playoffs': antlersPlayoffs * 2.0,
+        'oneseed': antlers1 / 50.0,
+        'twoseed': antlers2 / 50.0,
+        'threeseed': antlers3 / 50.0,
+        'fourseed': antlers4 / 50.0,
+        'fiveseed': antlers5 / 50.0,
+        'sixseed': antlers6 / 50.0,
+        'sevenseed': antlers7 / 50.0
     })
 
 
@@ -10856,7 +10856,7 @@ def playoffPercentages(games_df=None, simulations_per_batch=50):
         'Packers': [packersDiv, packersPlayoffs, packers1, packers2, packers3, packers4, packers5, packers6, packers7],
         'Vikings': [vikingsDiv, vikingsPlayoffs, vikings1, vikings2, vikings3, vikings4, vikings5, vikings6, vikings7],
         'Buccaneers': [buccaneersDiv, buccaneersPlayoffs, buccaneers1, buccaneers2, buccaneers3, buccaneers4, buccaneers5, buccaneers6, buccaneers7],
-        'Falcons': [falconsDiv, falconsPlayoffs, falcons1, falcons2, falcons3, falcons4, falcons5, falcons6, falcons7],
+        'Antlers': [antlersDiv, antlersPlayoffs, antlers1, antlers2, antlers3, antlers4, antlers5, antlers6, antlers7],
         'Panthers': [panthersDiv, panthersPlayoffs, panthers1, panthers2, panthers3, panthers4, panthers5, panthers6, panthers7],
         'Saints': [saintsDiv, saintsPlayoffs, saints1, saints2, saints3, saints4, saints5, saints6, saints7],
         'Cardinals': [cardinalsDiv, cardinalsPlayoffs, cardinals1, cardinals2, cardinals3, cardinals4, cardinals5, cardinals6, cardinals7],
@@ -10890,7 +10890,7 @@ def _simulate_odds_legacy(games_json):
     df = games_df
 
     global teamList, AFC, NFC, AFCE, AFCN, AFCS, AFCW, NFCE, NFCN, NFCS, NFCW
-    global Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans, Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers, Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks
+    global Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans, Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers, Antlers, Saints, Panthers, Niners, Cardinals, Rams, Seahawks
 
     Bills = Team("Bills", 'AFC', 'AFCE')
     Dolphins = Team("Dolphins", 'AFC', 'AFCE')
@@ -10923,7 +10923,7 @@ def _simulate_odds_legacy(games_json):
     Vikings = Team("Vikings", 'NFC', 'NFCN')
 
     Buccaneers = Team("Buccaneers", 'NFC', 'NFCS')
-    Falcons = Team("Falcons", 'NFC', 'NFCS')
+    Antlers = Team("Antlers", 'NFC', 'NFCS')
     Saints = Team("Saints", 'NFC', 'NFCS')
     Panthers = Team("Panthers", 'NFC', 'NFCS')
 
@@ -10935,14 +10935,14 @@ def _simulate_odds_legacy(games_json):
     teamList = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans,
             Broncos, Chiefs, Chargers, Raiders, Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings,
             Buccaneers,
-            Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
+            Antlers, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
 
     #print("In teamList: " + str(id(teamList[0])))
 
     AFC = [Bills, Dolphins, Jets, Patriots, Bengals, Browns, Ravens, Steelers, Colts, Jaguars, Titans, Texans,
         Broncos, Chiefs, Chargers, Raiders]
     NFC = [Commanders, Cowboys, Giants, Eagles, Bears, Lions, Packers, Vikings, Buccaneers,
-        Falcons, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
+        Antlers, Saints, Panthers, Niners, Cardinals, Rams, Seahawks]
 
     AFCE = [Bills, Dolphins, Jets, Patriots]
     AFCN = [Bengals, Browns, Ravens, Steelers]
@@ -10950,7 +10950,7 @@ def _simulate_odds_legacy(games_json):
     AFCW = [Broncos, Chiefs, Chargers, Raiders]
     NFCE = [Commanders, Cowboys, Giants, Eagles]
     NFCN = [Bears, Lions, Packers, Vikings]
-    NFCS = [Buccaneers, Falcons, Saints, Panthers]
+    NFCS = [Buccaneers, Antlers, Saints, Panthers]
     NFCW = [Niners, Cardinals, Rams, Seahawks]
 
     fillSchedules(df)
@@ -10981,7 +10981,7 @@ def _simulate_odds_legacy(games_json):
     packers1, packers2, packers3, packers4, packers5, packers6, packers7, packersOut = 0, 0, 0, 0, 0, 0, 0, 0
     vikings1, vikings2, vikings3, vikings4, vikings5, vikings6, vikings7, vikingsOut = 0, 0, 0, 0, 0, 0, 0, 0
     buccaneers1, buccaneers2, buccaneers3, buccaneers4, buccaneers5, buccaneers6, buccaneers7, buccaneersOut = 0, 0, 0, 0, 0, 0, 0, 0
-    falcons1, falcons2, falcons3, falcons4, falcons5, falcons6, falcons7, falconsOut = 0, 0, 0, 0, 0, 0, 0, 0
+    antlers1, antlers2, antlers3, antlers4, antlers5, antlers6, antlers7, antlersOut = 0, 0, 0, 0, 0, 0, 0, 0
     saints1, saints2, saints3, saints4, saints5, saints6, saints7, saintsOut = 0, 0, 0, 0, 0, 0, 0, 0
     panthers1, panthers2, panthers3, panthers4, panthers5, panthers6, panthers7, panthersOut = 0, 0, 0, 0, 0, 0, 0, 0
     cardinals1, cardinals2, cardinals3, cardinals4, cardinals5, cardinals6, cardinals7, cardinalsOut = 0, 0, 0, 0, 0, 0, 0, 0
@@ -11846,13 +11846,13 @@ def _simulate_odds_legacy(games_json):
                             break
 
         for i in range(17):
-            if (not Falcons.results[i] == 'W' and not Falcons.results[i] == 'L' and not Falcons.results[i] == 'T'):
-                game = Falcons.matchups[i]
+            if (not Antlers.results[i] == 'W' and not Antlers.results[i] == 'L' and not Antlers.results[i] == 'T'):
+                game = Antlers.matchups[i]
                 opponent = findTeam(game)
-                remSchedule.append('Falcons')
+                remSchedule.append('Antlers')
                 remSchedule.append(game)
                 winChance = 0.0
-                winDifference = Falcons.getWinPercentage() - opponent.getWinPercentage()
+                winDifference = Antlers.getWinPercentage() - opponent.getWinPercentage()
                 if (winDifference == 0):
                     winChance = 0.5
                 elif (winDifference < 0.83):
@@ -11863,19 +11863,19 @@ def _simulate_odds_legacy(games_json):
                 winChance *= 100
                 rand = random.randint(1, 100)
                 if rand <= winChance:
-                    Falcons.results[i] = 'W'
+                    Antlers.results[i] = 'W'
 
                     # Find the correct opponent schedule slot to update
                     for idx, opp in enumerate(opponent.matchups):
-                        if opp == Falcons.getName() and opponent.results[idx] == 'NA':
+                        if opp == Antlers.getName() and opponent.results[idx] == 'NA':
                             opponent.results[idx] = 'L'
                             break  # <-- very important
                 else:
-                    Falcons.results[i] = 'L'
+                    Antlers.results[i] = 'L'
 
                     # Find correct opponent slot for a win
                     for idx, opp in enumerate(opponent.matchups):
-                        if opp == Falcons.getName() and opponent.results[idx] == 'NA':
+                        if opp == Antlers.getName() and opponent.results[idx] == 'NA':
                             opponent.results[idx] = 'W'
                             break
 
@@ -12536,23 +12536,23 @@ def _simulate_odds_legacy(games_json):
                 else:
                     buccaneersOut += 1
 
-            if (team == Falcons):
-                if (playoffs[7] == Falcons):
-                    falcons1 += 1
-                elif (playoffs[8] == Falcons):
-                    falcons2 += 1
-                elif (playoffs[9] == Falcons):
-                    falcons3 += 1
-                elif (playoffs[10] == Falcons):
-                    falcons4 += 1
-                elif (playoffs[11] == Falcons):
-                    falcons5 += 1
-                elif (playoffs[12] == Falcons):
-                    falcons6 += 1
-                elif (playoffs[13] == Falcons):
-                    falcons7 += 1
+            if (team == Antlers):
+                if (playoffs[7] == Antlers):
+                    antlers1 += 1
+                elif (playoffs[8] == Antlers):
+                    antlers2 += 1
+                elif (playoffs[9] == Antlers):
+                    antlers3 += 1
+                elif (playoffs[10] == Antlers):
+                    antlers4 += 1
+                elif (playoffs[11] == Antlers):
+                    antlers5 += 1
+                elif (playoffs[12] == Antlers):
+                    antlers6 += 1
+                elif (playoffs[13] == Antlers):
+                    antlers7 += 1
                 else:
-                    falconsOut += 1
+                    antlersOut += 1
 
             if (team == Saints):
                 if (playoffs[7] == Saints):
@@ -12743,9 +12743,9 @@ def _simulate_odds_legacy(games_json):
                                      buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4 + buccaneers5 + buccaneers6 + buccaneers7) / 100.0
     buccaneersDiv = (buccaneers1 + buccaneers2 + buccaneers3 + buccaneers4) / 100.0
     buccaneersOut = 100 - buccaneersPlayoffs
-    falconsPlayoffs = (falcons1 + falcons2 + falcons3 + falcons4 + falcons5 + falcons6 + falcons7) / 100.0
-    falconsDiv = (falcons1 + falcons2 + falcons3 + falcons4) / 100.0
-    falconsOut = 100 - falconsPlayoffs
+    antlersPlayoffs = (antlers1 + antlers2 + antlers3 + antlers4 + antlers5 + antlers6 + antlers7) / 100.0
+    antlersDiv = (antlers1 + antlers2 + antlers3 + antlers4) / 100.0
+    antlersOut = 100 - antlersPlayoffs
     saintsPlayoffs = (saints1 + saints2 + saints3 + saints4 + saints5 + saints6 + saints7) / 100.0
     saintsDiv = (saints1 + saints2 + saints3 + saints4) / 100.0
     saintsOut = 100 - saintsPlayoffs
@@ -12778,7 +12778,7 @@ def _simulate_odds_legacy(games_json):
         'fiveseed': locals()[f'{team.lower()}5'] / 10.0,
         'sixseed': locals()[f'{team.lower()}6'] / 10.0,
         'sevenseed': locals()[f'{team.lower()}7'] / 10.0
-    } for team in ['Bills', 'Dolphins', 'Jets', 'Patriots', 'Bengals', 'Browns', 'Ravens', 'Steelers', 'Colts', 'Jaguars', 'Titans', 'Texans', 'Broncos', 'Chiefs', 'Chargers', 'Raiders', 'Commanders', 'Cowboys', 'Giants', 'Eagles', 'Bears', 'Lions', 'Packers', 'Vikings', 'Buccaneers', 'Falcons', 'Saints', 'Panthers', 'Cardinals', 'Niners', 'Rams', 'Seahawks']])       
+    } for team in ['Bills', 'Dolphins', 'Jets', 'Patriots', 'Bengals', 'Browns', 'Ravens', 'Steelers', 'Colts', 'Jaguars', 'Titans', 'Texans', 'Broncos', 'Chiefs', 'Chargers', 'Raiders', 'Commanders', 'Cowboys', 'Giants', 'Eagles', 'Bears', 'Lions', 'Packers', 'Vikings', 'Buccaneers', 'Antlers', 'Saints', 'Panthers', 'Cardinals', 'Niners', 'Rams', 'Seahawks']])       
         
 
 def simulate_odds(games_json, total_sims=1000, batch_size=50):
