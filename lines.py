@@ -17,7 +17,7 @@ SUPABASE_SERVICE_ROLE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
-LOGIT_COEF = 0.121
+LOGIT_COEF = 0.140
 LOGIT_INTERCEPT = -0.0170
 
 # WeeklyOdds stores a positive value when the HOME team is favored.
