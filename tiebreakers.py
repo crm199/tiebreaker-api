@@ -12795,8 +12795,15 @@ def simulate_odds(games_json, total_sims=1000, batch_size=50):
     id_to_name = dict(zip(teamMap['teamId'], teamMap['teamName']))
     games_df['homeTeam'] = games_df['homeTeamId'].map(id_to_name)
     games_df['awayTeam'] = games_df['awayTeamId'].map(id_to_name)
-    if games_df[['homeTeam', 'awayTeam']].isna().any().any():
-        raise ValueError("The schedule contains an unknown team ID")
+    unknown_ids = sorted(
+        set(games_df.loc[games_df['homeTeam'].isna(), 'homeTeamId'])
+        | set(games_df.loc[games_df['awayTeam'].isna(), 'awayTeamId'])
+    )
+    if unknown_ids:
+        raise ValueError(
+            f"The schedule contains team IDs missing from the Teams table map: {unknown_ids}. "
+            "The map is loaded when tiebreakers.py starts, so restart the service after changing team IDs."
+        )
     games_df = games_df.drop(columns=['homeTeamId', 'awayTeamId'])
 
     has_unplayed_games = ((games_df['homeScore'] == 0) & (games_df['awayScore'] == 0)).any()
